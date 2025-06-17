@@ -1,0 +1,76 @@
+name: 💡Feature
+description: This describles implementation feature
+title: "💡[feature] "
+labels: [feature, tbd,NEW]
+body:
+- type: dropdown
+  attributes:
+    label: Framework Release
+    description: What version of platform 
+    options:
+      - PMFW 3.0.x (Default)
+      - PMFW 3.1.x
+      - PMFW 3.2.x
+      - PMFW 3.3.x
+      - PMFW 3.4.x
+- type: dropdown
+  id: id-area
+  attributes: 
+    label: Comonent-Refactored
+    description: Which components are likely refactored for this enhancement ?
+    multiple: true
+    options:
+      - Unknown (Default)
+      - Platform
+      - Portal
+      - Gateway
+      - Connector
+      - Flow
+      - Scheduler
+      - Template
+      - App
+      - DatabaseServer
+      - Webserver
+      - ReportServer
+      - PMCloud
+      - Builder
+  validations:
+    required: true
+- type: dropdown
+  id: id-sys
+  attributes: 
+    label: Solution Version
+    description: What version of the solution
+    options:
+      - All-Domain (Default)
+      - BMS-Solution
+      - OEM-Solution
+      - WMS-Solution
+      - Custom-Domain
+      - Other
+  validations:
+    required: true
+- type: markdown
+  attributes:
+    value: |
+      Make sure this feature has not been requested earlier
+
+      ---
+
+      Once you know there are no similar tickets create this feature
+- type: input
+  id: id_uc
+  attributes:
+    label: Use case
+    description: "What feature is being defined or implemented"
+    placeholder: "e,g user can add perference and save it"
+  validations:
+    required: true  
+- type: textarea
+  id: id_desc
+  attributes:
+    label: Featire Details
+    description: "Describe in detail the feature implentation"
+    placeholder: "Implement platform API and portal UI"
+  validations:
+    required: true

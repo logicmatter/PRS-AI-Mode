@@ -1,0 +1,91 @@
+name: 🐞Bug
+description: File a bug or defect report against a release
+title: "🐞[bug]: "
+labels: [bug, tbd, builder]
+assignees:
+  - "support-logicmatter"
+body:
+- type: textarea
+  id: b_how
+  attributes:
+    label: Bug Description
+    description: Describe the problem, add screenshots, and describe how to reproduce this issue
+  validations:
+    required: true
+- type: table
+  id: bug_options
+  attributes:
+    label: Bug Options
+    description: Select options for the bug report
+    options:
+      - name: Framework Release
+        type: dropdown
+        default: "PMFW 3.0.x (Default)"
+        values:
+          - "PMFW 3.0.x (Default)"
+          - "PMFW 3.1.x"
+          - "PMFW 3.2.x"
+          - "PMFW 3.3.x"
+          - "PMFW 3.4.x"
+        validations:
+          required: true
+      - name: Framework Components
+        type: dropdown
+        multiple: true
+        default: ["Unknown (Default)"]
+        values:
+          - "Unknown (Default)"
+          - "Platform"
+          - "Portal"
+          - "Gateway"
+          - "Connector"
+          - "Scheduler"
+          - "Flow"
+          - "App"
+          - "SLA"
+          - "Manager"
+          - "Template"
+          - "DatabaseServer"
+          - "Webserver"
+          - "ReportServer"
+          - "PMCloud"
+          - "Builder"
+        validations:
+          required: true
+      - name: Solution Components
+        type: dropdown
+        multiple: true
+        default: ["Unknown (Default)"]
+        values:
+          - "Report-Template"
+          - "Dashboard-Template"
+          - "Import-Template"
+          - "Transform-Template"
+          - "Export-Template"
+          - "Maintin-Template"
+          - "SLA-Template"
+          - "Adhoc-Template"
+          - "Datapicker-Config"
+          - "Lookup-Sheet"
+          - "Subscription-Sheet"
+          - "Datasource-Config"
+          - "Defined-Schedule"
+          - "Defined-Report"
+          - "Core-Parameters"
+          - "Query-Performance"
+          - "Report-Performance"
+          - "User-Security"
+          - "License"
+          - "Unknown (Default)"
+        validations:
+          required: true
+      - name: Impact of Release Changes
+        type: checkboxes
+        default: ["This has no impact on the production."]
+        values:
+          - "This has no impact on the production."
+          - "Requires Solution patch or release."
+          - "Requires data-migration scripts or steps on production."
+          - "Requires production configuration (lookup, defined-import/transform, defined-reports, datasource, etc."
+        validations:
+          required: true

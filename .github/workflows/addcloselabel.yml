@@ -1,0 +1,76 @@
+name: "Add-Close-Label"
+on:
+  issues:
+    types:
+      - closed
+jobs:
+  label_issues:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Add labels
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ["QA"]
+            })
+
+  remove_REOPEN_label_issues:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Remove labels
+        uses: actions/github-script@v6
+        with:
+          script: |
+            if (${{ contains(github.event.issue.labels.*.name, 'REOPEN') }}) {
+              github.rest.issues.removeLabel({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: ["REOPEN"]
+              })
+            }
+
+  remove_OPEN_label_issues:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Remove labels
+        uses: actions/github-script@v6
+        with:
+          script: |
+            if (${{ contains(github.event.issue.labels.*.name, 'OPEN') }}) {
+              github.rest.issues.removeLabel({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: ["OPEN"]
+              })
+            }
+
+  remove_NEW_label_issues:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Remove labels
+        uses: actions/github-script@v6
+        with:
+          script: |
+            if (${{ contains(github.event.issue.labels.*.name, 'NEW') }}) {
+              github.rest.issues.removeLabel({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: ["NEW"]
+              })
+            }
+

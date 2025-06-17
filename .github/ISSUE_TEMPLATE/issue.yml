@@ -1,0 +1,129 @@
+name: 🧩Issue Ticket
+description: An activity or requirement or configuration requirements, sysops or devops tasks
+title: "🧩[ticket]"
+labels: [activity,story,tbd,NEW]
+body:
+- type: dropdown
+  attributes:
+    label: Worked On
+    description: What action has been taken or describe the user story
+    options:
+      - dataops
+      - sysops
+      - devops
+      - appdev
+      - secops
+      - testops
+      - Other (Default)
+- type: dropdown
+  attributes:
+      label: Activity
+      description: What is the activity or story?
+      multiple: true
+      options:
+        - analyzing
+        - approving
+        - configuring
+        - debugging
+        - demonstrating
+        - designing
+        - documenting
+        - installing
+        - meeting
+        - migrating
+        - nonitoring
+        - onboarding
+        - patching
+        - planning
+        - prototyping
+        - provisioning
+        - releasing
+        - researching
+        - reviewing
+        - testing
+        - triaging
+        - upgrading
+        - other (Default)
+- type: dropdown
+  attributes:
+    label: Framework Release
+    description: What version of platform 
+    options:
+      - PMFW 1.x.x
+      - PMFW 2.x.x
+      - PMFW 3.0.x (Default)
+      - PMFW 3.1.x
+      - PMFW 3.2.x
+      - PMFW 3.3.x
+      - PMFW 3.4.x
+      - Other
+- type: dropdown
+  attributes:
+    label: Product Location
+    description: Where is the action being taken?
+    multiple: true
+    options:
+      - Unknown (Default)
+      - Platform
+      - Portal
+      - Gateway
+      - Connector
+      - Flow
+      - Scheduler
+      - Template
+      - App
+      - DatabaseServer
+      - Webserver
+      - ReportServer
+      - PMCloud
+      - Builder
+  validations:
+    required: true
+- type: dropdown
+  attributes: 
+    label: Solution Version
+    description: What version of the solution
+    options:
+      - All-Domain (Default)
+      - BMS-Solution
+      - OEM-Solution
+      - WMS-Solution
+      - Custom-Domain
+      - Other
+  validations:
+    required: true
+- type: markdown
+  attributes:
+    value: |
+
+      ---
+
+
+- type: input
+  id: os
+  attributes:
+    label: What is the issue
+    description: "Describe the issue or activity being performed or story being defined"
+    placeholder: "e.g updating the template"
+  validations:
+    required: true  
+- type: textarea
+  id: php
+  attributes:
+    label: Detail Explaination
+    description: "Send screenshots, mockups or steps being performed."
+  validations:
+    required: true
+
+
+
+
+
+
+
+
+
+
+
+
+

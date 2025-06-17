@@ -1,0 +1,128 @@
+name: 📘Story
+description: Requirements and user story tickets
+title: "📘[story]: "
+labels: ["story","tbd","NEW"]
+body:
+- type: dropdown
+  attributes:
+    label: Area Type
+    description: What is the area of the use case
+    options:
+      - dataops
+      - sysops
+      - devops
+      - appdev
+      - secops
+      - testops
+      - Other (Default)
+- type: dropdown
+  attributes:
+      label: Usecase Type
+      description: What is the activity or story?
+      multiple: true
+      options:
+        - platform-services
+        - portal-usability
+        - performance-indexing
+        - database-storage
+        - archive-restore
+        - disaster-recovery
+        - lookups-datasources
+        - template-configuration
+        - flow-task-definition
+        - report-definition
+        - localization-globalization
+        - connectors-gateways
+        - installer-onboarding
+        - data-migration
+        - nonitoring-sysops
+        - patching-upgrade
+        - prototype-research
+        - provisioning-pmcloud
+        - other (Default)
+- type: dropdown
+  attributes:
+    label: Target Release
+    description: What version of platform 
+    options:
+      - PMFW 3.0.x (Default)
+      - PMFW 3.1.x
+      - PMFW 3.2.x
+      - PMFW 3.3.x
+      - PMFW 3.4.x
+      - Other
+- type: dropdown
+  attributes:
+    label: Product Location
+    description: Where is the action being taken?
+    multiple: true
+    options:
+      - Unknown (Default)
+      - Platform
+      - Portal
+      - Gateway
+      - Connector
+      - Flow
+      - Scheduler
+      - Template
+      - App
+      - DatabaseServer
+      - Webserver
+      - ReportServer
+      - PMCloud
+      - Builder
+  validations:
+    required: true
+- type: dropdown
+  attributes: 
+    label: Solution Version
+    description: What version of the solution
+    options:
+      - All-Domain (Default)
+      - BMS-Solution
+      - OEM-Solution
+      - WMS-Solution
+      - Custom-Domain
+      - Other
+  validations:
+    required: true
+- type: markdown
+  attributes:
+    value: |
+
+      ----
+
+- type: input
+  id: os
+  attributes:
+    label: Usecase or HowTo Title
+    description: "Describe the story and howto"
+    placeholder: "e.g user assigns report view permission"
+  validations:
+    required: true  
+- type: markdown
+  attributes:
+    value: |
+
+      ----
+
+- type: textarea
+  id: php
+  attributes:
+    label: Screenshot and detail explainations
+    description: "add mockups, screenshots and steps in case it is a howto"
+  validations:
+    required: true
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,94 @@
+name: ✂Enhance
+description: Ticket describes changes to system without effecting the functionality implemented
+assignees:
+  - "support-logicmatter"
+title: "✂[enhance]: "
+labels: ["enhance","tbd", "NEW"]
+body:
+- type: dropdown
+  attributes:
+    label: Framework Release
+    description: What version of platform
+    options:
+      - PMFW 3.0.x (Default)
+      - PMFW 3.1.x
+      - PMFW 3.2.x
+      - PMFW 3.3.x
+      - PMFW 3.4.x
+  validations:
+    required: true
+- type: dropdown
+  id: id-area
+  attributes: 
+    label: Comonent-Refactored
+    description: Which components are likely refactored for this enhancement ?
+    multiple: true
+    options:
+      - Unknown (Default)
+      - Platform
+      - Portal
+      - Gateway
+      - Connector
+      - Flow
+      - Scheduler
+      - Template
+      - App
+      - DatabaseServer
+      - Webserver
+      - ReportServer
+      - PMCloud
+      - Builder
+  validations:
+    required: true
+- type: dropdown
+  id: id-sys
+  attributes: 
+    label: Solution Version
+    description: What version of the solution
+    options:
+      - All-Domain (Default)
+      - BMS-Solution
+      - OEM-Solution
+      - WMS-Solution
+      - Custom-Domain
+      - Other
+  validations:
+    required: true
+- type: checkboxes
+  id: id-impact
+  attributes:
+    label: Impact of Release changes
+    description: Where would the impact be after this change is made
+    options:
+      - label: This has no impact on the production.    
+      - label: Requires Solution patch or release.
+      - label: Requires data-migration scripts or steps on production.
+      - label: Requires production configuration (lookup, defined-import/transform, defined-reports, datasource, etc.
+  validations:      
+        required: true
+- type: markdown
+  id: id-where
+  attributes:
+    value: >
+      What is being done?
+      ---      
+- type: textarea
+  id: id-what
+  attributes:
+    label: Changes made
+    description: What changes are being made?
+    placeholder: Describe the changes being made in various components to support this enhancements.
+    value: >
+
+      ----
+      
+      1.
+      
+      2.
+      
+      3.
+      
+      ...
+      
+  validations:
+    required: true

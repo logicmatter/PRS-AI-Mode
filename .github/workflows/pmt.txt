@@ -1,0 +1,217 @@
+@ECHO OFF
+IF EXIST "%PMT%" (
+  ECHO %PMT% OK
+) 
+IF  [%1]==[] GOTO :PMENV
+IF /I "%1"=="/i" GOTO :PMINST
+IF /I "%1"=="/I" GOTO :PMINST
+IF /I "%1"=="/v" GOTO :PMVER
+IF /I "%1"=="/V" GOTO :PMVER
+REM ******************************************
+REM Check arguments
+REM *******************************************
+:PMENV
+IF EXIST "%PMT%" (
+  ECHO %PMT% OK
+) 
+ELSE (
+	SET PMT=C:\pmtools
+	SET MSI=D:\pmtmsi
+	SET ZIPH=%PMT%\7z
+	SET WS32=c:\windows\system32
+	SET DEB=%PMT%\debian
+	SET PATH=%PATH%;%WS32%
+	SET PATH=%PATH%;%ZIPH%
+	SET JAVA_HOME=%PMT%\Java\jdk-11
+	SET UNIXU=%PMT%\coreutils
+	SET  DOTNET _ROOT=%PMT%\dotnet
+	SET PATH=%DOTNET _ROOT%\dot6;%DOTNET _ROOT%\dot5;%PATH%
+	SET DOTNET_MULTILEVEL_LOOKUP=1
+	SET CATALINA_HOME=%PMT%\apache\tomcat-7-0-65
+	SET M2_HOME=%PMT%\apache\apache-maven-3.3.9
+	SET ANT_HOME=%PMT%\apache\apache-ant-1.9.9
+	SET M2=%M2_HOME%\bin
+	SET GRADLE=%PMT%\gradle
+	SET MAVEN_OPTS=-Xms256m -Xmx512m
+	SET JENKINS_HOME=%PMT%\bin
+	SET GITH=%PMT%\git
+	SET GIT_INSTALL_ROOT=%GITH%
+	SET NODE_HOME=%PMT%\node
+	SET VSCODE_HOME=%PMT%\vscode
+	SET PYTHON_HOME=%PMT%\python
+	SET PY_PIP=%PYTHON_HOME%\Scripts
+	SET PY_LIBS=%PYTHON_HOME%\Lib;%PYTHON_HOME%\Lib\site-packages
+	SET PATH=%PATH%;%CATALINA_HOME%\bin;%M2%;%UNIXU%\bin
+	SET PATH=%PATH%;%PMT%\bin;%GITH%\bin;%ZIPH%
+	SET PATH=%PATH%;%ANT_HOME%\bin;%GRADLE%\bin;%JENKINS_HOME%
+	SET PATH=%PATH%;%NODE_HOME%;%JAVA_HOME%\bin
+	SET PATH=%PATH%;%VSCODE_HOME%
+	SET PATH=%PATH%;%VSCODE_HOME%
+	SET PATH=%PMT%\bin;%PATH%
+	SET PATH=%PATH%;"C:\Program Files\R\R-4.2.2\bin"
+	SET PATH=%PATH%;"C:\pmtools\sqllite"
+	SET PATH=%PYTHON_HOME%;%PY_PIP%;%PY_LIB%;%PATH%
+)
+REM
+GOTO :PMHLP
+REM 
+REM **********************************************
+REM     setup enviroment and get the current versions of the tools
+REM --------------------------------------------------------------------------
+REM ******add loma user***************
+:PMINST
+IF EXIST "%ZIPH%" (
+ 	ECHO* [1] **** %ZiPH%*******<OK>
+) ELSE (  
+  START /wait %MSI%\7z2201-x64.exe /S /D=%PMT%\7z
+)
+
+IF EXIST "%LOMAUSER%" (
+	ECHO * [2] **** The Default User %LOMAUSER%*******<OK>
+) ELSE (
+	IF  NOT [%LOMAUSER%]==[] net user loma Matter2 /ADD
+	SET %LOMAUSER%="loma"
+)
+IF EXIST "%DEB%" (
+	echo * [3] **** Windows Linux Shell %DEB% *******<OK>
+) ELSE (
+	mkdir "%DEB%"
+	DISM.exe /Online /Cleanup-Image /Restorehealth
+	dism /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+	dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+	wsl --set-default-version 2
+	wsl --install -d Debian
+	wsl -d Debian
+)
+
+IF EXIST "%PYTHON_HOME%"  (
+	ECHO* [4] **** The Default User %PYTHON_HOME%*******<OK>
+) ELSE (
+	CALL %MSI%\python-3.9.13-amd64.exe /quiet InstallAllUsers=1 Include_pip=1 Include_lib=1 Include_exe=1 Include_launcher=0 TargetDir=%PYTHON_HOME%
+	COPY %MSI%\get-pip.py %PYTHON_HOME%\.
+	CALL %PYTHON_HOME%\python.exe %PYTHON_HOME%\get-pip.py
+)
+REM ******* dotnet install *******************
+IF EXIST "%DOTNET _ROOT%"  (
+	ECHO* [5] **** %DOTNET _ROOT%*******<OK>
+) ELSE (
+	7z x dotnet-sdk-5.0.408-win-x64.zip -oc:\pmtools\dotnet\dot5
+	7z x dotnet-sdk-6.0.301-win-x64.zip -oc:\pmtools\dotnet\dot6
+	COPY /Y %MSI%\nuget.exe %PMT%\bin\
+)
+IF EXIST "%NODE_HOME%"  (
+	ECHO* [5] **** %NODE_HOME%*******<OK>
+) ELSE (
+	Call 7z x %MSI%\node-v16.15.0-win-x64.zip -o%PMT% -y
+	move /Y %PMT%\node-v16.15.0-win-x64 %PMT%\node
+)
+REM  **** install open jdk11
+IF EXIST "%JAVA_HOME%"  (
+	ECHO* [5] **** %JAVA_HOME%*******<OK>
+) ELSE (
+	7z x %MSI%\openjdk-11+28_windows-x64_bin.zip -oc:\pmtools\java -y
+	Call 7z x %MSI%\gradle-6.9.2-bin.zip -o%PMT% -y
+	MOVE /Y %PMT%\ gradle-6.9.2 %PMT%\gradle
+	REM ******** jenkins install ***********
+	COPY /Y %MSI%\*.war %PMT%\bin\
+	REM ******** apache ant, maven, tomcat install ***********
+	Call 7z x %MSI%\apache.zip -o%PMT% -y
+)
+
+REM ******** putty tools ***********
+Call 7z x %MSI%\puttys.zip -o%PMT%\bin
+REM ******** sql management tools ***********
+SSMS-Setup-ENU.exe  /Install /quiet /norestart /log c:\pmtools\log\ssms.log SSMSInstallRoot=c:\pmtools\ssms
+REM bash -c "if [[ $(tail -1 /mnt/c/pmtools/log/ssms.log | grep -c "Exit code: 0x0" ) > 0 ]] ; then echo 1 ; else echo 0 ; fi"
+REM ******** sql data tools ***********
+REM
+REM  ****install core linux utilities & library dlls
+IF EXIST "%UNIXU%"  (
+	ECHO* [6] **** The Default User %UNIXU%*******<OK>
+) ELSE (
+	7z x %MSI%\coreutils-5.3.0-dep.zip -oc:\pmtools\coreutils -y
+	7z x %MSI%\coreutils-5.3.0-bin.zip -oc:\pmtools\coreutils -y
+)
+REM ******Install Git*******
+IF EXIST "%GITH%"  (
+	ECHO* [7] **** The Default User %GITH%*******<OK>
+) ELSE (
+	start /wait %MSI%\Git-2.37.3-64-bit.exe /VERYSILENT /DIR="%GITH%" /NORESTART /SP-
+)
+
+REM
+REM **********************************************
+REM     get versions and environment of tools setup
+REM **********************************************
+:PMVER
+echo *PMBuilder Tools*
+7z -? | head -2
+git --version
+echo Node 
+node --version
+python --version
+pip --version
+echo **********************
+java -version
+javac -version
+echo --- Maven Version 
+java -jar %PMT%\bin\jenkins.war --version
+call ant -version
+call catalina version
+call mvn --version
+call gradle -version
+dotnet --info
+systeminfo | findstr /C:"Hos" /C:"Pro" /C:"OS"
+dism /Online /get-intl
+REM
+REM **********************************************
+:DONE
+ECHO Done!
+REM **********************************************
+REM http://net-informations.com/q/mis/7zip.html
+REM https://silentinstallhq.com/visual-studio-build-tools-2017-silent-install-how-to-guide/
+REM https://www.nuget.org/packages/PlantUmlClassDiagramGenerator
+REM https://docs.microsoft.com/en-us/dotnet/core/install/windows?tabs=net50
+REM https://github.com/dotnet/core/issues/4819
+REM https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-environment-variables
+REM https://devblogs.microsoft.com/dotnet/net-august-2021/
+REM https://github.com/dotnet/core/blob/main/release-notes/5.0/5.0.9/5.0.9.md
+REM https://github.com/dotnet/core/blob/main/release-notes/download-archive.md
+REM https://www.oracle.com/java/technologies/javase-jdk16-downloads.html
+REM https://docs.microsoft.com/en-us/nuget/consume-packages/install-use-packages-nuget-cli
+REM https://itectec.com/superuser/how-to-unzip-a-tar-gz-in-one-step-using-7-zip/
+REM https://www.codegrepper.com/search.php?q=7Z%20EXTRACT%20TAR.GZ
+REM http://gnuwin32.sourceforge.net/packages/coreutils.htm
+REM https://www.windows-commandline.com/add-user-from-command-line/
+REM Superset: command not found
+REM https://stackoverflow.com/questions/44513893/superset-command-not-found
+REM  Using Python on Windows¶4.4. The embeddable package
+REM https://docs.python.org/3/using/windows.html
+REM https://stevedower.id.au/blog/why-so-many-python-installers#:~:text=The%20executable%20installers%20provide%20the,as%20a%20web%20server%20dependency.
+REM Installing pip Python Embeddable version installation steps
+REM https://roytuts.com/installing-pip-with-embeddable-zip-python-in-windows/
+REM https://linuxhint.com/start-debian-gui-windows-10-wsl/
+REM https://www.brycematheson.io/how-to-perform-a-silent-install-of-sql-server-or-sql-express/
+REM SSDT Silent  https://techcommunity.microsoft.com/t5/sql-server-support-blog/how-to-install-sql-server-data-tools-ssdt-2017-offline-internal/ba-p/334020
+REM https://www.itprotoday.com/sql-server/perform-silent-install-sql-server
+REM https://sqlplayer.net/2019/01/unattended-installation-of-sql-server/
+REM https://www.sqlshack.com/unattended-installation-sql-server/
+REM https://thewindowsupdate.com/2019/02/12/how-to-install-sql-server-data-tools-ssdt-2017-offline-internal-network-installation/
+REM https://techcommunity.microsoft.com/t5/sql-server-support-blog/how-to-install-sql-server-data-tools-ssdt-2017-offline-internal/ba-p/334020
+REM **********************************************
+:PMHLP
+REM **********************************************
+ECHO @FF
+ECHO ----------------------------------------
+ECHO          PMBulder Tools
+ECHO        Version 2022.11.10
+ECHO ----------------------------------------
+ECHO   (c) LogicMatter Inc, 2012 
+ECHO   email:support@logicmatter.com
+ECHO   usage: 
+ECHO      pmt.bat /? -- usge help
+ECHO      /v or /V -- environment and tools setup
+ECHO      /i or /I -- install tools and setup environment
+ECHO     Contains all PM Developer Tools and Depdencies
+:PMEND
+ECHO Thanks!!
