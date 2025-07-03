@@ -22,10 +22,14 @@ views.py		: Handles UI rendering and interactions.
 main.py			: Initializes and runs the app.
 
 
-## Installation
+## Setup and Run
+
 - Install libraries
-`pip install -r requirements.txt`
--Then to run the program
+```
+pip install -r requirements.txt
+```
+
+- Then to run the program
 ```
 cd pmvp-1t1
 python main.py
