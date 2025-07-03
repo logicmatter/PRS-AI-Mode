@@ -23,7 +23,11 @@ main.py			: Initializes and runs the app.
 
 
 ## Installation
-create
+- Install libraries
+`pip install -r requirements.txt`
+-Then to run the program
+```
+cd pmvp-1t1
+python main.py
+```
 
-curl -o static/flatpickr.min.css https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css
-curl -o static/flatpickr.min.js https://cdn.jsdelivr.net/npm/flatpickr
