@@ -5,14 +5,17 @@ This uses neoGui and FastAPI to build apps very quickly.
 ```
 pip install fastapi uvicorn nicegui plotly pandas numpy
 ```
-|Package	|Purpose|
-|---------|--------|
-|fastapi	|Web framework|
-|uvicorn	|ASGI server to run FastAPI|
-|nicegui|	Frontend UI layer|
-|plotly|	Interactive charts|
-|pandas|	Time-series and data processing|
-|numpy	|Random number generation and array math|
+
+| Package  | Purpose                                   |
+|----------|-------------------------------------------|
+| fastapi  | Web framework                             |
+| uvicorn  | ASGI server to run FastAPI                |
+| nicegui  | Frontend UI layer                         |
+| plotly   | Interactive charts                        |
+| pandas   | Time-series and data processing           |
+| numpy    | Random number generation and array math   |
+
+
 
 ## Components
 
