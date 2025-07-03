@@ -1,0 +1,236 @@
+/* static/global.css */
+:root {
+    --bg-primary: #ffffff; /* Light mode page background */
+    --bg-secondary: #f3f4f6; /* Light mode secondary background (header, sidebar) */
+    --text-primary: #111827; /* Light mode text */
+    --text-secondary: #6b7280; /* Light mode secondary text */
+    --accent: #2563eb; /* Light mode button/link/icon color */
+    --accent-hover: #1d4ed8; /* Light mode hover color */
+    --border: #d1d5db; /* Light mode border */
+    --input-bg: #ffffff; /* Light mode input background */
+    --input-border: #d1d5db; /* Light mode input border */
+    --button-bg: #2563eb; /* Light mode button background */
+    --button-text: #ffffff; /* Light mode button text */
+    --calendar-bg: #ffffff; /* Light mode calendar background */
+    --calendar-text: #111827; /* Light mode calendar text */
+    --calendar-accent: #2563eb; /* Light mode calendar accent */
+}
+
+.q-dark {
+    --bg-primary: #111827; /* Dark mode page background */
+    --bg-secondary: #1f2937; /* Dark mode secondary background */
+    --text-primary: #f3f4f6; /* Dark mode text */
+    --text-secondary: #9ca3af; /* Dark mode secondary text */
+    --accent: #60a5fa; /* Dark mode button/link/icon color */
+    --accent-hover: #93c5fd; /* Dark mode hover color */
+    --border: #4b5563; /* Dark mode border */
+    --input-bg: #1f2937; /* Dark mode input background */
+    --input-border: #4b5563; /* Dark mode input border */
+    --button-bg: #60a5fa; /* Dark mode button background */
+    --button-text: #ffffff; /* Dark mode button text */
+    --calendar-bg: #1f2937; /* Dark mode calendar background */
+    --calendar-text: #f3f4f6; /* Dark mode calendar text */
+    --calendar-accent: #60a5fa; /* Dark mode calendar accent */
+}
+
+/* Override NiceGUI/Quasar defaults */
+html.q-dark, body.q-dark {
+    background-color: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+}
+html, body {
+    background-color: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+/* Page layout (ui.row in portal) */
+.page-container {
+    width: 100%;
+    height: calc(100vh - 64px);
+    display: flex;
+    background-color: var(--bg-primary) !important;
+}
+
+/* Content area (ui.column in portal) */
+.content-area {
+    flex: 1;
+    padding: 1.5rem;
+    background-color: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+    overflow: auto;
+}
+
+/* Header (ui.header in navbar) */
+.q-header, .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+    box-sizing: border-box;
+}
+
+/* Navbar rows (ui.row in navbar) */
+.navbar-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--bg-secondary) !important;
+}
+.navbar-row-tight {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    max-width: 15rem;
+    background-color: var(--bg-secondary) !important;
+}
+
+/* Sidebar (ui.column in sidebar) */
+.q-col, .sidebar {
+    min-height: 100vh;
+    width: 20%;
+    background-color: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+}
+.sidebar.hidden {
+    display: none !important;
+}
+
+/* Labels (ui.label) */
+.q-label, .title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary) !important;
+    background-color: var(--bg-secondary) !important;
+}
+.label {
+    font-size: 1rem;
+    color: var(--text-secondary) !important;
+    background-color: var(--bg-secondary) !important;
+}
+.sidebar-label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-primary) !important;
+    background-color: var(--bg-secondary) !important;
+}
+
+/* Buttons (ui.button in navbar, portal) */
+.q-btn, .button {
+    background-color: var(--button-bg) !important;
+    color: var(--button-text) !important;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    border: none;
+    text-align: center;
+    font-size: 1rem;
+}
+.q-btn:hover, .button:hover {
+    background-color: var(--accent-hover) !important;
+}
+
+/* Links (ui.link in main, ui.element('a') in sidebar) */
+.q-link, .link {
+    color: var(--accent) !important;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    border-radius: 0.25rem;
+    width: 100%;
+    background-color: var(--bg-secondary) !important;
+    transition: background-color 0.2s;
+}
+.q-link:hover, .link:hover {
+    background-color: var(--accent-hover) !important;
+    color: var(--button-text) !important;
+}
+
+/* Sidebar icons (ui.html in sidebar) */
+.icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: 0.5rem;
+    color: var(--accent) !important;
+    background-color: var(--bg-secondary) !important;
+}
+.icon:hover {
+    color: var(--accent-hover) !important;
+}
+
+/* Inputs (ui.input in portal, navbar) */
+.q-field, .input {
+    width: 11rem;
+    padding: 0.5rem;
+    background-color: var(--input-bg) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--input-border) !important;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+}
+.q-field__control, .q-field__native, .q-field__input {
+    background-color: var(--input-bg) !important;
+    color: var(--text-primary) !important;
+    border: none !important;
+}
+.hidden {
+    display: none !important;
+}
+
+/* Switch (ui.switch in navbar) */
+.q-switch, .switch {
+    color: var(--text-primary) !important;
+    background-color: var(--bg-secondary) !important;
+}
+.q-switch__inner {
+    background-color: var(--bg-secondary) !important;
+}
+.q-switch__track {
+    background-color: var(--border) !important;
+}
+.q-switch__thumb {
+    background-color: var(--accent) !important;
+}
+.q-switch__thumb:hover {
+    background-color: var(--accent-hover) !important;
+}
+
+/* Datetime picker (calendar) for ui.input with type=datetime-local */
+.q-date, .q-date__view, .q-date__calendar {
+    background-color: var(--calendar-bg) !important;
+    color: var(--calendar-text) !important;
+}
+.q-date__header {
+    background-color: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+}
+.q-date__content, .q-date__calendar-days {
+    background-color: var(--calendar-bg) !important;
+}
+.q-date__day {
+    color: var(--calendar-text) !important;
+    background-color: var(--calendar-bg) !important;
+}
+.q-date__day--selected, .q-date__day:hover {
+    background-color: var(--calendar-accent) !important;
+    color: var(--button-text) !important;
+}
+.q-date__arrow {
+    color: var(--accent) !important;
+}
+.q-date__arrow:hover {
+    color: var(--accent-hover) !important;
+}
