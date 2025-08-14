@@ -1,0 +1,100 @@
+.profile{
+    position: absolute;
+width: 687px;
+height: 614px;
+left: 400px;
+top: 31px;
+
+background: #F4F4F4;
+border-radius: 12px 12px 0px 0px;
+}
+.header {
+    position: absolute;
+width: 686px;
+height: 52px;
+left: 2px;
+top: 2px;
+
+background: #1A3A7F;
+border-radius: 12px 12px 0px 0px;
+}
+.profile-text {
+    position: absolute;
+width: 95px;
+height: 28px;
+left: 5px;
+top: 13px;
+font-size: 24px;
+line-height: 28px;
+text-align: center;
+
+color: #FFFFFF;
+}
+.profile-body{
+    margin-top: 62px;
+    margin-left: 10px;
+}
+.input-icons {
+    position: absolute;
+    cursor: pointer;
+    padding: 42px;
+    color: #310080;
+    margin-left: 55px;
+    font-size: 16px;
+}
+.input-icons-check {
+    position: absolute;
+    cursor: pointer;
+    padding: 42px;
+    color: #67a73f;
+    margin-left: 212px;
+    font-size: 16px;
+}
+.input-icons1 {
+    position: absolute;
+    cursor: pointer;
+    padding: 42px;
+    color: #310080;
+    margin-left: 33px;
+    font-size: 16px;
+}
+
+.input-icons-check1 {
+    position: absolute;
+    cursor: pointer;
+    padding: 42px;
+    color: #67a73f;
+    margin-left: 182px;
+    font-size: 16px;
+}
+.input-icons-check2 {
+    position: absolute;
+    cursor: pointer;
+    padding: 42px;
+    color: #67a73f;
+    margin-left: 206px;
+    font-size: 16px;
+}
+.input{
+    margin-left: 0px;
+    background-color: #e9ecef;
+    opacity: 1;
+}
+.row > * {
+    flex-shrink: 0;
+    max-width: 100%;
+    width: 28%;
+}
+
+@media screen and (min-width: 360px)  {
+  .input{
+    width: 245px;
+  }
+  .justify-content-md-center {
+    justify-content: center !important;
+}
+.card{
+  width:300px;
+}
+
+}

@@ -1,0 +1,91 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+    <li class="breadcrumb-item"><a [routerLink]="'/tDashboard/' + tenants.tenantId ">{{this.tenants.tenantName}}</a>
+    </li>
+    <li class="breadcrumb-item"><a routerLink="/flow">Flow</a></li>
+    <li class="breadcrumb-item"><a routerLink="/Gateway">GateWay-DataSource List</a></li>
+  </ol>
+</nav>
+<span data-toggle="tooltip" title="Back" class="sla-back-icon refresh-icon"><mat-icon mat-list-icon
+    class="btn-primary click-event" (click)="navigate1()">arrow_back</mat-icon></span>
+<div class="row">
+  <div class="col-md-6">
+    <h5>Datasource List</h5>
+  </div>
+  <div class="col-md-6" style="text-align: end;">
+    <a class="float-right" [routerLink]="['../gateway-detail/-1']">Setup Gateway Source</a>
+  </div>
+</div>
+<div class="col-md-6">
+</div>
+<app-spinner *ngIf="showSpinner"></app-spinner>
+
+<div class="" [hidden]="showSpinner">
+  <div>
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field class="filter-field" [hidden]="this.dataSource.data.length == 0">
+          <mat-label>Filter</mat-label>
+          <input style="padding-bottom: 10px;" matInput (keyup)="applyFilter($event.target.value)"
+            placeholder="eg. EasyEcom" #input [(ngModel)]="filter">
+        </mat-form-field>
+      </div>
+    </div>
+    <div [hidden]="!isTableHasData || this.dataSource.data.length == 0">
+      <div class="mat-elevation-z8 page" style="padding:0 20px;">
+        <table class="ml-2" mat-table [dataSource]="dataSource" matSort role="grid">
+          <ng-container matColumnDef="dataSourceName">
+            <th mat-header-cell-1 *matHeaderCellDef mat-sort-header class="spacing"> Name </th>
+            <td *matCellDef="let row" class="spacing"> {{row.dataSourceName}} </td>
+          </ng-container>
+          <ng-container matColumnDef="dataSourceDescription">
+            <th mat-header-cell-1 *matHeaderCellDef mat-sort-header class="spacing"> Description </th>
+            <td *matCellDef="let row" class="spacing"> {{row.dataSourceDescription}} </td>
+          </ng-container>
+          <ng-container matColumnDef="connectorType">
+            <th mat-header-cell-1 *matHeaderCellDef mat-sort-header class="spacing"> Connector </th>
+            <td *matCellDef="let row" class="spacing"> {{row.connectorType}} </td>
+          </ng-container>
+          <ng-container matColumnDef="templateName">
+            <th mat-header-cell-1 *matHeaderCellDef mat-sort-header class="spacing"> Template </th>
+            <td *matCellDef="let row" class="spacing"> {{row.templateName}} </td>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell-1 *matHeaderCellDef> Actions </th>
+            <td *matCellDef="let row">
+              <a class="action-width" [routerLink]="['../gateway-detail', row.dataSourceId]">
+                <img alt="Edit" src="assets/icons/noun_edit_1644623.svg" width="20px" height="20px"
+                  class="toggle-tenants mx-2 click-event" aria-hidden="true" matTooltip="Edit" matTooltipClass="tooltip" />
+              </a>
+              <a class="action-width pointer" (click)="schedule(row)">
+                <img alt="Schedule" [src]="row.scheduleId ? 'assets/icons/Group 230.svg' : 'assets/icons/Group 215.svg'"
+                  width="20px" height="20px" class="toggle-tenants mx-2 click-event" aria-hidden="false"
+                  matTooltip="Schedule" matTooltipClass="tooltip" />
+              </a>
+              <a class="text-danger action-width pointer" (click)="deleteDatasource(row)">
+                <img src="assets/icons/Group 216.svg" alt="Delete" width="20px" height="20px"
+                  class="toggle-tenants mx-2 click-event" aria-hidden="true" matTooltip="Delete" matTooltipClass="tooltip" />
+              </a>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+          <!-- Row shown when there is no matching data. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+          </tr>
+        </table>
+
+        <mat-paginator #paginator [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
+      </div>
+      <div *ngIf="!isTableHasData" class="d-flex justify-content-center align-items-center">
+        No data available
+      </div>
+    </div>
+  </div>
+  <div class="my-4" class="d-flex justify-content-center align-items-center" *ngIf="this.dataSource.data.length == 0">
+    No datasource configured
+  </div>
+</div>

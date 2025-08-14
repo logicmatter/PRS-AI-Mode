@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>Search</h1>
+<div mat-dialog-content [ngStyle]="{'margin-bottom':'10px','display':'grid'}">
+    <h5>Select an Object Type</h5>
+    <mat-form-field>
+        <mat-select [(ngModel)]="data.objectType" [(value)]="utility.entitySelected" (ngModelChange)="onChangeObjectTypeDropdown($event)">
+            <mat-option *ngFor="let obj of objectTypes" [value]="obj.value">
+                {{obj.viewValue}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <h5>Search Token</h5>
+    <mat-form-field>
+        <input matInput value="data.keyword" [(ngModel)]="data.keyword">
+    </mat-form-field>
+    <mat-hint [ngStyle]="{'dislplay':'block'}">{{searchPlaceholder}}</mat-hint>
+</div>
+<div mat-dialog-actions>
+    <button  mat-raised-button [mat-dialog-close]="data" cdkFocusInitial>Search</button>
+</div>

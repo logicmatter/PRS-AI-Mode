@@ -1,0 +1,76 @@
+<app-spinner *ngIf="showSpinner"></app-spinner>
+<div *ngIf="!showSpinner">
+  <div class="row fixedPosition">
+    <div class="col-md-3 mr-3" style="margin-left:3px;">
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text filterText">
+            <i class="fa fa-filter" aria-hidden="true"></i>
+          </span>
+        </div>
+        <input type="text" class="form-control" (keyup)="applyFilter1($event.target.value)" placeholder="Filter" />
+      </div>
+    </div>
+    <div class="col-md-3 mr-0"></div>
+    <div class="col-md-5 float-right mr-0 ml-0">
+      <mat-paginator [hidden]="length < 10" #userPaginator [pageSizeOptions]="[10, 25, 50, 100]" [pageSize]="currentPageSize" (page)="getData($event)" [showFirstLastButtons]="true"></mat-paginator>
+    </div>
+  </div>
+  <div class="scroller">
+    <div class="">
+      <table mat-table [dataSource]="profileObjs" #userSort="matSort" matSort class="example-container mat-elevation-z8" multiTemplateDataRows>
+
+        <ng-container matColumnDef="profile">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'profileWidthClass'">Profile Name</th>
+          <td mat-cell  *matCellDef="let data; let i = dataIndex"
+                    [ngClass]="'profileWidthClass'"
+                    [attr.rowspan]="getRowSpan('Profile', i)"
+                    [style.display]="getRowSpan('Profile', i) ? '' : 'none'">
+            {{data.profile}}
+         </td>
+        </ng-container>
+
+        <ng-container matColumnDef="ruleCode">
+         <th mat-header-cell  *matHeaderCellDef mat-sort-header [ngClass]="'profileWidthClass'">Facet</th>
+          <td mat-cell *matCellDef="let element" [ngClass]="'profileWidthClass'">{{element.ruleCode}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="standardName">
+         <th mat-header-cell  *matHeaderCellDef mat-sort-header [ngClass]="'profileWidthClass'">Standard</th>
+          <td mat-cell *matCellDef="let element" [ngClass]="'profileWidthClass'">{{element.standardName}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="criteria">
+         <th mat-header-cell  *matHeaderCellDef mat-sort-header [ngClass]="'profileWidthClass'">Criteria</th>
+          <td mat-cell *matCellDef="let element" [ngClass]="'profileWidthClass'">{{element.criteria}}</td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="acceptableHigh">
+         <th mat-header-cell  *matHeaderCellDef mat-sort-header [ngClass]="'profileWidthClass'">Acceptable High</th>
+          <td mat-cell *matCellDef="let element" [ngClass]="'profileWidthClass'">{{element.acceptableHigh}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="acceptableLow">
+         <th mat-header-cell  *matHeaderCellDef mat-sort-header [ngClass]="'profileWidthClass'">Acceptable Low</th>
+          <td mat-cell *matCellDef="let element" [ngClass]="'profileWidthClass'">{{element.acceptableLow}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+         <th mat-header-cell  *matHeaderCellDef [ngClass]="'profileWidthClass'">Actions</th>
+          <td mat-cell *matCellDef="let data; let i = dataIndex"
+          [ngClass]="'profileWidthClass'"
+          [attr.rowspan]="getRowSpan('Profile', i)"
+          [style.display]="getRowSpan('Profile', i) ? '' : 'none'">
+          <!-- <img src="assets/icons/duplicate.svg"  [ngClass]="'image'"class="toggle-tenants mx-2 click-event" aria-hidden="false" matTooltip="Duplicate" matTooltipClass="tooltip" (click)="openDialog(data)"> -->
+          <img src="assets/icons/noun_edit_1644623.svg" [ngClass]="'image'"class="toggle-tenants mx-2 click-event" aria-hidden="false" matTooltip="Edit" matTooltipClass="tooltip" (click)="editprofile(data)">
+          <img src="assets/icons/Group 216.svg"  [ngClass]="'image'" class="toggle-tenants mx-0 click-event image" aria-hidden="false" matTooltip="Delete" (click)="openDialog(data)" />  
+        </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,283 @@
+{
+  "domains":["BMS","OEM","WMS"],
+  "domain": [
+    {
+      "BMS": [
+        {
+          "sideNavRouting":[
+            {
+              "role": [ "Admin", "Manager", "User", "ServiceUser" ],
+              "components": [
+                {
+                  "Admin": [
+                    {
+                      "id": "1",
+                      "name": "Apps",
+                      "value": "/home/apps",
+                      "icon": "assets/icons/iconb_1.svg",
+                      "role": "Admin",
+                      "toolTip": "Apps",
+                      "privileges": [ "View", "Download" ]
+                    },
+                    {
+                      "id": "2",
+                      "name": "System Activity",
+                      "value": "/home/sysactivity",
+                      "icon": "assets/icons/iconb_1.svg",
+                      "role": "Admin",
+                      "toolTip": "Apps",
+                      "privileges": [ "View", "Download" ]
+                    },
+                    {
+                      "id": "3",
+                      "name": "Tenant",
+                      "value": "/home/tenant",
+                      "icon": "assets/icons/iconb_3.svg",
+                      "role": "Admin",
+                      "toolTip": "Tenant",
+                      "privileges": [ "View", "Download" ]
+                    },
+            
+                    {
+                      "id": "4",
+                      "name": "MarketPlace",
+                      "value": "/home/marketplace",
+                      "icon": "assets/icons/iconb_4.svg",
+                      "role": "Admin",
+                      "toolTip": "Market Place",
+                      "privileges": [ "View", "Download" ]
+                    },
+                    {
+                      "id": "5",
+                      "name": "Admin",
+                      "value": "/home/admin",
+                      "icon": "assets/icons/iconb_5.svg",
+                      "role": "Admin",
+                      "toolTip": "Admin",
+                      "privileges": [ "View", "Edit", "Manage" ]
+                    },
+                    {
+                      "id": "6",
+                      "name": "Flow",
+                      "value": "/home/flow",
+                      "icon": "assets/icons/flow.svg",
+                      "role": "Admin",
+                      "toolTip": "Flow",
+                      "privileges": [ "View", "Edit", "Manage" ]
+                    }
+                  ],
+                  "Manager": [
+                    {
+                      "id": "1",
+                      "name": "Apps",
+                      "value": "/home/apps",
+                      "icon": "assets/icons/iconb_1.svg",
+                      "toolTip": "Apps",
+                      "role": "Manager",
+                      "privileges": [ "View", "Download" ]
+                    },
+                    {
+                      "id": "3",
+                      "name": "Tenant",
+                      "value": "/home/tenant",
+                      "icon": "assets/icons/iconb_3.svg",
+                      "role": "Manager",
+                      "toolTip": "Tenant",
+                      "privileges": [ "View", "Download" ]
+                    },
+                    {
+                      "id": "4",
+                      "name": "Admin",
+                      "value": "/home/admin",
+                      "icon": "assets/icons/iconb_4.svg",
+                      "role": "Manager",
+                      "toolTip": "Admin",
+                      "privileges": [ "View", "Edit", "Manage" ]
+                    },
+                    {
+                      "id": "5",
+                      "name": "Template Manager",
+                      "value": "/home/template-manager",
+                      "icon": "assets/icons/iconb_5.svg",
+                      "role": "Manager",
+                      "toolTip": "Template Manager",
+                      "privileges": [ "View", "Edit", "Manage" ]
+                    },
+                    {
+                      "id": "6",
+                      "name": "MarketPlace",
+                      "value": "/home/marketplace",
+                      "icon": "assets/icons/iconb_6.svg",
+                      "role": "Manager",
+                      "toolTip": "Market Place",
+                      "privileges": [ "View", "Download" ]
+                    },
+                    {
+                      "id": "7",
+                      "name": "Flow",
+                      "value": "/home/flow",
+                      "icon": "assets/icons/flow.svg",
+                      "role": "Manager",
+                      "toolTip": "Flow",
+                      "privileges": [ "View", "Download" ]
+                    }
+                  ],
+                  "User": [
+                    {
+                      "id": "1",
+                      "name": "Apps",
+                      "value": "/home/apps",
+                      "icon": "assets/icons/iconb_1.svg",
+                      "role": "User",
+                      "toolTip": "Apps",
+                      "privileges": [ "View", "Download" ]
+                    }
+                  ],
+                  "ServiceUser": [
+                    {
+                      "id": "1",
+                      "name": "Apps",
+                      "value": "/home/apps",
+                      "icon": "assets/icons/iconb_1.svg",
+                      "role": "ServiceUser",
+                      "toolTip": "Apps",
+                      "privileges": [ "View", "Download" ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "searchObject": [
+            {
+              "value": "All",
+              "viewValue": "All"
+            },
+            {
+              "value": "Alarm",
+              "viewValue": "Alarm"
+            },
+            {
+              "value": "Device",
+              "viewValue": "Device"
+            },
+            {
+              "value": "Energylog",
+              "viewValue": "Energy Log"
+            },
+            {
+              "value": "Points",
+              "viewValue": "Points"
+            },
+            {
+              "value": "Reports",
+              "viewValue": "Reports"
+            },
+            {
+              "value": "Transformers",
+              "viewValue": "Transformers"
+            }
+          ],
+          "durations": [
+            {
+              "label": "24HRS",
+              "value": "_24HRS"
+            },
+            {
+              "label": "TODAY",
+              "value": "today"
+            },
+            {
+              "label": "YESTERDAY",
+              "value": "yesterday"
+            },
+            {
+              "label": "Last 7D",
+              "value": "Last 7"
+            },
+            {
+              "label": "Last 30D",
+              "value": "Last 30"
+            },
+            {
+              "label": "Last 90D",
+              "value": "Last 90"
+            },
+            {
+              "label": "WTD",
+              "value": "WTD"
+            },
+            {
+              "label": "WEEK",
+              "value": "WEEK"
+            },
+            {
+              "label": "MTD",
+              "value": "MTD"
+            },
+            {
+              "label": "MONTH",
+              "value": "MONTH"
+            },
+            {
+              "label": "QTD",
+              "value": "QTD"
+            },
+            {
+              "label": "1Q",
+              "value": "_1Q"
+            },
+            {
+              "label": "2Q",
+              "value": "_2Q"
+            },
+            {
+              "label": "3Q",
+              "value": "_3Q"
+            },
+            {
+              "label": "4Q",
+              "value": "_4Q"
+            },
+            {
+              "label": "YTD",
+              "value": "YTD"
+            },
+            {
+              "label": "YEAR",
+              "value": "currentyear"
+            },
+            {
+              "label": "LAST YEAR",
+              "value": "lastyear"
+            },
+            {
+              "label": "LAST YEAR Q1",
+              "value": "lastyearq1"
+            },
+            {
+              "label": "LAST YEAR Q2",
+              "value": "lastyearq2"
+            },
+            {
+              "label": "LAST YEAR Q3",
+              "value": "lastyearq3"
+            },
+            {
+              "label": "LAST YEAR Q4",
+              "value": "lastyearq4"
+            },
+            {
+              "label": "2Y",
+              "value": "_2Y"
+            },
+            {
+              "label": "CUSTOM",
+              "value": "custom"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

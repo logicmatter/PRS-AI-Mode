@@ -1,0 +1,51 @@
+<app-spinner *ngIf="showSpinner"></app-spinner>
+<div *ngIf="!showSpinner">
+  <div class="row fixedPosition">
+    <div class="col-md-3 mr-3" style="margin-left:3px;">
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text filterText"><i class="fa fa-filter" aria-hidden="true"></i></span>
+        </div>
+        <input type="text" class="form-control" (keyup)="applyFilter1($event.target.value)" placeholder="Filter" />
+      </div>
+    </div>
+    <div class="col-md-3 mr-0"></div>
+    <div class="col-md-5 float-right mr-0 ml-0 ">
+      <mat-paginator [hidden]="length < 10" #facetPaginator [pageSizeOptions]="[10, 25, 50, 100]"  [pageSize]="currentPageSize"
+      (page)="getData($event)" [showFirstLastButtons]="true"
+      >
+    </mat-paginator>
+    </div>
+  </div>
+  <div class="scroller">
+    <div class="example-container mat-elevation-z8">
+      <mat-table #table [dataSource]="facetObjs" #facetSort="matSort" matSort>
+
+        <ng-container matColumnDef="facetName">
+          <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'facetWidthClass'">Facet</mat-header-cell>
+          <mat-cell *matCellDef="let element" [ngClass]="'facetWidthClass'">{{element.facetName}}</mat-cell>
+        </ng-container>
+
+
+        <ng-container matColumnDef="facetUnit">
+          <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'facetWidthClass'"> Facet Unit </mat-header-cell>
+          <mat-cell *matCellDef="let element" [ngClass]="'facetWidthClass'">{{element.facetUnit}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef [ngClass]="'facetWidthClass'"> Actions </mat-header-cell>
+          <mat-cell *matCellDef="let element" [ngClass]="'facetWidthClass'">
+            <img src="assets/icons/noun_edit_1644623.svg" width="20px" height="20px"
+                class="toggle-tenants mx-2 click-event" aria-hidden="false" matTooltip="Edit" (click)="editFacet(element)"/>
+
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+
+    </div>
+  </div>
+
+</div>

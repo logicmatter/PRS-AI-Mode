@@ -1,0 +1,186 @@
+<div class="app-content">
+  <mat-card>
+    <app-spinner *ngIf="isLoading"></app-spinner>
+    <div *ngIf="!isLoading">
+      <div>
+        <!-- <div class="col-md-12">
+          <fieldset class="common-note">
+            <div>
+              <b>Note: </b><span>By default PointMatter logo will be reflected in all the reports(PDF export). To customize, please click on Edit Config button and change configuration</span>
+            </div>
+          </fieldset>
+        </div> -->
+        <form class="was-validated" #templateConfigForm="ngForm">
+          <div class="col-md-12" style="text-align: right; margin-bottom: 8px;">
+            <input *ngIf="!editOption" type="button" class="btn btn-outline-primary margin-right" (click)="editConfig()"
+              value="Edit Config" />
+            <button class="btn btn-outline-primary margin-right" style="margin-right: 10px;" *ngIf="editOption"
+              (click)="cancelEdit()">Cancel</button>
+            <button class="btn btn-outline-primary margin-right mr-2" *ngIf="!showLoadButton && editOption"
+              [disabled]="templateConfigForm.invalid" (click)="submitTemplateConfigForm()">Save</button>
+            <button class="btn btn-outline-primary margin-right" *ngIf="showLoadButton && editOption" disabled>
+              <span class="spinner-border spinner-border-sm"></span>
+              Loading...
+            </button>
+
+            <!--<input *ngIf="!editOption" type="button" class="btn btn-outline-primary" (click)="editConfig()" value="Edit Config" />-->
+          </div>
+          <fieldset id="headerFieldset" [disabled]="disableHeader">
+            <legend>Header</legend>
+            <div class="col-md-12 custom-control custom-checkbox" style="margin-left: 15px; margin-bottom: 15px;">
+              <input type="checkbox" class="custom-control-input" name="useSameSettingsForFooter"
+                id="useSameSettingsForFooter" (change)="useSameSettingsForFooterOnChange($event)"
+                [(ngModel)]="templateConfigInfo.useSameSettingsForFooter" />
+              <label class="custom-control-label" for="useSameSettingsForFooter" style="color: black !important;">Use
+                same settings for footer</label>
+            </div>
+            
+            <div class="form-group form-inline content">
+              <label for="headerImageName" class="col-md-2" style="display: block;" (click)="false">Report Image</label>
+              <!--<div class="custom-file form-control col-md-6 bg-icons-remove">
+                <input type="file" accept="image/png" class="custom-file-input"
+                       (click)="onClickHeader()" (change)="headerFileInputOnchange($event)"
+                       [(ngModel)]="templateConfigInfo.headerImageName" #headerImageName="ngModel"
+                       required id="headerImageName" name="headerImageName" placeholder="Upload file...">
+                <label class="custom-file-label" for="headerImageName" id="lblHeaderImageName">Choose file</label>
+              </div>-->
+
+              <input type="file" accept="image/png" class="form-control col-md-6 bg-icons-remove input"
+                (click)="onClickHeader()" (change)="headerFileInputOnchange($event)"
+                [(ngModel)]="templateConfigInfo.headerImageName" #headerImageName="ngModel" [required]="!editOption"
+                id="headerImageName" name="headerImageName" placeholder="Upload file..." />
+        
+              <img [style.background-color]="templateConfigInfo.headerBackgroundColor" id="headerImagePreview"
+                class="col-md-1" src="{{headerImagePreview}}" alt="Header Image"  style="padding-left:10px;">
+          
+              
+              <!--<div class="col-md-1" *ngIf="headerImagePreview.length">
+                <input type="file" accept="image/png" #file placeholder="Choose file" (change)="changeHeaderImage($event)" style="display:none;">
+                <button type="button" class="btn btn-outline-primary" (click)="file.click()">Change</button>
+              </div>-->
+
+              <div class="invalid-feedback" *ngIf="headerImageName.invalid && headerImageName.touched"
+                style="padding-left:17%;">
+                Header Image is required
+              </div>
+              <div class="invalid-feedback" *ngIf="headerImageSize" style="padding-left:17%;">
+                Image size should not exceed 1MB
+              </div>
+              <div class="invalid-feedback" *ngIf="headerImageType" style="padding-left:17%;">
+                Image type should be png
+              </div>
+            </div>
+            <div class="form-group form-inline content"
+              [class.has-error]="headerForegroundColor.invalid && headerForegroundColor.touched"
+              [class.has-success]="headerForegroundColor.valid">
+              <label for="headerForegroundColor" class="col-md-2" style="display: block;" (click)="false">
+                Font Color
+              </label>
+              <input type="color" class="form-control col-md-6 bg-icons-remove input"
+                (change)="headerFgColorInputOnchange()" [(ngModel)]="templateConfigInfo.headerForegroundColor"
+                #headerForegroundColor="ngModel" required id="headerForegroundColor" name="headerForegroundColor"
+                placeholder="Font Color">
+              <span id="headerFgPreview" *ngIf="headerFgPreview"
+                style="margin-left:10px; font-weight: bold;">{{headerFgPreview}}</span>
+              <div class="invalid-feedback" *ngIf="headerForegroundColor.invalid && headerForegroundColor.touched"
+                style="padding-left:17%;">
+                Font Color is required
+              </div>
+            </div>
+            <div class="form-group form-inline content"
+              [class.has-error]="headerBackgroundColor.invalid && headerBackgroundColor.touched"
+              [class.has-success]="headerBackgroundColor.valid">
+              <label for="headerBackgroundColor" class="col-md-2" style="display: block;" (click)="false">Background
+                Color</label>
+              <input type="color" class="form-control col-md-6 bg-icons-remove input"
+                (change)="headerBgColorInputOnchange()" [(ngModel)]="templateConfigInfo.headerBackgroundColor"
+                #headerBackgroundColor="ngModel" required id="headerBackgroundColor" name="headerBackgroundColor"
+                placeholder="Header Background Color">
+              <span id="headerBgPreview" *ngIf="headerBgPreview"
+                style="margin-left:10px; font-weight: bold;">{{headerBgPreview}}</span>
+              <div class="invalid-feedback" *ngIf="headerBackgroundColor.invalid && headerBackgroundColor.touched"
+                style="padding-left:17%;">
+                Header Background Color is required
+              </div>
+            </div>
+          </fieldset>
+          <fieldset id="footerFieldset" [disabled]="disableFooter">
+            <legend>Footer</legend>
+            <div></div>
+            <div class="form-group form-inline content">
+              <label for="footerImageName" class="col-md-2" style="display: block;" (click)="false">Report Image</label>
+              <input type="file" accept="image/png" class="form-control col-md-6 bg-icons-remove input"
+                (click)="onClickFooter()" (change)="footerFileInputOnchange($event)"
+                [(ngModel)]="templateConfigInfo.footerImageName" #footerImageName="ngModel" id="footerImageName"
+                name="footerImageName" placeholder="Upload file..." />
+              <img [style.background-color]="templateConfigInfo.footerBackgroundColor" id="footerImagePreview"
+                src="{{footerImagePreview}}" alt="Footer Image" class="col-md-1" style="padding-left:10px;">
+              <div class="invalid-feedback" *ngIf="footerImageName.invalid && footerImageName.touched"
+                style="padding-left:17%;">
+                Footer Image is required
+              </div>
+              <div class="invalid-feedback" *ngIf="footerImageSize" style="padding-left:17%;">
+                Image size should not exceed 1MB
+              </div>
+              <div class="invalid-feedback" *ngIf="footerImageType" style="padding-left:17%;">
+                Image type should be png
+              </div>
+            </div>
+            <div *ngIf="showIfCheckboxSelected" class="form-group form-inline">
+              <label for="footerImagePreview1" class="col-md-2" style="display: block;" (click)="false">Image</label>
+              <img [style.background-color]="templateConfigInfo.footerBackgroundColor" id="footerImagePreview1"
+                src="{{footerImagePreview1}}" alt="Footer Image" class="col-md-1">
+            </div>
+            <div class="form-group form-inline content"
+              [class.has-error]="footerForegroundColor.invalid && footerForegroundColor.touched"
+              [class.has-success]="footerForegroundColor.valid">
+              <label for="footerForegroundColor" class="col-md-2" style="display: block;" (click)="false">Font
+                Color</label>
+              <input type="color" class="form-control col-md-6 bg-icons-remove input"
+                (change)="footerFgColorInputOnchange()" [(ngModel)]="templateConfigInfo.footerForegroundColor"
+                #footerForegroundColor="ngModel" id="footerForegroundColor" name="footerForegroundColor"
+                placeholder="Font Color">
+              <span id="footerFgPreview" *ngIf="footerFgPreview"
+                style="margin-left:10px; font-weight: bold;">{{footerFgPreview}}</span>
+              <div class="invalid-feedback" *ngIf="footerForegroundColor.invalid && footerForegroundColor.touched"
+                style="padding-left:17%;">
+                Font Color is required
+              </div>
+            </div>
+            <div class="form-group form-inline content"
+              [class.has-error]="footerBackgroundColor.invalid && footerBackgroundColor.touched"
+              [class.has-success]="footerBackgroundColor.valid">
+              <label for="footerBackgroundColor" class="col-md-2" style="display: block;" (click)="false">Background
+                Color</label>
+              <input type="color" class="form-control col-md-6 bg-icons-remove input"
+                (change)="footerBgColorInputOnchange()" [(ngModel)]="templateConfigInfo.footerBackgroundColor"
+                #footerBackgroundColor="ngModel" id="footerBackgroundColor" name="footerBackgroundColor"
+                placeholder="Footer Background Color">
+              <span id="footerBgPreview" *ngIf="footerBgPreview"
+                style="margin-left:10px; font-weight: bold;">{{footerBgPreview}}</span>
+              <div class="invalid-feedback" *ngIf="footerBackgroundColor.invalid && footerBackgroundColor.touched"
+                style="padding-left:17%;">
+                Footer Background Color is required
+              </div>
+            </div>
+          </fieldset>
+          <div class="form-group form-inline content"
+            [class.has-error]="scheduledFilePath.invalid && scheduledFilePath.touched"
+            [class.has-success]="scheduledFilePath.valid">
+            <label for="scheduledFilePath" class="col-md-2" style="display: block;">Scheduled files location</label>
+            <input type="text" class="form-control col-md-6 bg-icons-remove input"
+              [(ngModel)]="templateConfigInfo.scheduledReportsFilePath" #scheduledFilePath="ngModel" required
+              id="scheduledFilePath" name="scheduledFilePath" placeholder="Scheduled files location" disabled>
+            <div class="invalid-feedback" *ngIf="scheduledFilePath.invalid && scheduledFilePath.touched"
+              style="padding-left:17%;">
+              Scheduled files location is required
+            </div>
+            <!--<button id="party" class="very-sweet-looking" (click)="selectFolder()">Browse</button>
+            <input id="business" type="file" style="display: none" />-->
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </mat-card>
+</div>

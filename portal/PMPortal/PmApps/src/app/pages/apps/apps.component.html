@@ -1,0 +1,49 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+    <li class="breadcrumb-item"><a
+        [routerLink]="'/tDashboard/' + tenantService.currentTenantValue.tenantId ">{{this.tenantService.currentTenantValue.tenantName}}</a>
+    </li>
+    <li class="breadcrumb-item"><a routerLink="/apps">Apps</a></li>
+  </ol>
+</nav>
+
+<div>
+  <app-spinner *ngIf="showSpinner"></app-spinner>
+  <div class="row" *ngIf="!showSpinner">
+    <div *ngIf="!(apps.length>0)">
+      <h5>No Apps available</h5>
+    </div>
+    <div class="banner banner1 col-sm-3" *ngFor="let app of apps">
+      <div class="market-container-box" (click)="getApp(app)">
+        <div class="app-box">
+          <div class="app-img">
+            <img src="{{app.imageUrl}}" />
+          </div>
+          <div class="app-info">
+            <div class="app-dec">
+              <h5>{{app.appName}}</h5>
+              <div [innerHtml]="app.description"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="banner banner1 col-sm-3 extra-tile" *ngIf="_utility.licenseInfo.isGrafanaInstalled">
+    <div class="market-container-box" (click)="handleExtraTileClick()" style="cursor:pointer;">
+        <div class="app-box">
+          <div class="app-img">
+            <img src="assets/images/Pmanalytic_logo.png" alt="Extra Tile Image">
+          </div>
+          <div class="app-info">
+            <div class="app-dec">
+              <h5>PM Analytics</h5>
+              <div>Analytic view for All the Templates</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </div>
+</div>

@@ -1,0 +1,45 @@
+.example-card {
+  margin: 20px;
+  padding: 0px;
+  padding-top: 10px;
+  margin-bottom:-15px;
+  cursor:pointer;
+}
+table {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.table_header {
+  text-align: center;
+background-color: #EFEFEF;
+color: black;
+width: 50%;
+font-size: 16px;
+font-family: Arial, Sans-Serif !important;
+padding: 8px;
+}
+@media only screen and (max-width: 599px) {
+  .dashboard-content .mat-card {
+      top: 30px !important;
+  }
+}
+.plotButton {
+  background-color: #1a3a7f;
+  font-weight: 500;
+  float: right;
+  color: white;
+  padding: 2px;
+  width: 62px;
+  height: 23px;
+}
+.plotButton:hover {
+  background-color: #e85d1b;
+}
+@media only screen and (max-width: 787px) and (min-width: 600px) {
+
+  .dashboard-content .mat-card {
+      top: 45px !important;
+  }
+}

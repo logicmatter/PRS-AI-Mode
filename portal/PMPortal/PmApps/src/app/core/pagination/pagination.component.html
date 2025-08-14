@@ -1,0 +1,28 @@
+<div>
+
+  <div class="home-paginations" *ngIf="!reportHelper.showSpinner">
+
+    <span id="ars-page-navigation" [hidden]="reportHelper.haspages">
+        <span id="page-numbers" class="page-numbers" data-ng-show="reportHelper.totalPageNo">
+            <!--<select>
+<mat-option ngModel="presentPageNo" *ngFor="let n of pageRange">
+{{n}}
+</mat-option>
+</select>-->
+            <!--<select ngModel="presentPageNo" data-ng-options="n for n in [] | range:1:totalPageNo" (ngModelChange)="onPageSelected()"></select>-->
+            <mat-form-field>
+                <input class="input-pageno" matInput [(ngModel)]=reportHelper.presentPageNo (keyup.enter)="reportHelper.onGoTo($event.target.value)" (focusout)="reportHelper.onGoTo($event.target.value)" (keypress)="reportHelper.numberOnly($event)" value = {{reportHelper.presentPageNo}}>
+            </mat-form-field>
+            <!--{{reportHelper.presentPageNo}}-->
+            of  {{reportHelper.totalPageNo}}
+
+        </span>
+        <span id="report-viewer-first-arrow" data-toggle="tooltip" title="First Page" (click)="reportHelper.firstPage()" [style.pointer-events]="reportHelper.isDisable && reportHelper.isDisablefirst ? 'stroke':'none'"><i [ngClass]="reportHelper.isDisablefirst ? 'sales-page-n-icons' : 'disable-sales-page-n-icons'" class="fa fa-angle-double-left"></i></span>
+        <span id="report-viewer-left-arrow" data-toggle="tooltip" title="Previous" (click)="reportHelper.previousPage()" [style.pointer-events]="reportHelper.isDisable && reportHelper.isDisablefirstpre ? 'stroke':'none'"> <i [ngClass]="reportHelper.isDisablefirstpre ? 'sales-page-n-icons' : 'disable-sales-page-n-icons'" class="fa fa-chevron-left"></i></span>
+        <span id="report-viewer-right-arrow" data-toggle="tooltip" title="Next" (click)="reportHelper.nextPage()" [style.pointer-events]="reportHelper.isDisable && reportHelper.isDisablelast ? 'stroke':'none'"><i [ngClass]="reportHelper.isDisablelast ? 'sales-page-n-icons' : 'disable-sales-page-n-icons'" class="fa fa-chevron-right"></i></span>
+        <span id="report-viewer-last-arrow" data-toggle="tooltip" title="Last Page" (click)="reportHelper.lastPage()" [style.pointer-events]="reportHelper.isDisable && reportHelper.isDisablelastnxt ? 'stroke':'none'"><i [ngClass]="reportHelper.isDisablelastnxt ? 'sales-page-n-icons' : 'disable-sales-page-n-icons'" class="fa fa-angle-double-right"></i></span>
+        <app-export></app-export>
+    </span>
+</div>
+</div>
+

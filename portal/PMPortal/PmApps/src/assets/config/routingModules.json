@@ -1,0 +1,43 @@
+{
+  "appModules": [
+    {
+      "BMS": [
+        {
+          "id": "1",
+          "name": "Alarm",
+          "module": "AppAlarmSharedModule.forRoot()"
+        }
+      ],
+      "WMS": [
+
+      ],
+      "OEM": [
+        {
+          "IAQ":[
+              {
+                "routingInfo":[
+                  {
+                    "path": "appIAQ/:appId",
+                    "component": "AppComponent",
+                    "canActivate": ["AuthGuard"]
+                  },
+                  {
+                    "path": "appIAQ/:appId/:id",
+                    "component": "AppComponent",
+                    "canActivate": ["AuthGuard"]
+                  },
+                  {
+                    "path": "appIAQ/:appId/:id/:action",
+                    "component": "AppComponent",
+                    "canActivate": ["AuthGuard"]
+                  },
+                  { "path": "appIAQ", "component": "AppComponent", "canActivate": ["AuthGuard"] },
+                  { "path": "home/appIAQ", "redirectTo": "appIAQ", "canActivate": ["AuthGuard"] }
+                ]
+              }
+          ]
+        }
+      ]
+    }
+  ]
+}

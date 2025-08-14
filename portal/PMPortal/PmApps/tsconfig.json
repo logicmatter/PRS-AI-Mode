@@ -1,0 +1,40 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
+    "emitDecoratorMetadata": true,
+    "module": "ES2022",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "skipLibCheck": true,
+    "target": "ES2015",
+    "esModuleInterop": true,
+    "typeRoots": [
+      "./node_modules/@types/"
+    ],
+    "lib": [
+      "ES2018",
+      "dom"
+    ],
+    "rootDir": "."
+  },
+  "files": [
+    "src/main.ts",
+    "src/polyfills.ts",
+    "src/zone-flags.ts"
+  ],
+  "include": [
+    "projects/AppCrEnv/src/main.ts",
+    "projects/AppCrEnv/src/polyfills.ts"
+  ],
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  }
+}

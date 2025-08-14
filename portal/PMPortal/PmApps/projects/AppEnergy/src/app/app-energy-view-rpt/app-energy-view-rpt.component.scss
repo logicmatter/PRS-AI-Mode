@@ -1,0 +1,77 @@
+.sidenav {
+  height: -webkit-fill-available;
+  width: 0;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
+  transition: 0.5s;
+}
+
+.rhead {
+  padding: 15px 50px;
+}
+
+#btn1{
+  display: inline-block;
+ }
+
+#main {
+  transition: margin-left 0.5s;
+  padding: 10px 0px 0px 15px;
+}
+
+.row {
+  margin-right: 0px;
+}
+
+.back {
+  flex: 0 0 25%;
+  max-width: 11%;
+}
+.save {
+  flex: 0 0 25%;
+  max-width: 12%;
+}
+.preview {
+  flex: 0 0 25%;
+  max-width: 11%;
+}
+.energy{
+  padding:15px 35px;
+}
+.my-custom-span {
+  margin-bottom: 10px;
+}
+
+.my-custom-icon {
+  font-size: 24px;
+}
+@media screen and (min-width:700px){
+  .save {
+
+    max-width: 13%;
+  }
+  .energy{
+    padding:15px 4px;
+    padding-left: 12px;
+  }
+
+}
+@media screen and (min-width:360px) and (max-width:650px){
+.back {
+  flex: 0 0 10%;
+    max-width: 33%;
+}
+.save {
+  flex: 0 0 10%;
+    max-width: 33%;
+}
+.preview {
+  flex: 0 0 10%;
+    max-width: 33%;
+}
+.row {
+  margin-right: -619px;
+}
+}

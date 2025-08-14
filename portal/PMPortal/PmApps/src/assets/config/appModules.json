@@ -1,0 +1,19 @@
+{
+  "appModules": [
+    {
+      "BMS": [
+        {
+          "id": "1",
+          "name": "Alarm",
+          "module": "AppAlarmSharedModule.forRoot()"
+        }
+      ],
+      "WMS": [
+
+      ],
+      "OEM": [
+
+      ]
+    }
+  ]
+}

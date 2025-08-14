@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="">
+    <i
+      *ngIf="_utility.currentPage != 1"
+      class="fa fa-chevron-left pagination-previous"
+      aria-hidden="true"
+      style="cursor: pointer"
+      (click)="previousPage()"
+    ></i>
+    <input
+      [appOnlydigit]="true"
+      type="text"
+      class="pagination-input"
+      [(ngModel)]="_utility.currentPage"
+      (keydown.enter)="setPageNo($event)"
+    />
+    <span class="pagination-text"> of {{ _utility.totalNoPages }}</span>
+    <i
+      *ngIf="_utility.currentPage < _utility.totalNoPages"
+      class="fa fa-chevron-right pagination-next"
+      aria-hidden="true"
+      style="cursor: pointer"
+      (click)="nextPage()"
+    ></i>
+  </div>
+</div>

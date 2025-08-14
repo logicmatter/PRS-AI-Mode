@@ -1,0 +1,134 @@
+
+<div class="dashboard-content">
+    <mat-card style="min-height:100vh">
+        <div *ngIf="count!=0">
+            <div *ngIf="model.objectType == 'Trendlog'">
+                <app-spinner *ngIf="showSpinner"></app-spinner>
+                <div *ngIf="!showSpinner">
+                    <div *ngFor="let d of searchList">
+                        <span data-toggle="tooltip" title="Back" (click)="backParent()" class="sla-back-icon refresh-icon"><mat-icon mat-list-icon class="btn-primary click-event">arrow_back</mat-icon></span>
+                        <h5 style="text-align:center"><b>{{model.objectType}}</b> Details for <b>{{d.logDescription}} ({{d.objName}})</b></h5>
+                        <table class="table table-bordered">
+
+                            <thead>
+                                 <tr>
+                                    <th colspan="2" class="table_header text-center">
+                                      <span style="visibility: unset;" id="plotT">{{model.objectType}}</span>
+                                      <span mat-raised-button matTooltip="Plot" class="plotButton" (click)="getSelectedSid(d)" style="visibility: unset;" class="btn btn-outline-primary float-right btn-sm" id="plotT"><i class="fa fa-line-chart" style="font-size: 16px;font-weight: 500;"></i> Plot</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>Log Dev num</th>
+                                    <td>{{d.logDevNum}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Log Inst</th>
+                                    <td>{{d.logInst}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Obj Name</th>
+                                    <td>{{d.objName}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Dev Num</th>
+                                    <td>{{d.devNum}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Object type</th>
+                                    <td>{{d.objectType}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Obj Inst</th>
+                                    <td>{{d.objInst}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Property</th>
+                                    <td>{{d.property}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Index</th>
+                                    <td>{{d.index}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Maxtbl Samples</th>
+                                    <td>{{d.maxtblSamples}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Interval</th>
+                                    <td>{{d.interval}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Engineering Unit</th>
+                                    <td>{{d.engineeringUnit}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Log Description</th>
+                                    <td>{{d.logDescription}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Not Class</th>
+                                    <td>{{d.notClass}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Buf Size</th>
+                                    <td>{{d.bufSize}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Not Thresh</th>
+                                    <td>{{d.notThresh}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Engucust</th>
+                                    <td>{{d.engucust}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Start Time</th>
+                                    <td>{{d.startTime}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Stop time</th>
+                                    <td>{{d.stopTime}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Covtlog</th>
+                                    <td>{{d.covtlog}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Cov Increment</th>
+                                    <td>{{d.covIncrement}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Cov Resub Interval</th>
+                                    <td>{{d.covResubInterval}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Cov Flags</th>
+                                    <td>{{d.covFlags}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Created Date</th>
+                                    <td>{{d.createdDate}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Data Source ID</th>
+                                    <td>{{d.dataSourceId}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Supervisor Host Name</th>
+                                    <td>{{d.supervisorHostName}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="count==0">
+            <div>
+                <h5 style="text-align:center">No Results Found for <b>"{{model.objectType}}"</b></h5>
+            </div>
+        </div>
+    </mat-card>
+</div>

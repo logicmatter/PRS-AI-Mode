@@ -1,0 +1,175 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+        <li class="breadcrumb-item"><a
+                [routerLink]="'/tDashboard/' + tenantService.currentTenantValue.tenantId">{{this.tenantService.currentTenantValue.tenantName}}</a>
+        </li>
+        <li class="breadcrumb-item"><a routerLink="/tenant">Tenant</a></li>
+    </ol>
+</nav>
+<div>
+    <div class="row">
+        <div class="col-xs-8">
+        </div>
+        <div class="col-xs-4">
+            <div class="dashboard-refresh" style="text-align:center;">
+                <!--<a data-toggle="tooltip" title="Cloud ARS Setup"><span (click)="downloadGateway()" class="refresh-icon"><mat-icon mat-list-icon>cloud_download</mat-icon></span></a>-->
+                <!--<a data-toggle="tooltip" title="Create Tenant"><span routerLink="/cloudplans" class="refresh-icon"><mat-icon mat-list-icon>group_add</mat-icon></span></a>-->
+                <!--<button mat-raised-button style="background-color:#1a3a7f;color:white;border-radius:25px;font-size: 12px;" (click)="downloadGateway()">
+                            <mat-icon mat-list-icon>cloud_download</mat-icon>
+                            Download Gateway
+                        </button>-->
+            </div>
+        </div>
+    </div>
+
+    <mat-card class="mat-card-common-bg">
+        <mat-card-title>
+        </mat-card-title>
+        <mat-card-content *ngIf="!isLoading">
+            <div>
+                <mat-accordion>
+                    <mat-expansion-panel style="background-color:grey" class="tenant-section"
+                        [expanded]="indexExpanded == i">
+                        <mat-expansion-panel-header class="mat-exp-header"
+                            (click)="getTenant(tenantService.currentTenantValue.tenantId)">
+
+                            <div class="col-md-4" *ngIf="tenantService.currentTenantValue.tenantName">
+                                <mat-panel-title class="">
+                                    <span
+                                        style="cursor:pointer;color:white">{{tenantService.currentTenantValue.tenantName}}</span>
+                                </mat-panel-title>
+                            </div>
+                            <!-- <div class="col-md-5">
+                                <mat-panel-description class="mat-exp-panel">
+                                    {{tenant.tenantMail}}
+                                </mat-panel-description>
+                            </div>
+                            <div class="col-md-3">
+                                <mat-panel-description class="mat-exp-panel">
+                                    {{tenant.plan}}
+                                </mat-panel-description>
+                            </div> -->
+                        </mat-expansion-panel-header>
+                        <div *ngIf="!isTenantModelLoading">
+                            <div class="row">
+                                <div class="col-md-12 db-location">
+                                    <!--To Display Progress Bar-->
+                                    <!--<mat-progress-bar mode="determinate" [(value)]="formPercentage"></mat-progress-bar>
+                                    <div>
+                                        <mat-form-field *ngFor="let form of formCount">
+                                            <input matInput placeholder="Favorite food" (change)="selectInput(form)" [id]="form.id" [value]="form.name">
+                                        </mat-form-field>
+                                    </div>-->
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <mat-card-title class="title" *ngIf='!loadComponent'>Tenant Information<span
+                                                    class="text-danger"></span></mat-card-title>
+                                        </div>
+                                        <div class="col-md-8" style="text-align:right">
+                                            <div>
+                                                <!-- <button matTooltip="User Managment" class="tenat-btn cust-btn btn btn-primary" (click)="openUserManagment()">Manage User</button> -->
+                                                <!-- <button matTooltip="Cloud ARS Client Setup" class="tenat-btn cust-btn btn btn-primary" *ngIf="isReadOnly" (click)="downloadClientPackage(tenant)" [disabled]="!deviceService.isDesktop()">Download Client Setup</button> -->
+                                                <!--<button matTooltip="Edit" class="tenat-btn cust-btn btn btn-primary" *ngIf="isReadOnly" (click)="isReadOnlyFalse('')"><i class="tenat-icon fa fa-pencil-square-o"></i></button>-->
+                                                <!-- <button class="tenat-btn cust-btn btn btn-primary" *ngIf="!isReadOnly && isEdit" (click)="isReadOnlyFalse(tenant)">Cancel</button>
+                                                <button matTooltip="Update Tenant" class="tenat-btn cust-btn btn btn-primary" *ngIf="!isReadOnly && isEdit" (click)="editTenant()" [disabled]="!isDateRangeValid">Update</button> -->
+                                            </div>
+                                            <!-- <div>
+                                                <div [hidden]="isDownload">
+                                                    <div class="loader1"></div>
+                                                    <button class="tenat-btn cust-btn btn btn-outline-primary" style="float: right; margin-right: 28px;">Please wait, the package is preparing to download...</button>
+                                                </div>
+                                                <div [hidden]="isEdit">
+                                                    <div class="loader1"></div>
+                                                </div>
+                                            </div> -->
+                                        </div>
+
+                                    </div>
+                                    <div *ngIf='loadComponent'>
+                                        <!-- <app-userMang></app-userMang> -->
+                                    </div>
+                                    <mat-card class="tenantInfo1"
+                                        *ngIf='!loadComponent && tenantService.currentTenantValue.tenantName'>
+                                        <form [formGroup]="tenantFormGroup" class="customer-form-step">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <span>Tenant Name: </span>
+                                                    <h6 style="color: #1a3a7f;font-weight: bold;">
+                                                        {{tenantService.currentTenantValue.tenantName}}</h6>
+                                                    <!-- <mat-form-field class="full-width-mat-input">
+                                                        <input matInput placeholder="Tenant Name" formControlName="tenantName" [(ngModel)]="tenantModel.tenantName" (change)="tenantModel.tenantName= tenantModel.tenantName.trim()" (keyup)="tenantTerm$.next($event.target.value)" [readonly]="isReadOnly" required>
+                                                        <mat-error *ngIf="invalid != true">Please provide a valid Tenant name</mat-error>
+                                                    </mat-form-field>
+                                                    <mat-error *ngIf="isExists">Tenant name already exists</mat-error><br /> -->
+                                                    <!--<mat-form-field class="full-width-mat-input">
+                                                        <mat-select placeholder="Location" formControlName="tenantLocation" [(ngModel)]="model.location" [disabled]="ReadOnly">
+                                                            <mat-option *ngFor="let loc of locations" [value]="loc.location">
+                                                                {{ loc.location }}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field><br />-->
+                                                </div>
+
+
+                                                <div class="col-md-6">
+                                                    <!-- <mat-form-field class="full-width-mat-input">
+                                                         <input matInput placeholder="Tenant Email" formControlName="tenantMail" [(ngModel)]="tenantModel.tenantMail" (change)="tenantModel.tenantMail= tenantModel.tenantMail.trim()" [readonly]="isReadOnly" required>
+                                                        <mat-error *ngIf="invalidEmail != true">Please enter a valid Email</mat-error>
+                                                    </mat-form-field><br />-->
+                                                    <!--<mat-form-field class="full-width-mat-input">
+                                                        <mat-select placeholder="Region" formControlName="tenantRegion" [(ngModel)]="model.region" [disabled]="ReadOnly">
+                                                            <mat-option *ngFor="let region of regions" [value]="region.location">
+                                                                {{ region.aregion }}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>-->
+                                                    <!--<mat-form-field class="full-width-mat-input">
+                                                        <input matInput placeholder="Cloud Plan" formControlName="plan" [(ngModel)]="model.plan" [readonly]="ReadOnly" required>
+                                                    </mat-form-field><br />-->
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </mat-card><br />
+                                    <div class="row tenant-config-section" *ngIf='!loadComponent'>
+                                        <mat-card-title class="title col-md-8">Tenant Config</mat-card-title>
+                                        <div class="col-md-4" style="text-align:right; color:whitesmoke;">
+                                        </div>
+                                    </div>
+                                    <mat-card class="tenantInfo" *ngIf='!loadComponent'>
+                                        <div>
+                                            <div style="text-align:right; color:#808080"><span>{{selectedVersionType==0
+                                                    ? 'Updated Date: '+ tenantModel.backupDate : 'Updated Date:
+                                                    '+tenantModel.currentConfigDate}}</span></div>
+                                            <div>
+                                                <textarea readonly
+                                                    style="width:100%;min-height:730px">{{selectedVersionType==0 ? tenantModel.backupConfig : tenantModel.currentConfig}}</textarea>
+                                                <!--<pre [innerHtml]="!showConfig ? model.currentConfig : model.backupConfig"></pre>-->
+                                            </div>
+                                        </div>
+                                    </mat-card><br />
+                                </div>
+                            </div>
+                            <!--<div class="bottom-btns">
+                                <div>
+                                    <button matTooltip="Edit" class="tenat-btn cust-btn btn btn-primary" [ngStyle]="{'margin-top':'10px'}" *ngIf="isReadOnly" (click)="isReadOnlyFalse('')"><i class="tenat-icon fa fa-pencil-square-o"></i></button>
+                                    <button class="tenat-btn cust-btn btn btn-primary" *ngIf="!isReadOnly && isEdit" (click)="isReadOnlyFalse(tenant)">Cancel</button>
+                                    <button matTooltip="Update Tenant" class="tenat-btn cust-btn btn btn-primary" *ngIf="isReadOnly==false && isEdit" (click)="editTenant()" [disabled]="!isDateRangeValid || isExists">Update</button>
+                                </div>
+                                <div>
+                                    <div style="width:10px;margin-right:20px;margin-left:10px;margin-top:5px;">
+                                        <div style="margin-right:30px;" [hidden]="isEdit" class="loader1"></div>
+                                    </div>
+                                </div>
+                            </div>-->
+
+                            <h5 style="color:#99f399">{{errorMsg ? errorMsg : ""}}</h5>
+                        </div>
+                        <app-spinner *ngIf="showSpinner"></app-spinner>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
+        </mat-card-content>
+        <app-spinner *ngIf="isLoading"></app-spinner>
+    </mat-card>
+</div>

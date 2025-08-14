@@ -1,0 +1,13 @@
+::ng-deep .mat-input-underline {
+  display: none;
+}
+
+
+@media screen and (min-width: 360px) and (max-width:624px) {
+  .tenant {
+
+    width: 88%;
+    padding-top: 41px;
+
+  }
+}

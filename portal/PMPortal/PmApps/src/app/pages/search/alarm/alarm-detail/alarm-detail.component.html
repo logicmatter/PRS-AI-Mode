@@ -1,0 +1,189 @@
+<div class="app-content">
+    <mat-card style="min-height:100vh">
+        <div *ngIf="count!=0">
+            <div *ngIf="model.objectType == 'Alarm'">
+                <app-spinner *ngIf="showSpinner"></app-spinner>
+                <div *ngIf="!showSpinner">
+                    <div *ngFor="let d of searchList">
+                        <span data-toggle="tooltip" title="Back" (click)="backParent()" class="sla-back-icon refresh-icon"><mat-icon mat-list-icon class="btn-primary click-event">arrow_back</mat-icon></span>
+                        <h5 style="text-align:center"><b>{{model.objectType}}</b> Details for <b>{{d.description}} ({{d.objName}})</b></h5>
+                        <table class="table table-bordered">
+
+                            <thead>
+                                 <tr>
+                                    <th colspan="2" class="table_header text-center">
+
+                                      <span style="visibility: unset;" id="plotA">{{model.objectType}}</span>
+                                      <div class="plotContainer">
+
+                                      <span mat-raised-button matTooltip="Plot" class="plotButton" (click)="getSelectedSid(d)" style="visibility: unset;" class="btn btn-outline-primary float-right btn-sm" id="plotA"><i class="fa fa-line-chart" style="font-size: 16px;font-weight: 500;" ></i> Plot</span>
+                                     </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>Dev Inst</th>
+                                    <td>{{d.devInst}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Obj Name</th>
+                                    <td>{{d.objName}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Obj Type</th>
+                                    <td>{{d.objectType}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Obj Inst</th>
+                                    <td>{{d.objInst}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Property</th>
+                                    <td>{{d.property}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Description</th>
+                                    <td>{{d.description}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Property Object Description</th>
+                                    <td>{{d.propDescr}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Event Type</th>
+                                    <td>{{d.eventType}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Event Typedesc</th>
+                                    <td>{{d.eventTypedesc}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Notify Type</th>
+                                    <td>{{d.notifyType}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Prop Dev Inst</th>
+                                    <td>{{d.propDevInst}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Prop Obj Type</th>
+                                    <td>{{d.propObjType}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Not Class</th>
+                                    <td>{{d.notClass}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Prop Obj Inst</th>
+                                    <td>{{d.propObjInst}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Prop index</th>
+                                    <td>{{d.propIndex}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Prop Descr</th>
+                                    <td>{{d.propIndex}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Not Class Descr</th>
+                                    <td>{{d.notClassDescr}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Event Enable</th>
+                                    <td>{{d.eventEnable}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep type</th>
+                                    <td>{{d.ep_Type}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep time Delay</th>
+                                    <td>{{d.ep_TimeDelay}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep List of Values</th>
+                                    <td>{{d.ep_ListOfValues}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Created Date</th>
+                                    <td>{{d.createdDate}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep Bit Mask</th>
+                                    <td>{{d.ep_BitMask}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep Ref Prop Inc</th>
+                                    <td>{{d.ep_RefPropInc}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep Feedback Prop Ref</th>
+                                    <td>{{d.ep_FeedbackPropRef}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Data Source ID</th>
+                                    <td>{{d.dataSourceID}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Supervisor Host Name</th>
+                                    <td>{{d.supervisorHostName}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Rep Job Name</th>
+                                    <td>{{d.repName}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep Feedbackpropref descr</th>
+                                    <td>{{d.ep_Feedbackpropref_descr}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep Set Point Ref</th>
+                                    <td>{{d.supervisorHostName}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep Setpoint Ref descr</th>
+                                    <td>{{d.ep_SetPointRef}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep High Limit</th>
+                                    <td>{{d.ep_HighLimit}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep Low Limit</th>
+                                    <td>{{d.ep_LowLimit}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep Deadband</th>
+                                    <td>{{d.ep_Deadband}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep List Of Alarm Values</th>
+                                    <td>{{d.ep_ListOfAlarmValues}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep List Of Life Safety Values</th>
+                                    <td>{{d.ep_ListOfLifeSafetyValues}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep Mode Prop Ref</th>
+                                    <td>{{d.ep_ModePropRef}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Almlink Url</th>
+                                    <td>{{d.almlink_Url}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="count==0">
+            <div>
+                <h5 style="text-align:center">No Results Found for <b>"{{model.objectType}}"</b></h5>
+            </div>
+        </div>
+    </mat-card>
+</div>

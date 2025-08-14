@@ -1,0 +1,149 @@
+<app-spinner *ngIf="showSpinner"></app-spinner>
+<div class="fixedPosition">
+
+  <div class="float-right">
+    <mat-paginator #paginator [pageSize]="currentPageSize" *ngIf="length>10"
+    [pageIndex]="currentPageIndex" [pageSizeOptions]="pageSizeOptions" (page)="getData($event)"
+    [showFirstLastButtons]="true" class="pageTop"></mat-paginator>
+  </div>
+  <div>
+    <div *ngIf="length > 0 && _inputparams === 'lid'">
+      <h5 class="search-message py-2">
+        Showing {{startingIndex + 1}} - {{endingIndex > length ? length : endingIndex}} of
+        {{length}} <b>"Environments Available"</b>
+      </h5>
+    </div>
+    <div *ngIf="length > 0 && _inputparams === 'eid'">
+      <h5 class="search-message py-2">
+        Showing {{startingIndex + 1}} - {{endingIndex > length ? length : endingIndex}} of
+        {{length}} <b>"Equipments Available"</b>
+      </h5>
+    </div>
+  </div>  
+  <div>
+    <div class="input-container" style="float:left">
+      <i class="fa fa-filter icon" matTooltip="Filter"></i>
+      <input class="form-control" type="text" name="search" placeholder="Filter"  (keyup)="applyFilter($event.target.value)"
+        style="border-radius:0px;width:auto;margin-left: 0px;">
+    </div>
+  </div>
+
+  <!-- <div *ngIf="isDetails =='false'" class="input-container" style="float:left">
+    <i class="fa fa-filter icon" matTooltip="Filter"></i>
+    <input class="form-control" type="text" name="search" placeholder="Filter" [(ngModel)]="filter"
+    (keyup.enter)="applyFilter($event.target.value,$event)" (keyup)="filterByKey($event.target.value,$event)" style="border-radius:0px;width:auto">
+  </div> -->
+  <div class="checkList">
+    <a style="font-size:12px" (click)="clearSelection()"
+      [class.disabled]="!(adhocUtility.roomsList.length > 0)">Uncheck All</a>
+  </div>
+  <div class="checkList">
+    <a style="font-size:12px" (click)="checked()" [class.disabled]="!(adhocUtility.roomsList.length > 0)">
+      PinSelectedtoTop
+    </a>
+  </div>
+
+
+  <!-- <mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+  </mat-form-field> -->
+  <div class="float-right ml-5 mr-2">
+
+  </div>
+  <!-- <div class="float-right ml-5 mt-1">
+    <a style="font-size:12px"
+      [class.disabled]="!(adhocUtility.roomsList.length > 0)"><strong>Alarm Objects :
+        {{adhocUtility.roomsList.length}}</strong> </a>
+  </div> -->
+  <div>
+  </div>
+
+</div><br /><br />
+<div class="scroller">
+<div class="example-container mat-elevation-z8">
+  <mat-table cdkDropList #table #list="cdkDropList" [dataSource]="roomsList" [cdkDropListData]="roomsList.data"
+    (cdkDropListDropped)="onListDrop($event)" #sort="matSort" matSort *ngIf="length > 0"
+    [matSortActive]="sortProperty" [matSortDirection]="sortDirection">
+    <ng-container matColumnDef="checked">
+      <mat-header-cell *matHeaderCellDef [ngClass]="'checkedWidthClass'"></mat-header-cell>
+      <mat-cell *matCellDef="let element" [ngClass]="'checkedWidthClass'">
+        <mat-checkbox value="{{ element }}" (change)="checkedState(element,$event)" [(ngModel)]="element.checked">
+        </mat-checkbox>
+      </mat-cell>
+    </ng-container>
+    <!-- First Column ID-->
+    <!-- Room Name Container -->
+<ng-container *ngIf="_inputparams === 'lid'" matColumnDef="roomName">
+  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'nameWidthClass'"> Environment Name
+  </mat-header-cell>
+  <mat-cell *matCellDef="let element" [ngClass]="'nameWidthClass'">
+    {{element.roomName}}
+  </mat-cell>
+</ng-container>
+
+<ng-container *ngIf="_inputparams === 'lid'" matColumnDef="location">
+  <mat-header-cell *matHeaderCellDef mat-sort-header> Profile
+  </mat-header-cell>
+  <mat-cell *matCellDef="let element">
+    {{element.location}}
+  </mat-cell>
+</ng-container>
+
+ <!-- Third Column -->
+ <ng-container *ngIf="_inputparams === 'lid'" matColumnDef="classType">
+  <mat-header-cell *matHeaderCellDef mat-sort-header> Environment Type
+  </mat-header-cell>
+  <mat-cell *matCellDef="let element">
+    {{element.classType}}
+  </mat-cell>
+</ng-container>
+
+<!-- Equipment Name Container -->
+<ng-container *ngIf="_inputparams === 'eid'" matColumnDef="roomName">
+  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'nameWidthClass'"> Equipment Name
+  </mat-header-cell>
+  <mat-cell *matCellDef="let element" [ngClass]="'nameWidthClass'">
+    {{element.equipmentName}}
+  </mat-cell>
+</ng-container>
+
+<ng-container *ngIf="_inputparams === 'eid'" matColumnDef="location">
+  <mat-header-cell *matHeaderCellDef mat-sort-header> Profile
+  </mat-header-cell>
+  <mat-cell *matCellDef="let element">
+    {{element.location}}
+  </mat-cell>
+</ng-container>
+
+ <!-- Third Column -->
+ <ng-container *ngIf="_inputparams === 'eid'" matColumnDef="classType">
+  <mat-header-cell *matHeaderCellDef mat-sort-header> Equipment Type
+  </mat-header-cell>
+  <mat-cell *matCellDef="let element">
+    {{element.classType}}
+  </mat-cell>
+</ng-container>
+
+    <!-- Second Column -->
+   
+
+     <!-- Third Column -->
+     <!-- <ng-container matColumnDef="action">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <img src="assets/icons/Group 686.svg" width="26px" height="26px"
+        class="dragdrop" aria-hidden="false" matTooltip="Drag & drop" />
+      </mat-cell>
+    </ng-container> -->
+
+    <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag></mat-row>
+  </mat-table>
+
+  <!-- <mat-paginator [hidden]="length < 10"  [length]="dataLength" #paginator [pageSizeOptions]="[10, 20, 50, 100]" (page)="getData($event)" showFirstLastButtons>
+  </mat-paginator> -->
+
+
+</div>
+</div>

@@ -1,0 +1,71 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+        <ng-container *ngIf="model.objectType === 'Alarm'">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['./alarm']"
+                    [queryParams]="{ objectType: model.objectType, keyword: model.keyWord, app: 'search' }">
+                    Alarm
+                </a>
+            </li>
+        </ng-container>
+        <ng-container *ngIf="model.objectType === 'Trendlog'">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['./trendlog']"
+                    [queryParams]="{ objectType: model.objectType, keyword: model.keyWord, app: 'search' }">
+                    Trendlog
+                </a>
+            </li>
+        </ng-container>
+        <ng-container *ngIf="model.objectType === 'Energylog'">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['./energylog']"
+                    [queryParams]="{ objectType: model.objectType, keyword: model.keyWord, app: 'search' }">
+                    Energylog
+                </a>
+            </li>
+        </ng-container>
+        <ng-container *ngIf="model.objectType === 'Reports'">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['./reports']"
+                    [queryParams]="{ objectType: model.objectType, keyword: model.keyWord, app: 'search' }">
+                    Reports
+                </a>
+            </li>
+        </ng-container>
+        <ng-container *ngIf="model.objectType === 'Device'">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['./device']"
+                    [queryParams]="{ objectType: model.objectType, keyword: model.keyWord, app: 'search' }">
+                    Device
+                </a>
+            </li>
+        </ng-container>
+        <ng-container *ngIf="model.objectType === 'Points'">
+            <li class="breadcrumb-item">
+                <a [routerLink]="['./points']"
+                    [queryParams]="{ objectType: model.objectType, keyword: model.keyWord, app: 'search' }">
+                    Points
+                </a>
+            </li>
+        </ng-container>
+    </ol>
+</nav>
+<div>
+    <div *ngIf="utility.patternShow && !searchUtility.showSpinner" class="note">
+        <b>Note:</b><br />
+        <h6 style="font-size:12px; display:inline-block !important;color: #1a3a7f;"><b>" * "</b> - Represents zero
+            or more characters</h6><br />
+        <h6 style="font-size:12px; display:inline-block !important;color: #1a3a7f;"><b>" ? "</b> - Represents a
+            single character</h6>
+    </div>
+
+    <nav mat-tab-nav-bar class="plans-details-tabs salesport-tabs">
+        <a mat-tab-link style="pointer-events: none;cursor: default;" *ngFor="let link of navLinks; let i = index;"
+            [routerLink]="link.link" routerLinkActive #rla="routerLinkActive"
+            (click)="activeLinkIndex = i; $event.stopPropagation();$event.preventDefault()" [active]="rla.isActive">
+
+            {{link.label}} </a>
+    </nav>
+    <router-outlet></router-outlet>
+</div>

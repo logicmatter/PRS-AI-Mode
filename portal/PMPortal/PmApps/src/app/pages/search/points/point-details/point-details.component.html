@@ -1,0 +1,154 @@
+
+<div class="dashboard-content">
+    <mat-card style="min-height:100vh">
+        <div *ngIf="count!=0">
+            <div *ngIf="model.objectType == 'Points'">
+                <app-spinner *ngIf="showSpinner"></app-spinner>
+                <div *ngIf="!showSpinner">
+                    <div *ngFor="let d of searchList">
+                        <span data-toggle="tooltip" title="Back" (click)="backParent()" class="sla-back-icon refresh-icon"><mat-icon mat-list-icon class="btn-primary click-event">arrow_back</mat-icon></span>
+                        <h5 style="text-align:center"><b>{{model.objectType}}</b> Details for <b>{{d.devNum}} ({{d.name}})</b></h5>
+                        <table class="table table-bordered">
+
+                            <thead>
+                                <tr>
+                                    <th colspan="2" class="table_header">{{model.objectType}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>Point Name</th>
+                                    <td>{{d.name}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Point Type</th>
+                                    <td>{{d.pointType}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Description</th>
+                                    <td>{{d.description}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Device Number</th>
+                                    <td>{{d.devNum}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Instance</th>
+                                    <td>{{d.instance}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Value</th>
+                                    <td>{{d.value}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Engineering Unit</th>
+                                    <td>{{d.engineeringUnit}}</td>
+                                </tr>
+                                <tr>
+                                    <th>cov Increment</th>
+                                    <td>{{d.covIncrement}}</td>
+                                </tr>
+                                <tr>
+                                    <th>prio01</th>
+                                    <td>{{d.prio01}}</td>
+                                </tr>
+                                <tr>
+                                    <th>prio02</th>
+                                    <td>{{d.prio02}}</td>
+                                </tr>
+                                <tr>
+                                    <th>prio03</th>
+                                    <td>{{d.prio03}}</td>
+                                </tr>
+                                <tr>
+                                    <th>prio04</th>
+                                    <td>{{d.prio04}}</td>
+                                </tr>
+                                <tr>
+                                    <th>prio05</th>
+                                    <td>{{d.prio05}}</td>
+                                </tr>
+                                <tr>
+                                    <th>prio06</th>
+                                    <td>{{d.prio06}}</td>
+                                </tr>
+                                <tr>
+                                    <th>prio07</th>
+                                    <td>{{d.prio07}}</td>
+                                </tr>
+                                <tr>
+                                    <th>prio08</th>
+                                    <td>{{d.prio08}}</td>
+                                </tr>
+                                <tr>
+                                    <th>prio09</th>
+                                    <td>{{d.prio09}}</td>
+                                </tr>
+                                <tr>
+                                    <th>prio10</th>
+                                    <td>{{d.prio10}}</td>
+                                </tr>
+                                <tr>
+                                    <th>prio11</th>
+                                    <td>{{d.prio11}}</td>
+                                </tr>
+                                <tr>
+                                    <th>prio12</th>
+                                    <td>{{d.prio12}}</td>
+                                </tr>
+                                <tr>
+                                    <th>prio13</th>
+                                    <td>{{d.prio13}}</td>
+                                <tr>
+                                    <th>prio14</th>
+                                    <td>{{d.prio14}}</td>
+                                </tr>
+                                <tr>
+                                    <th>prio15</th>
+                                    <td>{{d.prio15}}</td>
+                                </tr>
+                                <tr>
+                                    <th>prio16</th>
+                                    <td>{{d.prio16}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Value</th>
+                                    <td>{{d.value}}</td>
+                                </tr>
+                                <tr>
+                                    <th>gatewaySetup</th>
+                                    <td>{{d.gatewaySetup}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Minimum On Time</th>
+                                    <td>{{d.minimumOnTime}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Minimum Off Time</th>
+                                    <td>{{d.minimumOffTime}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Number of States</th>
+                                    <td>{{d.numberofStates}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Relinquish Default</th>
+                                    <td>{{d.relinquishDefault}}</td>
+                                </tr>
+                                <tr>
+                                    <th>State Text</th>
+                                    <td>{{d.stateText}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="count==0">
+            <div>
+                <h5 style="text-align:center">No Results Found for <b>"{{model.objectType}}"</b></h5>
+            </div>
+        </div>
+    </mat-card>
+</div>

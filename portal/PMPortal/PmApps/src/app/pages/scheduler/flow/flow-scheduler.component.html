@@ -1,0 +1,356 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+    <li class="breadcrumb-item"><a
+        [routerLink]="'/tDashboard/' + tenantService.currentTenantValue.tenantId ">{{this.tenantService.currentTenantValue.tenantName}}</a>
+    </li>
+    <li class="breadcrumb-item"><a routerLink="/flow">Flow</a></li>
+
+    <li class="breadcrumb-item" *ngIf="istype === true">
+      <a routerLink="/Gateway">Gateway-DataSource List</a>
+    </li>
+
+    <li class="breadcrumb-item" *ngIf="istype === false">
+      <a routerLink="/data-source-list">DataSource List</a>
+    </li>
+
+    <li class="breadcrumb-item" *ngIf="istype === null">
+      <a routerLink="/Transformers">Transformers</a>
+    </li>
+
+    <li class="breadcrumb-item">
+      <a [routerLink]="'/home/schedulesList'" [queryParams]="{ tabId: istype === true ? 2 : 1 }">
+        {{ istype === true ? 'Gateway Schedules' : 'Flow Schedules' }}
+      </a>
+    </li>
+
+    <li class="breadcrumb-item"><a routerLink="/home/flowScheduler/dataSource/">{{title}}
+        SCHEDULE</a>
+    </li>
+  </ol>
+</nav>
+<div>
+  <h5 style="text-transform:uppercase" align="center">{{title}} SCHEDULE</h5>
+  <app-spinner *ngIf="showSpinner"></app-spinner>
+  <div *ngIf="!showSpinner">
+    <mat-card>
+      <div class="row margin">
+        <div class="col-sm-6">
+          <div class="input-group mb-1">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-sm">{{flowType == 'dataFlow' ? 'Data Flow Name' :
+                'DataSource Name'}}</span>
+            </div>
+            <!-- <input type="text" style="background-color:white" disabled value="{{scheduleObj.dataSourceName}}"
+                class="form-control" /> -->
+            <label class="form-control" style="background-color:white; height: auto; margin-top: 0px
+               " disabled>{{scheduleObj.dataSourceName}}</label>
+          </div>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-sm">Description</span>
+            </div>
+            <textarea style="resize: none;background-color:white; height: 10px " disabled
+              class="form-control">{{scheduleObj.dataSourceDescription}}</textarea>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="input-group mb-1">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-sm">Created By</span>
+            </div>
+            <input type="text" style="background-color:white;" disabled value="{{scheduleObj.reportCreatedBy}}"
+              class="form-control" />
+          </div>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-sm">Schedule Created On</span>
+            </div>
+            <!-- <input type="text" style="background-color:white" disabled
+                value="{{coreService.convert(scheduleObj.scheduleCreatedOn)}}" class="form-control" /> -->
+            <label class="form-control" style="background-color:white; height: auto; margin-top: 0px
+               " disabled>{{coreService.convert(scheduleObj.scheduleCreatedOn)}}</label>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+    <!-- <div class="container rounded border" style="padding:10px 10px; margin-top:35px">
+
+      </div> -->
+    <br />
+    <mat-card>
+      <form [formGroup]="scheduleForm">
+        <div class="row" style="margin-left: 10%;margin-right: 10%;">
+          <div class="col-sm-6">
+            <div *ngIf="rptUserModel.scheduleId !== 'new'" class="col-sm-0 custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="enableSch" name="enableSch"
+                (change)="removePauseScheduleDialog($event,isScheduleEnabled ? 'pause':'enable')"
+                [checked]="isScheduleEnabled" />
+              <label class="custom-control-label" for="enableSch">Enable Schedule</label>
+            </div>
+            <div class="form-group row">
+              <!--<label for="inputStartDate" class="col-sm-5 col-form-label">
+                  <sup class="mandatory-indication">*</sup>Report Format
+                </label>-->
+              <div class="col-sm-7">
+                <!--<mat-select class="form-control" [(ngModel)]="scheduleObj.reportFormat"
+                    [(value)]="scheduleObj.reportFormat" [ngModelOptions]="{standalone: true}">
+                    <mat-option *ngFor="let v of reportFormats" [value]="v.value">{{v.viewValue}}</mat-option>
+                  </mat-select>-->
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="inputEmail" style="margin-left: 13px;" class="col-sm-0 col-form-label"></label>
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="customCheck" name="emailCheck"
+                  (change)="showEmail($event)" [checked]="isMailSchedule" style="margin-right: 5px;" />
+                <label class="custom-control-label" for="customCheck">Run schedule</label>
+              </div>
+            </div>
+            <div *ngIf="isMailSchedule && !isRepeat" class="mb-1">
+              <fieldset class="common-note">
+                <div>
+                  <b>Note: </b><span>Executes the data load process instantly</span>
+                </div>
+              </fieldset>
+            </div>
+            <!--<div *ngIf="isMailSchedule">
+                <div class="form-group row">
+                  <label for="mailContent" class="col-sm-2">Message</label>
+                  <div class="col-sm-10">
+                    <textarea id="mailContent" formControlName="mailContent" name="mailContent"
+                      placeholder="Type the message to send through mail"
+                      [(ngModel)]="scheduleObj.scheduleInfo.mailContent" class="form-control" required cols="10"
+                      rows="4"></textarea>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="emailto" class="col-sm-2"><sup class="mandatory-indication">*</sup>To</label>
+                  <div class="col-sm-10">
+                    <textarea id="emailto" formControlName="emailTo" name="to"
+                      placeholder="Use (,) to seperate multiple email addresess"
+                      [(ngModel)]="scheduleObj.scheduleInfo.to" class="form-control" required cols="10"
+                      rows="2"></textarea>
+                    <mat-error
+                      *ngIf="scheduleForm?.controls.emailTo.errors && (scheduleForm?.controls.emailTo.dirty || scheduleForm?.controls.emailTo.touched) && scheduleForm?.controls.emailTo?.errors?.haspattern">
+                      Email must be a valid email address
+                    </mat-error>
+
+                    <mat-error
+                      *ngIf="(scheduleForm?.controls.emailTo.dirty || scheduleForm?.controls.emailTo.touched) && scheduleForm?.controls.emailTo?.errors?.required">
+                      Email is required
+                    </mat-error>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="emailCC" class="col-sm-2">Cc</label>
+                  <div class="col-sm-10" style="padding-bottom: 4px;">
+                    <textarea id="emailCC" formControlName="emailCc" name="emailCc"
+                      placeholder="Use (,) to seperate multiple email addresess"
+                      [(ngModel)]="scheduleObj.scheduleInfo.toCc" class="form-control" required cols="10"
+                      rows="2"></textarea>
+                    <mat-error
+                      *ngIf="scheduleForm?.controls.emailCc.errors && (scheduleForm?.controls.emailCc.dirty || scheduleForm?.controls.emailCc.touched) && scheduleForm?.controls.emailCc?.errors?.haspattern">
+                      Email must be a valid email address
+                    </mat-error>
+                  </div>
+                  <label for="emailBcc" class="col-sm-2">Bcc</label>
+                  <div class="col-sm-10">
+                    <textarea id="emailBcc" formControlName="emailBcc" name="emailBcc"
+                      placeholder="Use (,) to seperate multiple email addresess"
+                      [(ngModel)]="scheduleObj.scheduleInfo.toBcc" class="form-control" required cols="10"
+                      rows="2"></textarea>
+                    <mat-error
+                      *ngIf="scheduleForm?.controls.emailBcc.errors && (scheduleForm?.controls.emailBcc.dirty || scheduleForm?.controls.emailBcc.touched) && scheduleForm?.controls.emailBcc?.errors?.haspattern">
+                      Email must be a valid email address
+                    </mat-error>
+                  </div>
+                </div>
+              </div>-->
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group row">
+              <label for="inputStartDate" class="col-sm-5 col-form-label">
+                <sup class="mandatory-indication">*</sup>Schedule begin on
+              </label>
+              <div class="col-sm-7">
+                <input id="inputStartDate" type="text" placeholder="Date Time:" class="form-control"
+                  [style.background-color]="isRepeat ? '#fff': '#ccc'" formControlName="startDate"
+                  [owlDateTimeTrigger]="dt1" [(ngModel)]="scheduleObj.scheduleInfo.startDate" [owlDateTime]="dt1"
+                  [required]="isRepeat" readonly />
+                <owl-date-time [disabled]="!isRepeat" #dt1></owl-date-time>
+                <mat-error
+                  *ngIf="(scheduleForm?.controls.startDate.dirty || scheduleForm?.controls.startDate.touched) && scheduleForm?.controls.startDate?.errors?.required">
+                  Start date is required to begin schedule
+                </mat-error>
+              </div>
+              <div class="ml-3" style="color: #0c5460;font-family: Arial;font-size: small;">{{serverTimeZone}}</div>
+            </div>
+            <div class="form-group row">
+              <label for="inputRepeat" style="margin-left: 12px;" class="col-sm-0 col-form-label"></label>
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="customCheck1" (change)="isRepeat1($event)"
+                  [checked]="isRepeat" style="margin-right: 5px;" />
+                <label class="custom-control-label" for="customCheck1">Repeat</label>
+              </div>
+            </div>
+            <div *ngIf="isRepeat">
+              <!-- <div class="form-group row">
+                <label for="inputEmail" style="margin-left: 12px;" class="col-sm-0 col-form-label"></label>
+                <div class="custom-control custom-radio list" style="margin-bottom: 10px;"
+                  *ngFor="let scheduleDuration of scheduleDurations">
+                  <input type="radio" class="custom-control-input" [id]="scheduleDuration.value"
+                    [checked]="schDuration == scheduleDuration.value" [(ngModel)]="schDuration"
+                    [value]=scheduleDuration.value (change)="showOptions()" formControlName="scheduleDuration"
+                    name="scheduleDuration">
+                  <label class="form-control-label"
+                    [for]="scheduleDuration.value">{{scheduleDuration.viewValue}}</label>&nbsp;&nbsp;&nbsp;
+                </div>
+              </div> -->
+              <div class="form-group row">
+                <label for="inputEmail" style="margin-left: 12px;" class="col-sm-0 col-form-label"></label>
+                <div class="custom-control custom-radio list" style="margin-bottom: 10px;"
+                  *ngFor="let scheduleDuration of filteredScheduleDurations">
+                  <input type="radio" class="custom-control-input" [id]="scheduleDuration.value"
+                    [checked]="schDuration == scheduleDuration.value" [(ngModel)]="schDuration"
+                    [value]="scheduleDuration.value" (change)="showOptions()" formControlName="scheduleDuration"
+                    name="scheduleDuration">
+                  <label class="form-control-label"
+                    [for]="scheduleDuration.value">{{scheduleDuration.viewValue}}</label>&nbsp;&nbsp;&nbsp;
+                </div>
+              </div>
+
+              <div class="form-group row" *ngIf="schDuration=='time'" class="col-auto">
+                <label for="inputEmail" style="margin-left: 12px;" class="col-sm-0 col-form-label">Every </label>
+                <div class="btn-group col-md-7">
+                  <mat-select class="form-control" [(ngModel)]="scheduleObj.scheduleInfo.timeInterval"
+                    [(value)]="scheduleObj.scheduleInfo.timeInterval" [ngModelOptions]="{standalone: true}">
+                    <mat-option *ngFor="let v of timeInterval" [value]="v.value">{{v.viewValue}}</mat-option>
+                  </mat-select>
+                </div>
+              </div>
+              <!-- <div class="form-group row" *ngIf="schDuration=='daily'">
+                <label for="inputEmail" style="margin-left: 12px; padding-right: 0px;"
+                  class="col-sm-0 col-form-label"></label>
+                <div class="btn-group col-xs-12 list" *ngFor="let d of selectedDays">
+                  <label class="btn button_season_day" [class.activated]="d.selected" (click)="checkedState($event,d)">
+                    {{d.viewValue}}
+                  </label>
+                </div>
+              </div> -->
+              <div class="form-group row" *ngIf="schDuration == 'daily'">
+                <label for="inputEmail" style="margin-left: 12px; padding-right: 0px;" class="col-sm-0 col-form-label"></label>
+                <div class="btn-group col-xs-12 list" *ngFor="let d of selectedDays">
+                  <label
+                    class="btn button_season_day"
+                    [class.activated]="d.selected"
+                    (click)="checkedState($event, d)">
+                    {{ d.viewValue }}
+                </label>
+                </div>
+              </div>
+
+
+
+
+              <div class="form-group row" *ngIf="schDuration=='weekly'">
+                <label for="inputEmail" style="margin-left: 12px; padding-right: 0px;"
+                  class="col-sm-0 col-form-label"></label>
+                <div class="btn-group col-xs-12 list" *ngFor="let d of selectedDays">
+                  <label class="btn button_season_day" [class.activated]="d.selected" (click)="checkedState($event,d)">
+                    {{d.viewValue}}
+                  </label>
+                </div>
+              </div>
+              <div class="form-group" *ngIf="schDuration=='monthly'">
+                <div class="row">
+                  <div class="col-sm-2">
+                    <label for="inputEmail" style="margin-left: 12px;" class="col-sm-0col-form-label">Months:</label>
+                  </div>
+                  <div class="col-sm-10">
+                    <div class="btn-group list" *ngFor="let month of selectedMonths">
+                      <label class="btn btn-default button_season" [class.activated]="month.selected"
+                        (click)="checkedMonths($event,month)">
+                        {{month.viewValue}}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="inputEmail" class="col-sm-0 col-form-label ml-3"></label>
+                  <div class="custom-control custom-radio list" style="margin-bottom: 10px;"
+                    *ngFor="let tofm of typesOfMonthly">
+                    <input type="radio" class="custom-control-input" [id]="tofm.value"
+                      [checked]="tofm.value === scheduleObj.scheduleInfo.typeOfMonthly"
+                      (click)="scheduleObj.scheduleInfo.typeOfMonthly = tofm.value" [value]=tofm.value
+                      formControlName="typeOfMonthly" name="typeOfMonthly">
+                    <label class="custom-control-label" [for]="tofm.value">{{tofm.viewValue}}</label>&nbsp;&nbsp;&nbsp;
+                  </div>
+                </div>
+                <div class="row" *ngIf="scheduleObj.scheduleInfo.typeOfMonthly == 'day'">
+                  <div class="col-md-4">
+                    <label for="inputEmail" class="col-sm-0 col-form-label ml-3">Day of month(s):</label>
+                  </div>
+                  <div class="col-md-5">
+                    <mat-select class="form-control" [(ngModel)]="scheduleObj.scheduleInfo.dayOfMonth"
+                      [(value)]="scheduleObj.scheduleInfo.dayOfMonth" [ngModelOptions]="{standalone: true}">
+                      <mat-option *ngFor="let v of daysOfMonth" [value]="v.value">{{v.viewValue}}</mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+                <div class="row" *ngIf="scheduleObj.scheduleInfo.typeOfMonthly == 'week'">
+                  <div>
+                    <label for="inputEmail" class="col-sm-0 col-form-label ml-4 mr-1">Week:</label>
+                    <div class="btn-group col-xs-12" *ngFor="let w of selectedWeeks">
+                      <label class="btn button_season_day" [class.activated]="w.selected"
+                        (click)="checkedWeekState($event,w)">
+                        {{w.viewValue}}
+                      </label>
+                    </div>
+                  </div>
+                  <div>
+                    <label for="inputEmail" class="col-sm-0 col-form-label ml-4 mr-3">Day:</label>
+                    <div class="btn-group col-xs-12" *ngFor="let d of selectedWeekDays">
+                      <label class="btn button_season_day" [class.activated]="d.selected"
+                        (click)="checkedState($event,d)">
+                        {{d.viewValue}}
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+        <div style="text-align:left" class="">
+          <mat-error>{{errMessage}}</mat-error>
+        </div>
+        <div class="container" style="text-align: center;">
+          <button (click)="cancel()" class="btn btn-outline-primary bg-white"
+            style="cursor:pointer; margin-right: 15px;margin-top: 10px;">Cancel</button>
+          <button style="margin-top: 10px;" class="btn btn-outline-primary bg-white" [disabled]="isBtnLoad"
+            (click)="createSchedule(scheduleForm.value)">
+            {{(isRepeat) ? (scheduleObj.scheduleId ? 'Modify Schedule':'Create Schedule'): isMailSchedule ?
+            'Run':(scheduleObj.scheduleId ? 'Modify Schedule':'Create Schedule')}}
+            <span *ngIf="isBtnLoad" class="spinner-border spinner-border-sm mr-1"></span>
+          </button>
+          <button
+            *ngIf="rptUserModel.scheduleId != 'new' && rptUserModel.scheduleId != null && rptUserModel.scheduleId != 'null' && rptUserModel.scheduleId != undefined"
+            style="margin-left:15px;margin-top: 10px;" class="btn btn-outline-primary bg-white"
+            (click)="removePauseScheduleDialog($event,'remove')">
+            Remove Schedule
+          </button>
+
+        </div>
+
+      </form>
+
+    </mat-card>
+    <!-- <div align="center" class="container rounded border" style="padding:10px 10px;margin-top:10px">
+
+      </div> -->
+  </div>
+</div>

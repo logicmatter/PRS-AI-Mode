@@ -1,0 +1,52 @@
+.mat-form-field {
+  display: block !important;
+  //border-top: 0px !important;
+}
+.mat-form-field-infix {
+  //display: block !important;
+  border-top: 0px !important;
+}
+.info {
+    float: right;
+    margin-top: -11px;
+    border-left: 2px solid #2196F3;
+    height: 17px;
+    padding: 2px;
+    font-size: 12px;
+    margin-left: 17px;
+}
+
+#trend,#template{
+  margin-top: 3px;
+  margin-left: 6px;
+}
+
+#template,#reportName,#reportDescription,#select,#trend1{
+  margin-top: 3px;
+  margin-left: 6px;
+}
+#startDate,#endDate{
+  margin-top: 3px;
+  margin-left: 3px;
+}
+label{
+  margin-left: 9px;
+}
+#space{
+  margin-left: 6px;
+}
+#dr{
+  margin-left: 5px;
+}
+.mat-form-field-appearance-legacy {
+  width: 104%;
+}
+
+#resolution{
+  margin-top: 10px;
+  margin-left: 6px;
+}
+
+#resolution1{
+  margin-left: 6px;
+}

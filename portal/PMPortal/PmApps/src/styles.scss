@@ -1,0 +1,621 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~angular2-multiselect-dropdown/themes/default.theme.css";
+@import "~ng-pick-datetime-ex/assets/style/picker.min.css";
+@import "ngx-toastr/toastr";
+@import '~typeface-open-sans/index.css';
+$fa-font-path: '~@fortawesome/fontawesome-free/webfonts';
+@import "@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "@fortawesome/fontawesome-free/scss/solid.scss";
+@import "@fortawesome/fontawesome-free/scss/brands.scss";
+
+:root {
+  --primary-color: rgba(1, 102, 152, 1);
+  --secondary-color: hsla(20, 88%, 44%, 1);
+  --background: rgba(255, 255, 255, 1);
+  --on-background-alt: rgba(66, 66, 66, 0.7);
+  --box-shadow: 0 5px 20px 1px rgba(0, 0, 0, 0.5);
+  --success: hsla(154, 73%, 46%, 1);
+  --errors: hsla(0, 100%, 67%, 1);
+}
+
+[data-theme="dark"] {
+  --primary-color: rgb(150, 65, 255);
+  --primary-variant: #6c63ff;
+  --secondary-color: #03dac5;
+  --on-primary: #000;
+  --on-background: rgba(255, 255, 255, 0.9);
+  --on-background-alt: rgba(255, 255, 255, 0.7);
+  --background: #121212;
+}
+
+body {
+  font-family: Arial, Sans-Serif !important;
+  font-size: 1rem;
+  -moz-user-select: text;
+}
+
+.app-content>mat-card {
+  font-family: Arial, Sans-Serif !important;
+}
+
+label {
+  font-family: Arial, Sans-Serif !important;
+}
+
+.mat-option-text {
+  font-family: Arial, Sans-Serif !important;
+}
+
+.input-select {
+  background-color: white !important;
+  height: 30px !important;
+}
+
+.dropdown-list ul li {
+  font-family: Arial, Sans-Serif !important;
+  z-index: unset !important;
+}
+
+.form-control {
+  font-family: Arial, Sans-Serif !important;
+  margin-left: 8px;
+}
+
+label {
+  margin-top: 4px;
+  // margin-left: 6px;
+
+}
+
+.dropdown-list.tagToBody.animated.fadeIn {
+  position: sticky;
+}
+
+
+.app-navs h4 {
+  font-family: Arial, Sans-Serif !important;
+}
+
+.common-note {
+  background-color: #d1ecf1;
+  border: 2px solid #bee5eb;
+  border-radius: 8px;
+  padding: 12px;
+  font-family: Arial, sans-serif !important;
+  font-size: smaller;
+  margin-bottom: 10px;
+  color: #0c5460;
+}
+
+#toast-container>div {
+  opacity: 1 !important;
+}
+
+button {
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(1, 102, 152, 1);
+  border-color: rgba(1, 102, 152, 1);
+}
+
+.btn-align-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.primary-color {
+  color: var(--background) !important;
+}
+
+.primary-background {
+  background: var(--background) !important;
+}
+
+.btn-primary {
+  color: var(--background) !important;
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.btn-outline-primary {
+  color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.click-event {
+  cursor: pointer;
+}
+
+.btn-outline-primary:hover {
+  color: var(--background) !important;
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.btn-primary:hover {
+  filter: opacity(70%) !important;
+}
+
+.refresh-icon mat-icon {
+  color: #fff;
+}
+
+// Login Page
+div.my-login-page {
+  font-size: 14px;
+}
+
+.my-login-page .brand {
+  width: 10px;
+  height: 10px;
+}
+
+.my-login-page .brand img {
+  width: 100%;
+}
+
+.my-login-page .card-wrapper {
+  width: 400px;
+}
+
+.my-login-page .card {
+  border-color: transparent;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.05);
+}
+
+.my-login-page .card.fat {
+  padding: 10px;
+}
+
+.my-login-page .card .card-title {
+  margin-bottom: 30px;
+}
+
+.my-login-page .form-control {
+  border-width: 2.3px;
+}
+
+.my-login-page .form-group label {
+  width: 100%;
+}
+
+.my-login-page .btn.btn-block {
+  padding: 12px 10px;
+}
+
+.my-login-page .margin-top20 {
+  margin-top: 20px;
+}
+
+.my-login-page .no-margin {
+  margin: 0;
+}
+
+.my-login-page .footer {
+  margin: 40px 0;
+  color: #888;
+  text-align: center;
+}
+
+// Mandatory Field Indicator
+.mandatory-indication {
+  color: red;
+  font-size: 15px;
+  top: 3px;
+  float: left;
+  left: -1px;
+}
+
+// Tab Menu Styles
+.mat-list-base {
+  display: contents !important;
+}
+
+.cust-mat .mat-list-item-content {
+  padding: 0 10px !important;
+}
+
+.home-paginations {
+  position: absolute;
+  right: 60px;
+  top: 6px;
+}
+
+span.page-numbers {
+  float: left;
+  margin-right: 6px;
+  font-size: 18px;
+  padding-top: 4px;
+}
+
+i.sales-page-n-icons.fa {
+  background-color: #2859c8;
+  color: #323C43;
+  font-size: 17px;
+  padding: 7.8px 11px;
+  float: left;
+  margin-right: 1px;
+  cursor: pointer;
+}
+
+i.disable-sales-page-n-icons.fa {
+  background-color: #eeeeee;
+  color: #BBD;
+  font-size: 17px;
+  padding: 7.8px 11px;
+  float: left;
+  margin-right: 1px;
+  cursor: pointer;
+}
+
+.plans-details-tabs .mat-tab-header,
+.mat-tab-nav-bar {
+  background-color: #EFEFEF;
+}
+
+.plans-details-tabs nav-bar {
+  background-color: #4b566d;
+}
+
+
+// .plans-details-tabs .mat-tab-header-pagination-controls-enabled .mat-tab-header-pagination {
+//     display: flex;
+//     background-color: #EC7011;
+// }
+
+// .plans-details-tabs .mat-tab-header-pagination-disabled .mat-tab-header-pagination-chevron, .mat-tab-header-pagination-chevron {
+//     border-color: #fff;
+// }
+
+
+
+
+.plans-details-tabs .mat-tab-label {
+  opacity: 1;
+  border-right: 1px solid #fafafa;
+  font: normal normal 600 15px/20px Arial;
+}
+
+.plans-details-tabs .mat-tab-link {
+  opacity: 1;
+  border-right: 1px solid #fafafa;
+}
+
+.plans-details-tabs .mat-tab-label-active {
+  background-color: #016698;
+  color: #ffffff !important;
+}
+
+// .plans-details-tabs .mat-tab-header-pagination.mat-tab-header-pagination-disabled {
+//     background-color: #ef9e7a;
+//     cursor: not-allowed;
+// }
+mat-list-item.cust-mat.mat-item-active.mat-list-item.ng-star-inserted.active {
+  color: #323C43;
+  background-color: var(--primary-color);
+}
+
+.active .mat-icon {
+  color: #323C43 !important;
+}
+
+.activated {
+  background-color: var(--primary-color) !important;
+  background: #016698 0% 0% no-repeat padding-box;
+  color: white !important;
+}
+
+.inactive {
+  background-color: #dddddd !important;
+  color: black !important;
+}
+
+.active::after {
+  content: box;
+  color: red;
+}
+
+.show-tenatsdatepicker {
+  position: absolute;
+  top: 65px;
+  right: 5rem;
+  min-width: -webkit-max-content;
+  min-width: -moz-max-content;
+  display: flex;
+  font-size: 14px;
+  z-index: 2;
+  border-radius: 10px;
+}
+
+.gdp-label {
+  top: 118px;
+  left: 1452px;
+  width: 82px;
+  height: 22px;
+  text-align: left;
+  font: normal normal 600 14px Arial;
+  letter-spacing: 0px;
+  color: #333333;
+  opacity: 1;
+
+}
+
+.gdp-select {
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border: 1px solid #B9D3DA;
+  border-radius: 6px;
+  opacity: 1;
+}
+
+// Resolution Buttons
+.resolutions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.logoDisplay {
+  top: 26px;
+  height: 2.3em;
+  min-width: 10em;
+}
+
+// Date Picker Styles
+select.selectpicker {
+  border: 1px solid #ccc;
+  padding: 5px 8px;
+  font-size: 14px;
+  /*margin-top: 31px;*/
+  margin-right: 9px;
+}
+
+input.selectpicker {
+  border: 1px solid #ccc;
+  padding: 6px 8px;
+  font-size: 14px;
+  /* margin-top: 31px; */
+  /* margin-right: 9px; */
+  width: 90px;
+  height: 30px;
+  background-color: black;
+  color: white;
+  font-weight: 500;
+  border-radius: 4px;
+}
+
+.tenant-select {
+  font: normal normal normal 18px/33px Arial;
+  letter-spacing: 0px;
+  color: #333333;
+  opacity: 1;
+}
+
+
+// Table Styles
+.mat-header-cell {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  opacity: 1;
+  text-align: left;
+  font: normal normal bold 14px/20px Arial;
+  letter-spacing: 0px;
+  color: #333333;
+  opacity: 1;
+}
+
+.mat-row:nth-child(even) {
+  background-color: rgb(255, 255, 255);
+}
+
+.mat-row:nth-child(odd) {
+  background-color: #fafafa;
+}
+
+::ng-deep .mat-checkbox-checked .mat-checkbox-background {
+  background-color: var(--primary-color) !important;
+}
+
+.tableStyles {
+  white-space: nowrap;
+  text-align: left;
+  font-size: 14px;
+}
+
+table thead {
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  opacity: 1;
+  text-align: left;
+  font: normal normal 600 16px/22px Arial;
+  letter-spacing: 0px;
+  color: #333333;
+  opacity: 1;
+}
+
+.search-message {
+  text-align: left;
+  margin-top: 1px;
+  display: inline-block !important
+}
+
+// Modify Toster CLass
+.toast-top-center {
+  top: 70px !important;
+  right: 0;
+  width: 100%;
+}
+
+.mat-table {
+  font-family: Arial, sans-serif !important;
+}
+
+mat-header-cell,
+mat-cell {
+  justify-content: center;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: lightgrey;
+  border-right-color: lightgrey;
+  border-right-style: solid;
+  border-right-width: 1px;
+  padding-left: 8px;
+}
+
+.fixedPosition {
+  top: 193px;
+  left: 70px;
+  width: 100%;
+}
+
+.scroller {
+  overflow: scroll;
+  height: 80vh;
+  overflow-x: hidden;
+}
+
+.pageTop {
+  background: #fbfafa !important;
+  height: 50px !important;
+  margin-top: -5px !important;
+  font-weight: 500;
+}
+
+.pageTop1 {
+  background: #ffffff !important;
+  height: 50px !important;
+  margin-top: -5px !important;
+  font-weight: 500;
+}
+
+@media only screen and (min-width: 1500px) {
+  .scroller {
+    overflow: scroll;
+    height: 80vh;
+    overflow-x: hidden;
+  }
+}
+
+// Tabview
+@media only screen and (max-width: 768px) {
+  .scroller {
+    overflow: scroll;
+    height: 80vh;
+    overflow-x: hidden;
+  }
+
+  .logoDisplay {
+    top: 26px;
+    height: 1em;
+    min-width: 1em;
+    padding-right: 8.5px;
+  }
+
+  .mat-header-cell {
+    font: normal normal bold 10px/20px Arial;
+  }
+
+}
+
+//mbl view
+@media only screen and (min-width: 360px) and (max-width: 480px) {
+  .scroller {
+    overflow: visible;
+    display: inline-block;
+    height: 34vh;
+    overflow-x: visible;
+    justify-content: center;
+  }
+
+  .logoDisplay {
+    top: 26px;
+    // height: 10px;
+    height: 20px;
+    min-width: 3px;
+    padding-right: 37px;
+    // padding-right: 0.5px;
+  }
+
+  .cust-mat .mat-list-item-content {
+    padding: 0 3px !important;
+  }
+
+}
+
+@media screen and (min-width: 360px) and (max-width:535px) {
+
+
+  .cust-mat .mat-list-item-content {
+    padding: 0 3px !important;
+  }
+
+  .home-paginations {
+    position: absolute;
+    right: 8px;
+    top: 6px;
+  }
+
+  .wrap-text {
+    width: 113px;
+    margin-right: 78px;
+
+  }
+
+  .search-message {
+
+    margin-top: 0px;
+    font-size: 14px;
+
+  }
+
+  h5,
+  .h5 {
+    font-size: 1rem;
+  }
+
+  .icon {
+    padding: 6px;
+    color: #70787d;
+    min-width: 28px;
+  }
+
+  body {
+    font-family: Arial, Sans-Serif !important;
+    font-size: 1.7rem;
+    -moz-user-select: text;
+  }
+
+  .mat-header-cell {
+    font: normal normal bold 7px/12px Arial;
+  }
+
+  .mat-cell {
+    font-size: 7px;
+    padding-left: 5px;
+  }
+
+  .example-sidenav-content[_ngcontent-pyt-c9] {
+    height: 89vh;
+    width: 197%;
+    margin: 15px;
+  }
+
+
+
+}
+
+@media screen and (min-width: 536px) and (max-width:556px) {
+  .wrap-text {
+    width: 133px;
+
+
+  }
+}
+@media screen and (min-width: 300px) and (max-width:600px) {
+
+a{
+  font-size: small;
+}
+}
+
+

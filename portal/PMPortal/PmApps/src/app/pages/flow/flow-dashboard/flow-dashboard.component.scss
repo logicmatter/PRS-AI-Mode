@@ -1,0 +1,93 @@
+@import '~typeface-open-sans/index.css';
+
+
+.demo-card-wide.mdl-card {
+  width: 100%;
+}
+
+.report-container {
+  height: 500px;
+  margin: 1em;
+}
+
+.app-box {
+  text-align: center;
+  padding-top: 35px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border: 1px solid #E1E1E1;
+  border-radius: 6px;
+  opacity: 1;
+}
+
+.app-box:hover {
+  box-shadow: 0 2px 15px 0px #9ea9c1;
+  cursor: pointer;
+  border: 1px solid #9ea9c1;
+}
+
+.app-box:hover h4 {
+  color: rgba(1, 102, 152, 1);
+  font-weight: bold;
+}
+
+.app-box:hover .app-btn .btn {
+  border: 1px solid rgba(1, 102, 152, 1);
+  background-color: rgba(1, 102, 152, 1);
+}
+
+.app-img {
+  width: 100%;
+  min-height: 115px;
+}
+
+.app-img img {
+  width: 110px;
+}
+
+.app-info {
+  padding-bottom: 15px;
+  margin: -1px;
+  padding-top: 10px;
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border: 1px solid #E1E1E1;
+  border-radius: 0px 0px 6px 6px;
+  opacity: 1;
+}
+
+.app-dec {
+  min-height: 87px;
+  text-align: left;
+  padding: 0px;
+  margin-left: 10px;
+  font: normal normal normal 14px/22px Arial;
+  padding: 5px;
+}
+
+.app-dec h4 {
+  color: rgba(1, 102, 152, 1);
+  text-transform: uppercase;
+  font-size: 18px;
+  margin-top: 5px;
+}
+
+.app-btn .btn {
+  border: 1px solid #e85d1b;
+  background-color: #e85d1b;
+  color: #fff;
+  padding: 3px 17px;
+}
+
+@media only screen and (max-width: 599px) {
+  .dashboard-content .mat-card {
+    top: 35px !important;
+  }
+}
+
+@media only screen and (max-width: 786px) and (min-width: 600px) {
+
+  .dashboard-content .mat-card {
+    top: 57px !important;
+  }
+}

@@ -1,0 +1,66 @@
+@import '../../../../styles.scss';
+.custom-control-input:checked~.custom-control-indicator {
+  color: white;
+  background-color: red;
+}
+
+
+.button_season {
+  width: 45px;
+  height: 45px;
+  border-radius: 32px;
+  background-color: #DDDDDD;
+  padding: 10px 8px;
+  margin: 1px;
+}
+
+.button_season_week{
+  width: 40px;
+  height: 40px;
+  border-radius: 27px;
+  background-color: #DDDDDD;
+  padding: 8px;
+  margin: 1px;
+}
+
+.button_season_day {
+  width: 40px;
+  height: 38px;
+  border-radius: 32px;
+  background-color: #DDDDDD;
+  padding: 7px 4px;
+  margin: 1px;
+}
+
+.col-form-label{
+  text-align:left!important;
+}
+.margin{
+  margin-left: 10%;
+  margin-right: 10%;
+}
+.margintop{
+  margin-left:15px
+}
+
+.list{
+  flex-basis: content;
+  padding-right: 0px;
+}
+.col-sm-10{
+  margin-bottom: 15px;
+}
+@media screen and (min-width:360px)and (max-width:599px){
+  .col-sm-6{
+    padding:0px;
+    padding-bottom: 5px
+  }
+  .mat-card{
+    padding:2px 0px;
+  }
+  .margin{
+    margin-left: 1%;
+    margin-right: 1%;
+  }
+
+}

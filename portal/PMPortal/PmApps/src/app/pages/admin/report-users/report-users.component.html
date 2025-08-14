@@ -1,0 +1,104 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+    <li class="breadcrumb-item"><a
+        [routerLink]="'/tDashboard/' + tenantService.currentTenantValue.tenantId">{{this.tenantService.currentTenantValue.tenantName}}</a>
+    </li>
+    <li class="breadcrumb-item"><a routerLink="/admin">Admin</a></li>
+    <li class="breadcrumb-item"><a routerLink="/home/admin" [queryParams]="{ tabId: 1 }">Manage Reports</a></li>
+    <li class="breadcrumb-item"><a routerLink="/admin/user-reports/Assignreports">Assign-reports</a></li>
+  </ol>
+</nav>
+<div>
+  <h5 style="text-transform:uppercase" align="center">Assign Users to Report</h5>
+  <app-spinner *ngIf="showSpinner"></app-spinner>
+  <div *ngIf="!showSpinner">
+    <mat-card-content>
+      <div class="container rounded border" style="padding:10px 10px; margin-top:35px">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="input-group mb-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Report Name</span>
+              </div>
+              <label class="form-control input">{{reportObj.reportName}}</label>
+            </div>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Description</span>
+              </div>
+              <label style="resize: none;background-color:white;" disabled matTextareaAutosize matAutosizeMinRows=2
+                matAutosizeMaxRows=5 class="form-control input">{{reportObj.reportDescription}}</label>
+              <!-- <textarea style="resize: none;background-color:white;" disabled matTextareaAutosize matAutosizeMinRows=2 matAutosizeMaxRows=5 >{{reportObj.reportDescription}}</textarea> -->
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="input-group mb-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Report Owner</span>
+              </div>
+              <label class="form-control input">{{reportObj.createdBy}}</label>
+            </div>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Created On</span>
+              </div>
+              <label class="form-control input">{{coreService.convert(reportObj.createdOn)}}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3" style="margin-top:12px;">
+        <app-filter [placeHolderText]="'Filter'"></app-filter>
+      </div>
+      <mat-card-actions style="float: right;">
+        <div align="center">
+          <a style="cursor:pointer; margin-right: 5px;" (click)="cancel()" class="btn btn-outline-primary">Cancel</a>
+          <button class="btn btn-outline-primary mr-2" *ngIf="usersList.length>0"
+            (click)="updateAssignReportUsers()">Update Report Access</button>
+        </div>
+      </mat-card-actions>
+      <div class="table-responsive" style="width: 100%;margin-top: 70px ">
+        <table class="table table-bordered tableStyles" *ngIf="usersList.length>0">
+          <thead class="headerStyle">
+            <tr>
+              <th style="width: 2%;">#</th>
+              <th style="width: 5%; margin-left: 50px;">Assigned</th>
+              <th scope="col" style="width: 20%" [class.active]="key === 'firstName'" (click)="sort('firstName')">
+                First Name
+                <span [hidden]="reverse">▼</span>
+                <span [hidden]="!reverse">▲</span>
+              </th>
+              <th scope="col" style="width: 20%" [class.active]="key === 'lastName'" (click)="sort('lastName')">
+                Last Name
+                <span [hidden]="reverse">▼</span>
+                <span [hidden]="!reverse">▲</span>
+              </th>
+              <th scope="col" style="width: 20%" [class.active]="key === 'email'" (click)="sort('email')">
+                Email
+                <span [hidden]="reverse">▼</span>
+                <span [hidden]="!reverse">▲</span>
+              </th>
+              <th style="width: 20%;">User Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="table-light"
+              *ngFor="let usr of filterByReportOwner(reportObj) | orderBy: key : !reverse : true | filter: coreService.filter; let rowNo = index;">
+              <td style="width: 2%;">{{ rowNo+1 }}</td>
+              <td style="width: 5%;padding-left: 45px;"><input type="checkbox"
+                  [disabled]="reportObj.createdBy==usr.email ? 'disabled':''" [checked]=usr.hasAccess
+                  (change)="checkAssign(usr)" /></td>
+              <td style="width: 20%;">{{ usr.firstName }}</td>
+              <td style="width: 20%;">{{ usr.lastName }}</td>
+              <td style="width: 20%;">{{ usr.email}}</td>
+              <td style="width: 20%;">{{usr.isActive ? 'Active' : 'Inactive'}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <h5 align="center" *ngIf="!(usersList.length>0)">No Users registered</h5>
+      </div>
+    </mat-card-content>
+
+  </div>
+</div>

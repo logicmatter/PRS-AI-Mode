@@ -1,0 +1,68 @@
+<div class="row">
+  <div class="col-md-6">
+    <h5>Data Flow List</h5>
+  </div>
+  <div class="col-md-6">
+    <a class="float-right" [routerLink]="['../data-flow-detail/-1']">New Data Flow</a>
+  </div>
+</div>
+<div class="col-md-6">
+</div>
+<!--<app-spinner *ngIf="showSpinner"></app-spinner>-->
+<div class="" >
+  <div *ngIf="!(dataFlowList)">
+    <h5>No Data Flow defined</h5>
+  </div>
+
+  <mat-form-field class="col-md-4">
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="eg. Name" #input>
+  </mat-form-field>
+  <div class="mat-elevation-z8" style="padding:0 20px;">
+    <table class="ml-2" mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="dataFlowName">
+        <th mat-header-cell-1 *matHeaderCellDef mat-sort-header> Name </th>
+        <td *matCellDef="let row"> {{row.dataFlowName}} </td>
+      </ng-container>
+      <ng-container matColumnDef="dataFlowDescription">
+        <th mat-header-cell-1 *matHeaderCellDef mat-sort-header> Description </th>
+        <td *matCellDef="let row"> {{row.dataFlowDescription}} </td>
+      </ng-container>
+      <!--<ng-container matColumnDef="connectorType">
+        <th mat-header-cell-1 *matHeaderCellDef mat-sort-header> Connector </th>
+        <td *matCellDef="let row"> {{row.connectorType}} </td>
+      </ng-container>-->
+      <ng-container matColumnDef="templateName">
+        <th mat-header-cell-1 *matHeaderCellDef mat-sort-header> Template </th>
+        <td *matCellDef="let row"> {{row.templateName}} </td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell-1 *matHeaderCellDef> Actions </th>
+        <td *matCellDef="let row">
+          <a class="action-width" [routerLink]="['./data-flow-detail',row.dataFlowId]">
+            <img alt="Edit" src="assets/icons/noun_edit_1644623.svg" width="20px" height="20px"
+                 class="toggle-tenants mx-2 click-event" aria-hidden="true" matTooltip="Edit" />
+          </a>
+          <a class="action-width pointer" (click)="schedule(row)">
+            <img alt="Schedule" [src]="row.scheduleId ? 'assets/icons/Group 230.svg' : 'assets/icons/Group 215.svg'"
+                 width="20px" height="20px" class="toggle-tenants mx-2 click-event" aria-hidden="false"
+                 matTooltip="Schedule" />
+          </a>
+          <a class="text-danger action-width pointer" (click)="deleteDataflow(row)">
+            <img src="assets/icons/Group 216.svg" alt="Delete" width="20px" height="20px"
+                 class="toggle-tenants mx-2 click-event" aria-hidden="true" matTooltip="Delete" />
+          </a>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+      </tr>
+    </table>
+
+    <mat-paginator #paginator [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
+  </div>
+</div>

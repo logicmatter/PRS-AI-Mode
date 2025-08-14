@@ -1,0 +1,36 @@
+
+<nav class="navbar navbar-expand-sm bg-light navbar-dark">
+  <!-- Brand/logo -->
+  <!-- <a class="navbar-brand" style="color:#000;">{{_utility.appName | uppercase}}</a> -->
+  <img src="{{'assets/icons/'+_utility.normalizedAppName+'.svg'}}" width="30px" height="30px" class="toggle-tenants mx-2"
+         aria-hidden="false" matTooltip="{{_utility.appName}}" />
+<a class="navbar-brand appName">{{_utility.appName }}</a>
+
+  <!-- Links -->
+  <ul class="navbar-nav ms-auto">
+    <li class="nav-item">
+      <a>
+        <i
+          class="fa fa-list"
+          [ngClass]="_utility.isReportList ? 'nav-active' : 'nav-inactive'"
+          (click)="_utility.isCreateReport ? reportList() : ''"
+        >
+          &nbsp;<span class="app-navs"> Reports List |</span>
+        </i>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a>
+        <i
+          class="fa fa-plus"
+          [ngClass]="
+            _utility.isCreateReport ? 'nav-active' : 'nav-inactive'
+          "
+          (click)="_utility.isReportList ? createReport() : ''"
+        >
+          &nbsp;<span class="app-navs">Create Report</span>
+        </i>
+      </a>
+    </li>
+  </ul>
+</nav>

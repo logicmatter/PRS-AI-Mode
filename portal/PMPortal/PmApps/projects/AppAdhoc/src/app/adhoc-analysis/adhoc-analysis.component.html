@@ -1,0 +1,14 @@
+<div>
+
+<nav mat-tab-nav-bar class="plans-details-tabs salesport-tabs">
+  <a mat-tab-link
+  *ngFor="let link of navLinks; let i = index;"
+  [routerLink]="link.link" [queryParams]="{objectType: link.label,keyword: model.keyWord,app:'search'}"
+  routerLinkActive #rla="routerLinkActive"
+   (click)="activeLinkIndex = i"
+  [active]="rla.isActive">
+
+  {{link.label}} </a>
+  </nav>
+  <router-outlet></router-outlet>
+</div>

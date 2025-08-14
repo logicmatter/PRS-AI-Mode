@@ -1,0 +1,87 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+    <li class="breadcrumb-item"><a
+        [routerLink]="'/tDashboard/' + tenantService.currentTenantValue.tenantId">{{this.tenantService.currentTenantValue.tenantName}}</a>
+    </li>
+    <li class="breadcrumb-item"><a routerLink="/admin">Admin</a></li>
+    <li class="breadcrumb-item"><a routerLink="/admin">Manage Users</a></li>
+    <li class="breadcrumb-item">
+      <ng-container *ngIf="isNew; else editBreadcrumb">
+        Create User
+      </ng-container>
+      <ng-template #editBreadcrumb>
+        Edit User
+      </ng-template>
+    </li>
+  </ol>
+</nav>
+<div>
+  <h5 style="text-transform:uppercase" align="center">{{isNew?'Create New User':'Edit User'}}</h5>
+  <div class="col-sm-6 offset-sm-3 container border rounded" style="padding:10px 10px">
+    <div class="mb-4" align="center" style="padding:5px 10px">
+      <span style="font-size:14px" *ngIf="isNew">
+        Please fill out this form, to create a PointMatter Reporting Solutions user.<br />
+        A welcome email will be sent to the created user<br />User can verify the email address and sign in to
+        PointMatter Reporting Solution.
+      </span>
+      <span style="font-size:14px" *ngIf="!isNew"></span>
+    </div>
+    <mat-card-content>
+      <form [formGroup]="registerForm" (ngSubmit)="createNewUser()">
+        <div class="form-group" id="reg">
+          <label class="control-label" for="firstName" required><sup class="mandatory-indication">*</sup>First
+            Name</label>
+          <input type="text" id="reg" formControlName="firstName" class="form-control input"
+            [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" />
+          <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+            <div *ngIf="f.firstName.errors.required">First Name is required</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="lastName">Last Name</label>
+          <input type="text" id="reg" formControlName="lastName" class="form-control input"
+            [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" />
+          <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="email"><sup class="mandatory-indication">*</sup>Email</label>
+          <input type="text" formControlName="email" class="form-control input"
+            [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+          <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+            <div *ngIf="f.email.errors.required">Email is required</div>
+            <div *ngIf="f.email.errors.email">Email is invalid</div>
+            <div *ngIf="f.email.errors.verifyUser">User already registered with the given email</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="tenant"><sup class="mandatory-indication">*</sup>Tenant</label>
+          <angular2-multiselect [data]="tenantsList" [(ngModel)]="selectedTenants" [settings]="dropdownSettings"
+            formControlName="tenant" (onDeSelectAll)="OnItemDeSelectAll($event)"
+            (onFilterDeSelectAll)="OnItemDeSelectAll($event)">
+          </angular2-multiselect>
+          <div *ngIf="submitted && f.tenant.errors" class="invalid-feedback" style="display:block">
+            <div *ngIf="f.tenant.errors.required">Tenant is required</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="isManager">Can Manage PointMatter?&nbsp;&nbsp;&nbsp;</label>
+          <mat-slide-toggle color="primary" [checked]="isManager" (change)="changeRole()">{{isManager ? 'Yes' :
+            'No'}}</mat-slide-toggle>
+        </div>
+        <div class="form-group">
+          <button routerLink="/home/admin/" type="button" class="btn btn-outline-primary mr-2 py-1">Cancel</button>
+          <button style="margin-left: 20px;" [disabled]="loading" class="btn btn-outline-primary">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            {{isNew? 'Register User':'Update'}}
+          </button>
+
+
+          <!-- <a routerLink="/home/admin/" type="button" class="btn btn-outline-primary mr-2 py-1" class="btn btn-link">Cancel</a> -->
+        </div>
+      </form>
+    </mat-card-content>
+  </div>
+
+</div>

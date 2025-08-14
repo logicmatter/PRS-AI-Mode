@@ -1,0 +1,4 @@
+<app-spinner *ngIf="_utility.showSpinner"></app-spinner>
+
+<div id="report" 
+*ngIf="rptData != undefined" [innerHTML]="rptData | safe: 'html'"></div>

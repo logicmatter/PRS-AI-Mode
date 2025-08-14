@@ -1,0 +1,1003 @@
+<div *ngIf="route.children.length === 0">
+  <app-spinner *ngIf="showSpinner"></app-spinner>
+  <div *ngIf="model.app ==='app'">
+    <div>
+      <div *ngIf="!showSpinner">
+        <div class="fixedPosition">
+          <span data-toggle="tooltip" title="Back" (click)="backParent()" class="sla-back-icon refresh-icon"
+            *ngIf="!utility.routerValue" style="margin-left: 0%;margin-top: 1px;">
+            <mat-icon mat-list-icon class="btn-primary click-event">arrow_back</mat-icon>
+          </span>
+          <div class="float-end">
+            <mat-paginator #trendlogPaginator [hidden]="length < 10" [length]="dataLength" [pageSize]="currentPageSize"
+              [pageIndex]="currentPageIndex" [pageSizeOptions]="pageSizeOptions" (page)="getData($event)"
+              [showFirstLastButtons]="true" [disabled]="isDisable" class="pageTop"></mat-paginator>
+          </div>
+
+          <div *ngIf="utility.patternShow">
+            <div *ngIf="length>0">
+              <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}}
+                of {{dataLength}} results for Pattern<b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5>
+            </div>
+            <div *ngIf="length==0">
+              <h5 class="search-message py-2">Showing {{startingIndex}} - {{endingIndex}}
+                of {{dataLength}} results for Pattern<b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5>
+            </div>
+          </div>
+          <div *ngIf="(model.DevNum != null && model.DevNum != '') && !utility.patternShow">
+            <div>
+              <div *ngIf="length>0">
+                <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}} of
+                  {{length}} results for <b>"{{model.objectType}}"</b> in <b>"Device {{model.DevNum}}"</b></h5>
+              </div>
+              <div *ngIf="length==0">
+                <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}} of
+                  {{length}} results for <b>"{{model.objectType}}"</b> in <b>"Device {{model.DevNum}}"</b></h5>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="(model.DevNum == null || model.DevNum == '') && !utility.patternShow">
+            <div *ngIf="model.keyWord == null || model.keyWord == ''">
+              <div *ngIf="length>0">
+                <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}}
+                  <b>"{{model.objectType}}s"</b>
+                  in {{dataLength}} <b>"Total{{model.objectType}}s"</b>
+                </h5>
+              </div>
+              <div *ngIf="length==0">
+                <h5 class="search-message py-2">Showing {{startingIndex }} - {{endingIndex}} of
+                  {{dataLength}} results for <b>"{{model.objectType}}"</b></h5>
+              </div>
+            </div>
+            <div *ngIf="(model.keyWord != null && model.keyWord != '') && !utility.patternShow">
+              <div *ngIf="length>0">
+                <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}}
+                  of {{dataLength}} results for <b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5>
+              </div>
+              <div *ngIf="length==0">
+                <h5 class="search-message py-2">Showing {{startingIndex}} - {{endingIndex}}
+                  of {{dataLength}} results for <b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top: 20px;" *ngIf="isDetails !='true'; else elseBlock1">
+            <div class="input-container" style="float:left">
+              <i class="fa fa-filter icon" matTooltip="Filter"></i>
+              <input class="form-control wrap-text" type="text" name="search" placeholder="Filter" [(ngModel)]="filter"
+                (keyup.enter)="applyFilter($event.target.value,$event)"
+                (keyup)="filterByKey($event.target.value,$event)" style="border-radius:0px;margin-left: 0px;">
+            </div>
+          </div>
+          <ng-template #elseBlock1>
+            <div class="input-container" style="float:left">
+              <i class="fa fa-filter icon" matTooltip="Filter"></i>
+              <input class="form-control wrap-text" type="text" name="search" placeholder="Filter" [(ngModel)]="filter"
+                (keyup)="applyFilter1($event.target.value)" style="border-radius:0px;margin-left: 0px;">
+            </div>
+          </ng-template>
+
+          <div class="checkList">
+            <a style="font-size:12px" (click)="clearSelection()"
+              [class.disabled]="!(adhocUtility.checkedList.length > 0)">Uncheck All</a>
+          </div>
+          <div class="checkList">
+            <a style="font-size:12px" (click)="checked()" [class.disabled]="!(adhocUtility.checkedList.length > 0)">
+              PinSelectedtoTop
+            </a>
+          </div>
+
+
+          <!-- <mat-form-field>
+          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+        </mat-form-field> -->
+          <div class="float-end ml-5 mr-2">
+            <button mat-raised-button matTooltip="Plot" class="plotButton"
+              [disabled]="!(adhocUtility.checkedList.length > 0)" (click)="getSelected()" *ngIf="model.app != 'app'">
+              <i class="fa fa-line-chart" style="font-size: 16px;font-weight: 500;cursor:none"></i>
+              Plot
+            </button>
+          </div>
+          <div class="float-end ml-5 mt-1">
+            <a style="font-size:12px" *ngIf="model.app == 'app' && model.objectType == 'Trendlog' "
+              [class.disabled]="!(adhocUtility.checkedList.length > 0)"><strong>Trendlog Objects :
+                {{adhocUtility.checkedList.length}}</strong> </a>
+                <a style="font-size:12px" *ngIf="model.app == 'app' && model.objectType == 'Roomlist' "
+                [class.disabled]="!(adhocUtility.checkedList.length > 0)"><strong>Room Objects :
+                  {{adhocUtility.checkedList.length}}</strong> </a>
+          </div>
+          <div>
+            <div class="info1" *ngIf="model.app == 'app' && model.objectType == 'Roomlist'">
+              <p>Select up to 25 Roomlist for Analysis</p>
+            </div>
+            <div class="info1" *ngIf="model.app == 'app' && model.objectType == 'Trendlog'">
+              <p>Select up to 25 Trendlogs for Analysis</p>
+            </div>
+            <div class="info" *ngIf="model.app != 'app'  && model.objectType == 'Trendlog'">
+              <p>Select up to 10 Trendlogs for Analysis</p>
+            </div>
+          </div>
+
+
+        </div><br /><br /><br />
+        <div class="scroller mt-2"*ngIf="model.objectType ==='Trendlog'">
+          <div *ngIf="isDetails !='true'; else elseBlock">
+            <div *ngIf="length > 0 && trendlogList.filteredData.length == 0">
+              <h5 style="text-align:center">No results found for the specified filter, press <b>Enter</b> for more
+                results
+                from database</h5>
+            </div>
+            <div *ngIf="length == 0">
+              <h5 style="text-align:center" *ngIf="adhocUtility.saveFilter == ''">No results found</h5>
+              <h5 style="text-align:center" *ngIf="adhocUtility.saveFilter != ''">No results found for
+                <b>{{adhocUtility.saveFilter}}</b>
+              </h5>
+            </div>
+          </div>
+          <ng-template #elseBlock>
+            <h5 style="text-align:center" *ngIf="adhocUtility.saveFilter != ''">No results found for
+              <b>{{adhocUtility.saveFilter}}</b>
+            </h5>
+          </ng-template>
+          <div class="example-container mat-elevation-z8">
+
+            <div class="spinner-container" *ngIf="trendlogList">
+              <!-- <app-spinner *ngIf="showSpinner"></app-spinner> -->
+            </div>
+
+            <mat-table cdkDropList #table1  #list="cdkDropList" [dataSource]="trendlogList"
+             [cdkDropListData]="trendlogList.data" (cdkDropListDropped)="onListDrop($event)"
+              #trendlogSort="matSort" *ngIf="length>0" matSort
+              [matSortActive]="sortProperty" [matSortDirection]="sortDirection">
+
+
+
+              <ng-container matColumnDef="checked">
+                <mat-header-cell *matHeaderCellDef [ngClass]="'checkedWidthClass'"></mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'checkedWidthClass'" class="right-aligned-cell">
+                  <mat-checkbox value="{{ element }}" (change)="checkedState(element,$event)"
+                    [(ngModel)]="element.checked"></mat-checkbox>
+                </mat-cell>
+              </ng-container>
+              <!-- First Column ID-->
+              <ng-container matColumnDef="trendlogName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'nameWidthClass'"> Trendlog Name
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'nameWidthClass'">
+                  <ng-template #disabledLink>
+                    <span *ngIf="model.app == 'app'">{{element.trendlogName}}</span>
+                  </ng-template>
+                  <a *ngIf="model.app != 'app'; else disabledLink" [routerLink]="['./trendDetail']"
+                    [queryParams]="{objectType: 'Trendlog',sid: element.sid,isDetails:true,app:model.app}">{{element.trendlogName}}</a>
+                </mat-cell>
+              </ng-container>
+
+              <!-- Second Column -->
+              <ng-container matColumnDef="logDescription">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'descrWidthClass'"> Trendlog Description
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'descrWidthClass'">
+                  <ng-template #disabledLink1>
+                    <span *ngIf="model.app == 'app'">{{element.logDescription}}</span>
+                  </ng-template>
+                  <a *ngIf="model.app != 'app'; else disabledLink1" [routerLink]="['./trendDetail']"
+                    [queryParams]="{objectType: 'Trendlog',sid: element.sid,isDetails:true,app:model.app}">{{element.logDescription}}</a>
+                </mat-cell>
+              </ng-container>
+
+              <!-- Third Column -->
+              <ng-container matColumnDef="logDevNum">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'logsWidthClass'"> Log Dev Number
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'logsWidthClass'">
+                  <ng-template #disabledLink3>
+                    <span *ngIf="model.app == 'app'">{{element.logDevNum}}</span>
+                  </ng-template>
+                  <a *ngIf="model.app != 'app'; else disabledLink3" [routerLink]="['./deviceDetail']"
+                    [queryParams]="{objectType: 'Device',DevNum: element.logDevNum,isDetails:true,app:model.app}">{{element.logDevNum}}</a>
+                  <div class="form-group">
+                    <!-- <a target="_blank"
+                          (click)="onNavigate(element.productCode)" href="#">{{element.productCode}}</a> -->
+                  </div>
+                </mat-cell>
+              </ng-container>
+              <!-- Fourth Column -->
+              <ng-container matColumnDef="logInst">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'logsWidthClass'"> Log Instance Number
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'logsWidthClass'"> {{element.logInst }} </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="engineeringUnit">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'logsWidthClass'"> Engineering Units
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'logsWidthClass'"> {{element.engineeringUnit }}
+                </mat-cell>
+              </ng-container>
+              <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"  cdkDrag></mat-row>
+            </mat-table>
+            <!-- <div *ngIf="isLoading"
+                style="display: flex; justify-content: center; align-items: center; background: white;">
+               <mat-progress-spinner
+                 color="primary"
+                 mode="indeterminate">
+               </mat-progress-spinner>
+             </div> -->
+            <!-- <mat-paginator [hidden]="length < 10" #trendlogPaginator [pageSizeOptions]="[10, 20, 50, 100]"
+            (page)="getData($event)" showFirstLastButtons></mat-paginator> -->
+
+          </div>
+        </div>
+        <div class="scroller mt-2"*ngIf="model.objectType ==='Roomlist'">
+          <div *ngIf="isDetails !='true'; else elseBlock">
+            <div *ngIf="length > 0 && trendlogList.filteredData.length == 0">
+              <h5 style="text-align:center">No results found for the specified filter, press <b>Enter</b> for more
+                results
+                from database</h5>
+            </div>
+            <div *ngIf="length == 0">
+              <h5 style="text-align:center" *ngIf="adhocUtility.saveFilter == ''">No results found</h5>
+              <h5 style="text-align:center" *ngIf="adhocUtility.saveFilter != ''">No results found for
+                <b>{{adhocUtility.saveFilter}}</b>
+              </h5>
+            </div>
+          </div>
+          <ng-template #elseBlock>
+            <h5 style="text-align:center" *ngIf="adhocUtility.saveFilter != ''">No results found for
+              <b>{{adhocUtility.saveFilter}}</b>
+            </h5>
+          </ng-template>
+          <div class="example-container mat-elevation-z8">
+
+            <div class="spinner-container" *ngIf="trendlogList">
+              <!-- <app-spinner *ngIf="showSpinner"></app-spinner> -->
+            </div>
+
+            <mat-table cdkDropList #table1  #list="cdkDropList" [dataSource]="trendlogList"
+             [cdkDropListData]="trendlogList.data" (cdkDropListDropped)="onListDrop($event)"
+              #trendlogSort="matSort" *ngIf="length>0" matSort
+              [matSortActive]="sortProperty" [matSortDirection]="sortDirection">
+
+
+
+              <ng-container matColumnDef="checked">
+                <mat-header-cell *matHeaderCellDef [ngClass]="'checkedWidthClass'"></mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'checkedWidthClass'" class="right-aligned-cell">
+                  <mat-checkbox value="{{ element }}" (change)="checkedState(element,$event)"
+                    [(ngModel)]="element.checked"></mat-checkbox>
+                </mat-cell>
+              </ng-container>
+              <!-- First Column ID-->
+              <ng-container matColumnDef="site">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'nameWidthClass1'"> Site
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'nameWidthClass1'">
+                  <ng-template #disabledLink>
+                    <span *ngIf="model.app == 'app'">{{element.site}}</span>
+                  </ng-template>
+                  <a *ngIf="model.app != 'app'; else disabledLink" [routerLink]="['./trendDetail']"
+                    [queryParams]="{objectType: 'Roomlist',sid: element.sid,isDetails:true,app:model.app}">{{element.site}}</a>
+                </mat-cell>
+              </ng-container>
+
+              <!-- Second Column -->
+              <ng-container matColumnDef="room">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'descrWidthClass1'"> Room
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'descrWidthClass1'">
+                  <ng-template #disabledLink1>
+                    <span *ngIf="model.app == 'app'">{{element.room}}</span>
+                  </ng-template>
+                  <a *ngIf="model.app != 'app'; else disabledLink1" [routerLink]="['./trendDetail']"
+                    [queryParams]="{objectType: 'Roomlist',sid: element.sid,isDetails:true,app:model.app}">{{element.room}}</a>
+                </mat-cell>
+              </ng-container>
+
+              <!-- Third Column -->
+                          <!-- Fourth Column -->
+              <ng-container matColumnDef="roomID">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'logsWidthClass1'"> RoomID
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'logsWidthClass1'"> {{element.roomID}} </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="environment">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'logsWidthClass1'"> Environment
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'logsWidthClass1'"> {{element.environment}}
+                </mat-cell>
+              </ng-container>
+              <mat-header-row *matHeaderRowDef="displayedColumns2; sticky: true"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns2;"  cdkDrag></mat-row>
+            </mat-table>
+            <!-- <div *ngIf="isLoading"
+                style="display: flex; justify-content: center; align-items: center; background: white;">
+               <mat-progress-spinner
+                 color="primary"
+                 mode="indeterminate">
+               </mat-progress-spinner>
+             </div> -->
+            <!-- <mat-paginator [hidden]="length < 10" #trendlogPaginator [pageSizeOptions]="[10, 20, 50, 100]"
+            (page)="getData($event)" showFirstLastButtons></mat-paginator> -->
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div *ngIf="model.app ==='lookUpApp'" class="mt-2">
+    <div>
+      <div *ngIf="!showSpinner">
+        <hr>
+        <div class="fixedPosition">
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+            <div *ngIf="utility.patternShow">
+              <div *ngIf="length>0">
+                <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}}
+                  of {{dataLength}} results for Pattern<b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5>
+              </div>
+              <div *ngIf="length==0">
+                <h5 class="search-message py-2">Showing {{startingIndex}} - {{endingIndex}}
+                  of {{dataLength}} results for Pattern<b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5>
+              </div>
+            </div>
+            <div *ngIf="(model.DevNum != null && model.DevNum != '') && !utility.patternShow">
+              <div>
+                <div *ngIf="length>0">
+                  <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}} of
+                    {{length}} results for <b>"{{model.objectType}}"</b> in <b>"Device {{model.DevNum}}"</b></h5>
+                </div>
+                <div *ngIf="length==0">
+                  <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}} of
+                    {{length}} results for <b>"{{model.objectType}}"</b> in <b>"Device {{model.DevNum}}"</b></h5>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="(model.DevNum == null || model.DevNum == '') && !utility.patternShow">
+              <div *ngIf="model.keyWord == null || model.keyWord == ''">
+                <div *ngIf="length>0">
+                  <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}}
+                    <b>"{{model.objectType}}s"</b> in
+                    {{dataLength}} <b>"Total{{model.objectType}}s"</b>
+                  </h5>
+                </div>
+                <div *ngIf="length==0">
+                  <h5 class="search-message py-2">Showing {{startingIndex }} - {{endingIndex}} of
+                    {{dataLength}} results for <b>"{{model.objectType}}"</b></h5>
+                </div>
+              </div>
+              <div *ngIf="(model.keyWord != null && model.keyWord != '') && !utility.patternShow">
+                <div *ngIf="length>0">
+                  <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}}
+                    of {{dataLength}} results for <b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5>
+                </div>
+                <div *ngIf="length==0">
+                  <h5 class="search-message py-2">Showing {{startingIndex}} - {{endingIndex}}
+                    of {{dataLength}} results for <b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5>
+                </div>
+              </div>
+            </div>
+            <span data-toggle="tooltip" title="Back" (click)="backParent()" class="sla-back-icon refresh-icon"
+              *ngIf="!utility.routerValue" style="margin-left: 0%;margin-top: 1px;">
+              <mat-icon mat-list-icon class="btn-primary click-event">arrow_back</mat-icon>
+            </span>
+            <div class="d-flex">
+              <mat-paginator #trendlogPaginator [hidden]="length < 10" [length]="dataLength"
+                [pageSize]="currentPageSize" [pageIndex]="currentPageIndex" [pageSizeOptions]="pageSizeOptions"
+                (page)="getData($event)" [showFirstLastButtons]="true" [disabled]="isDisable"
+                class="pageTop1"></mat-paginator>
+            </div>
+          </div>
+
+          <div *ngIf="isDetails !='true'; else elseBlock1">
+            <div class="input-container" style="float:left">
+              <i class="fa fa-filter icon" matTooltip="Filter"></i>
+              <input class="form-control wrap-text" type="text" name="search" placeholder="Filter" [(ngModel)]="filter"
+                (keyup.enter)="applyFilter($event.target.value,$event)"
+                (keyup)="filterByKey($event.target.value,$event)" style="border-radius:0px;margin-left: 0px;">
+            </div>
+          </div>
+          <ng-template #elseBlock1>
+            <div class="input-container" style="float:left">
+              <i class="fa fa-filter icon" matTooltip="Filter"></i>
+              <input class="form-control wrap-text" type="text" name="search" placeholder="Filter" [(ngModel)]="filter"
+                (keyup)="applyFilter1($event.target.value)" style="border-radius:0px;">
+            </div>
+          </ng-template>
+
+          <div class="checkList">
+            <a style="font-size:12px" (click)="clearSelection()"
+              [class.disabled]="!(adhocUtility.checkedList.length > 0)">Uncheck All</a>
+          </div>
+          <div class="checkList">
+            <a style="font-size:12px" (click)="checked()" [class.disabled]="!(adhocUtility.checkedList.length > 0)">
+              PinSelectedtoTop
+            </a>
+          </div>
+          <div class="text-sm-right">
+            <a style="font-size:12px;float:right" *ngIf="model.app == 'lookUpApp'"
+              [class.disabled]="!(adhocUtility.checkedList.length > 0)"><strong>Trendlog Objects :
+                {{adhocUtility.checkedList.length}}</strong> </a>
+          </div>
+
+          <div class="float-end ml-5 mr-2">
+            <button mat-raised-button matTooltip="Plot" class="plotButton"
+              [disabled]="!(adhocUtility.checkedList.length > 0)" (click)="getSelected()"
+              *ngIf="model.app != 'lookUpApp'">
+              <i class="fa fa-line-chart" style="font-size: 16px;font-weight: 500;cursor:none"></i>
+              Plot
+            </button>
+          </div><br /><br /><br />
+        </div>
+        <div class="scroller">
+          <div *ngIf="length > 0 && trendlogList.filteredData.length == 0">
+            <h5 style="text-align:center">No results found for the specified filter, press <b>Enter</b> for more results
+              from database</h5>
+          </div>
+          <div *ngIf="length == 0">
+            <h5 style="text-align:center" *ngIf="adhocUtility.saveFilter == ''">No results found</h5>
+            <h5 style="text-align:center" *ngIf="adhocUtility.saveFilter != ''">No results found for
+              <b>{{adhocUtility.saveFilter}}</b>
+            </h5>
+          </div>
+          <div class="example-container mat-elevation-z8">
+
+            <div class="spinner-container" *ngIf="trendlogList">
+              <!-- <app-spinner *ngIf="showSpinner"></app-spinner> -->
+            </div>
+            <mat-table #table1 [dataSource]="trendlogList" #trendlogSort="matSort" *ngIf="length>0" matSort
+              [matSortActive]="sortProperty" [matSortDirection]="sortDirection">
+              <ng-container matColumnDef="checked">
+                <mat-header-cell *matHeaderCellDef [ngClass]="'checkedWidthClass'"></mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'checkedWidthClass'" class="right-aligned-cell">
+                  <mat-checkbox value="{{ element }}" (change)="checkedState(element,$event)"
+                    [(ngModel)]="element.checked"></mat-checkbox>
+                </mat-cell>
+              </ng-container>
+              <!-- First Column ID-->
+              <ng-container matColumnDef="trendlogName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Trendlog Name </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <ng-template #disabledLink>
+                    <span *ngIf="model.app == 'lookUpApp'">{{element.trendlogName}}</span>
+                  </ng-template>
+                  <a *ngIf="model.app != 'lookUpApp'; else disabledLink" [routerLink]="['./trendDetail']"
+                    [queryParams]="{objectType: 'Trendlog',sid: element.sid,isDetails:true,app:model.app}">{{element.trendlogName}}</a>
+                </mat-cell>
+              </ng-container>
+
+              <!-- Second Column -->
+              <ng-container matColumnDef="logDescription">
+                <mat-header-cell *matHeaderCellDef mat-sort-header style="overflow-wrap: anywhere;"> Trendlog
+                  Description </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <ng-template #disabledLink1>
+                    <span *ngIf="model.app == 'lookUpApp'">{{element.logDescription}}</span>
+                  </ng-template>
+                  <a *ngIf="model.app != 'lookUpApp'; else disabledLink1" [routerLink]="['./trendDetail']"
+                    [queryParams]="{objectType: 'Trendlog',sid: element.sid,isDetails:true,app:model.app}">{{element.logDescription}}</a>
+                </mat-cell>
+              </ng-container>
+
+              <!-- Third Column -->
+              <ng-container matColumnDef="logDevNum">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Log Dev Number </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <ng-template #disabledLink3>
+                    <span *ngIf="model.app == 'lookUpApp'">{{element.logDevNum}}</span>
+                  </ng-template>
+                  <a *ngIf="model.app != 'lookUpApp'; else disabledLink3" [routerLink]="['./deviceDetail']"
+                    [queryParams]="{objectType: 'Device',DevNum: element.logDevNum,isDetails:true,app:model.app}">{{element.logDevNum}}</a>
+                  <div class="form-group">
+                    <!-- <a target="_blank"
+                        (click)="onNavigate(element.productCode)" href="#">{{element.productCode}}</a> -->
+                  </div>
+                </mat-cell>
+              </ng-container>
+              <!-- Fourth Column -->
+              <ng-container matColumnDef="logInst">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Log Instance Number </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.logInst }} </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="engineeringUnit">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Engineering Units</mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.engineeringUnit }} </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="standardId">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Standard </mat-header-cell>
+                <!-- <mat-cell *matCellDef="let element" >
+                  <mat-form-field   >
+                    <mat-select  (selectionChange)="onChange($event, element)"
+            [value]="element.standardID ? element.standardID : 'none'" >
+  <mat-option value="none"> -- Select Standard -- </mat-option>
+  <mat-option  *ngFor="let col of _utility.standard" [value]="col.standardID">{{ col.standard }}</mat-option>
+</mat-select>
+                  </mat-form-field>
+                </mat-cell> -->
+                <mat-cell *matCellDef="let element">
+                  <!-- <mat-form-field> -->
+                      <mat-select (selectionChange)="onChange($event, element)"
+                                  [value]="element.standardID ? element.standardID : 'none'"
+                                  > <!-- Adjust width as needed -->
+                          <mat-option value="none">-- Select Standard --</mat-option>
+                          <mat-option *ngFor="let col of _utility.standard" [value]="col.standardID">{{ col.standard }}</mat-option>
+                      </mat-select>
+                  <!-- </mat-form-field> -->
+              </mat-cell>
+
+              </ng-container>
+              <mat-header-row *matHeaderRowDef="displayedColumns1; sticky: true"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns1;"></mat-row>
+            </mat-table>
+            <!-- <div *ngIf="isLoading"
+              style="display: flex; justify-content: center; align-items: center; background: white;">
+             <mat-progress-spinner
+               color="primary"
+               mode="indeterminate">
+             </mat-progress-spinner>
+           </div> -->
+            <!-- <mat-paginator [hidden]="length < 10" #trendlogPaginator [pageSizeOptions]="[10, 20, 50, 100]"
+            (page)="getData($event)" showFirstLastButtons></mat-paginator> -->
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="model.app ==='search'">
+    <div>
+      <div *ngIf="!showSpinner">
+        <div class="fixedPosition">
+          <span data-toggle="tooltip" title="Back" (click)="backParent()" class="sla-back-icon refresh-icon"
+          *ngIf="!utility.routerValue" style="margin-left: 0%;margin-top: 1px;">
+          <mat-icon mat-list-icon class="btn-primary click-event" >arrow_back</mat-icon>
+        </span>
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+            <div *ngIf="utility.patternShow">
+              <div *ngIf="length>0">
+                <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}}
+                  of {{dataLength}} results for Pattern<b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5>
+              </div>
+              <div *ngIf="length==0">
+                <h5 class="search-message py-2">Showing {{startingIndex}} - {{endingIndex}}
+                  of {{dataLength}} results for Pattern<b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5>
+              </div>
+            </div>
+            <div *ngIf="(model.DevNum != null && model.DevNum != '') && !utility.patternShow">
+              <div>
+                <div *ngIf="length>0">
+                  <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}} of
+                    {{length}} results for <b>"{{model.objectType}}"</b> in <b>"Device {{model.DevNum}}"</b></h5>
+                </div>
+                <div *ngIf="length==0">
+                  <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}} of
+                    {{length}} results for <b>"{{model.objectType}}"</b> in <b>"Device {{model.DevNum}}"</b></h5>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="(model.DevNum == null || model.DevNum == '') && !utility.patternShow">
+              <div *ngIf="model.keyWord == null || model.keyWord == ''">
+                <div *ngIf="length>0">
+                  <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}}
+                    <b>"{{model.objectType}}s"</b> in
+                    {{dataLength}} <b>"Total{{model.objectType}}s"</b>
+                  </h5>
+                </div>
+                <div *ngIf="length==0">
+                  <h5 class="search-message py-2">Showing {{startingIndex }} - {{endingIndex}} of
+                    {{dataLength}} results for <b>"{{model.objectType}}"</b></h5>
+                </div>
+              </div>
+              <div *ngIf="(model.keyWord != null && model.keyWord != '') && !utility.patternShow">
+                <div *ngIf="length>0">
+                  <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}}
+                    of {{dataLength}} results for <b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5>
+                </div>
+                <div *ngIf="length==0">
+                  <h5 class="search-message py-2">Showing {{startingIndex}} - {{endingIndex}}
+                    of {{dataLength}} results for <b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex">
+              <mat-paginator #trendlogPaginator [hidden]="length < 10" [length]="dataLength"
+                [pageSize]="currentPageSize" [pageIndex]="currentPageIndex" [pageSizeOptions]="pageSizeOptions"
+                (page)="getData($event)" [showFirstLastButtons]="true" [disabled]="isDisable"
+                class="pageTop"></mat-paginator>
+            </div>
+          </div>
+          <div *ngIf="isDetails !='true'; else elseBlock1">
+            <div class="input-container" style="float:left">
+              <i class="fa fa-filter icon" matTooltip="Filter"></i>
+              <input class="form-control wrap-text" type="text" name="search" placeholder="Filter" [(ngModel)]="filter"
+                (keyup.enter)="applyFilter($event.target.value,$event)"
+                (keyup)="filterByKey($event.target.value,$event)" style="border-radius:0px;margin-left: 0px;">
+            </div>
+          </div>
+          <ng-template #elseBlock1>
+            <div class="input-container" style="float:left">
+              <i class="fa fa-filter icon" matTooltip="Filter"></i>
+              <input class="form-control wrap-text" type="text" name="search" placeholder="Filter" [(ngModel)]="filter"
+                (keyup)="applyFilter1($event.target.value)" style="border-radius:0px;margin-left: 0px;">
+            </div>
+          </ng-template>
+
+          <div class="checkList">
+            <a style="font-size:12px" (click)="clearSelection()"
+              [class.disabled]="!(adhocUtility.checkedList.length > 0)">Uncheck All</a>
+          </div>
+          <div class="checkList">
+            <a style="font-size:12px" (click)="checked()" [class.disabled]="!(adhocUtility.checkedList.length > 0)">
+              PinSelectedtoTop
+            </a>
+          </div>
+          <div class="text-sm-right">
+            <a style="font-size:12px" *ngIf="model.app != 'search'"
+              [class.disabled]="!(adhocUtility.checkedList.length > 0)"><strong>Trendlog Objects :
+                {{adhocUtility.checkedList.length}}</strong> </a>
+          </div>
+
+          <!-- <mat-form-field>
+          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+        </mat-form-field> -->
+          <div class="float-end ml-5 mr-2">
+            <button mat-raised-button matTooltip="Plot" class="plotButton"
+              [disabled]="!(adhocUtility.checkedList.length > 0)" (click)="getSelected()" *ngIf="model.app == 'search'">
+              <i class="fa fa-line-chart" style="font-size: 16px;font-weight: 500;cursor:none"></i>
+              Plot
+            </button>
+          </div>
+          <div>
+            <div class="info" style="margin-right: 80px;">
+              <p>Select up to 10 Trendlogs for Analysis</p>
+            </div>
+          </div>
+
+
+        </div><br /><br /><br />
+        <div class="scroller">
+          <div *ngIf="isDetails !='true'; else elseBlock">
+            <div *ngIf="length > 0 && trendlogList.filteredData.length == 0">
+              <h5 style="text-align:center">No results found for the specified filter, press <b>Enter</b> for more
+                results
+                from database</h5>
+            </div>
+            <div *ngIf="length == 0">
+              <h5 style="text-align:center" *ngIf="adhocUtility.saveFilter == ''">No results found</h5>
+              <h5 style="text-align:center" *ngIf="adhocUtility.saveFilter != ''">No results found for
+                <b>{{adhocUtility.saveFilter}}</b>
+              </h5>
+            </div>
+          </div>
+          <ng-template #elseBlock>
+            <div *ngIf="trendlogList.filteredData.length == 0">
+              <h5 style="text-align:center">No records found for filter <b>{{filter}}</b> in the fetched results</h5>
+            </div>
+          </ng-template>
+
+          <div class="example-container mat-elevation-z8">
+
+            <div class="spinner-container" *ngIf="trendlogList">
+              <!-- <app-spinner *ngIf="showSpinner"></app-spinner> -->
+            </div>
+
+            <mat-table #table1 [dataSource]="trendlogList" #trendlogSort="matSort" *ngIf="length > 0" matSort
+              [matSortActive]="sortProperty" [matSortDirection]="sortDirection">
+              <ng-container matColumnDef="checked">
+                <mat-header-cell *matHeaderCellDef [ngClass]="'checkedWidthClass'"></mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'checkedWidthClass'" class="right-aligned-cell">
+                  <mat-checkbox value="{{ element }}" (change)="checkedState(element,$event)"
+                    [(ngModel)]="element.checked"></mat-checkbox>
+                </mat-cell>
+              </ng-container>
+              <!-- First Column ID-->
+              <ng-container matColumnDef="trendlogName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'nameWidthClass'"> Trendlog Name
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'nameWidthClass'">
+                  <ng-template #disabledLink>
+                    <span *ngIf="model.app != 'search'">{{element.trendlogName}}</span>
+                  </ng-template>
+                  <a *ngIf="model.app == 'search'; else disabledLink" [routerLink]="['./trendDetail']"
+                    [queryParams]="{objectType: 'Trendlog',sid: element.sid,isDetails:true,app:model.app}">{{element.trendlogName}}</a>
+                </mat-cell>
+              </ng-container>
+
+              <!-- Second Column -->
+              <ng-container matColumnDef="logDescription">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'descrWidthClass'"> Trendlog Description
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'descrWidthClass'">
+                  <ng-template #disabledLink1>
+                    <span *ngIf="model.app != 'search'">{{element.logDescription}}</span>
+                  </ng-template>
+                  <a *ngIf="model.app == 'search'; else disabledLink1" [routerLink]="['./trendDetail']"
+                    [queryParams]="{objectType: 'Trendlog',sid: element.sid,isDetails:true,app:model.app}">{{element.logDescription}}</a>
+                </mat-cell>
+              </ng-container>
+
+              <!-- Third Column -->
+              <ng-container matColumnDef="logDevNum">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'logsWidthClass'"> Log Dev Number
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'logsWidthClass'">
+                  <ng-template #disabledLink3>
+                    <span *ngIf="model.app != 'search'">{{element.logDevNum}}</span>
+                  </ng-template>
+                  <a *ngIf="model.app == 'search'; else disabledLink3" [routerLink]="['./deviceDetail']"
+                    [queryParams]="{objectType: 'Device',DevNum: element.logDevNum,isDetails:true,app:model.app}">{{element.logDevNum}}</a>
+                  <div class="form-group">
+                    <!-- <a target="_blank"
+                          (click)="onNavigate(element.productCode)" href="#">{{element.productCode}}</a> -->
+                  </div>
+                </mat-cell>
+              </ng-container>
+              <!-- Fourth Column -->
+              <ng-container matColumnDef="logInst">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'logsWidthClass'"> Log Instance Number
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'logsWidthClass'"> {{element.logInst }} </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="engineeringUnit">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'logsWidthClass'"> Engineering
+                  Units </mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'logsWidthClass'"> {{element.engineeringUnit }}
+                </mat-cell>
+              </ng-container>
+
+
+              <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+            <!-- <div *ngIf="isLoading"
+                style="display: flex; justify-content: center; align-items: center; background: white;">
+               <mat-progress-spinner
+                 color="primary"
+                 mode="indeterminate">
+               </mat-progress-spinner>
+             </div> -->
+            <!-- <mat-paginator [hidden]="length < 10" #trendlogPaginator [pageSizeOptions]="[10, 20, 50, 100]"
+            (page)="getData($event)" showFirstLastButtons></mat-paginator> -->
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="model.app ==='adhoc'">
+    <div>
+      <div *ngIf="!showSpinner">
+        <div class="fixedPosition">
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+            <div *ngIf="utility.patternShow">
+              <div *ngIf="length>0">
+                <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}}
+                  of {{dataLength}} results for Pattern<b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5>
+              </div>
+              <div *ngIf="length==0">
+                <h5 class="search-message py-2">Showing {{startingIndex}} - {{endingIndex}}
+                  of {{dataLength}} results for Pattern<b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5>
+              </div>
+            </div>
+            <div *ngIf="(model.DevNum != null && model.DevNum != '') && !utility.patternShow">
+              <div>
+                <div *ngIf="length>0">
+                  <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}} of
+                    {{length}} results for <b>"{{model.objectType}}"</b> in <b>"Device {{model.DevNum}}"</b></h5>
+                </div>
+                <div *ngIf="length==0">
+                  <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}} of
+                    {{length}} results for <b>"{{model.objectType}}"</b> in <b>"Device {{model.DevNum}}"</b></h5>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="(model.DevNum == null || model.DevNum == '') && !utility.patternShow">
+              <div *ngIf="model.keyWord == null || model.keyWord == ''">
+                <div *ngIf="length>0">
+                  <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}}
+                    <b>"{{model.objectType}}s"</b> in
+                    {{dataLength}} <b>"Total{{model.objectType}}s"</b>
+                  </h5>
+                </div>
+                <div *ngIf="length==0">
+                  <h5 class="search-message py-2">Showing {{startingIndex }} - {{endingIndex}} of
+                    {{dataLength}} results for <b>"{{model.objectType}}"</b></h5>
+                </div>
+              </div>
+              <div *ngIf="(model.keyWord != null && model.keyWord != '') && !utility.patternShow">
+                <div *ngIf="length>0">
+                  <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}}
+                    of {{dataLength}} results for <b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5>
+                </div>
+                <div *ngIf="length==0">
+                  <h5 class="search-message py-2">Showing {{startingIndex}} - {{endingIndex}}
+                    of {{dataLength}} results for <b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5>
+                </div>
+              </div>
+            </div>
+            <span data-toggle="tooltip" title="Back" (click)="backParent()" class="sla-back-icon refresh-icon"
+              *ngIf="!utility.routerValue" style="margin-left: 0%;margin-top: 1px;">
+              <mat-icon mat-list-icon class="btn-primary click-event">arrow_back</mat-icon>
+            </span>
+            <div class="d-flex">
+              <mat-paginator #trendlogPaginator [hidden]="length < 10" [length]="dataLength"
+                [pageSize]="currentPageSize" [pageIndex]="currentPageIndex" [pageSizeOptions]="pageSizeOptions"
+                (page)="getData($event)" [showFirstLastButtons]="true" [disabled]="isDisable"
+                class="pageTop"></mat-paginator>
+            </div>
+          </div>
+          <div class="input-container" style="float:left">
+            <i class="fa fa-filter icon" matTooltip="Filter"></i>
+            <input class="form-control wrap-text" type="text" name="search" placeholder="Filter" [(ngModel)]="filter"
+              (keyup.enter)="applyFilter($event.target.value,$event)" (keyup)="filterByKey($event.target.value,$event)"
+              style="border-radius:0px;margin-left: 0px;">
+          </div>
+          <div class="checkList">
+            <a style="font-size:12px" (click)="clearSelection()"
+              [class.disabled]="!(adhocUtility.checkedList.length > 0)">Uncheck All</a>
+          </div>
+          <div class="checkList">
+            <a style="font-size:12px" (click)="checked()" [class.disabled]="!(adhocUtility.checkedList.length > 0)">
+              PinSelectedtoTop
+            </a>
+          </div>
+          <div class="text-sm-right">
+            <a style="font-size:12px" *ngIf="model.app != 'adhoc'"
+              [class.disabled]="!(adhocUtility.checkedList.length > 0)"><strong>Trendlog Objects :
+                {{adhocUtility.checkedList.length}}</strong> </a>
+          </div>
+
+          <!-- <mat-form-field>
+          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+        </mat-form-field> -->
+          <div class="d-flex justify-content-end align-items-center">
+            <div class="info" style="margin-right: 80px;">
+              <p id="p">Select up to 10 Trendlogs For Analysis</p>
+            </div>
+            <div class="float-end ml-5 mr-2">
+              <button mat-raised-button matTooltip="Plot" class="plotButton"
+                [disabled]="!(adhocUtility.checkedList.length > 0)" (click)="getSelected()"
+                *ngIf="model.app === 'adhoc'">
+                <i class="fa fa-line-chart" style="font-size: 16px;font-weight: 500;cursor:none"></i>
+                Plot
+              </button>
+            </div>
+          </div>
+
+
+        </div><br />
+        <div class="scroller">
+          <div *ngIf="length > 0 && trendlogList.filteredData.length == 0">
+            <h5 style="text-align:center">No results found for the specified filter, press <b>Enter</b> for more results
+              from database</h5>
+          </div>
+          <div *ngIf="length == 0">
+            <h5 style="text-align:center" *ngIf="adhocUtility.saveFilter == ''">No results found</h5>
+            <h5 style="text-align:center" *ngIf="adhocUtility.saveFilter != ''">No results found for
+              <b>{{adhocUtility.saveFilter}}</b>
+            </h5>
+          </div>
+          <div class="example-container mat-elevation-z8">
+
+            <div class="spinner-container" *ngIf="trendlogList">
+              <!-- <app-spinner *ngIf="showSpinner"></app-spinner> -->
+            </div>
+
+            <!-- <mat-table #table1 [dataSource]="trendlogList" #trendlogSort="matSort" *ngIf="length>0" matSort
+              [matSortActive]="sortProperty" [matSortDirection]="sortDirection"> -->
+
+              <mat-table cdkDropList #table1  #list="cdkDropList" [dataSource]="trendlogList"
+              [cdkDropListData]="trendlogList.data" (cdkDropListDropped)="onListDrop($event)"
+               #trendlogSort="matSort" *ngIf="length>0" matSort
+               [matSortActive]="sortProperty" [matSortDirection]="sortDirection">
+
+              <ng-container matColumnDef="checked">
+                <mat-header-cell *matHeaderCellDef [ngClass]="'checkedWidthClass'"></mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'checkedWidthClass'" class="right-aligned-cell">
+                  <mat-checkbox value="{{ element }}" (change)="checkedState(element,$event)"
+                    [(ngModel)]="element.checked"></mat-checkbox>
+                </mat-cell>
+              </ng-container>
+              <!-- First Column ID-->
+              <ng-container matColumnDef="trendlogName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'nameWidthClass'"> Trendlog Name
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'nameWidthClass'">
+                  <ng-template #disabledLink>
+                    <span *ngIf="model.app != 'adhoc'">{{element.trendlogName}}</span>
+                  </ng-template>
+                  <a *ngIf="model.app == 'adhoc'; else disabledLink" [routerLink]="['./trendDetail']"
+                    [queryParams]="{objectType: 'Trendlog',sid: element.sid,isDetails:true,app:model.app}">{{element.trendlogName}}</a>
+                </mat-cell>
+              </ng-container>
+
+              <!-- Second Column -->
+              <ng-container matColumnDef="logDescription">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'descrWidthClass'"> Trendlog Description
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'descrWidthClass'">
+                  <ng-template #disabledLink1>
+                    <span *ngIf="model.app != 'adhoc'">{{element.logDescription}}</span>
+                  </ng-template>
+                  <a *ngIf="model.app == 'adhoc'; else disabledLink1" [routerLink]="['./trendDetail']"
+                    [queryParams]="{objectType: 'Trendlog',sid: element.sid,isDetails:true,app:model.app}">{{element.logDescription}}</a>
+                </mat-cell>
+              </ng-container>
+
+              <!-- Third Column -->
+              <ng-container matColumnDef="logDevNum">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'logsWidthClass'"> Log Dev Number
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'logsWidthClass'">
+                  <ng-template #disabledLink3>
+                    <span *ngIf="model.app != 'adhoc'">{{element.logDevNum}}</span>
+                  </ng-template>
+                  <a *ngIf="model.app == 'adhoc'; else disabledLink3" [routerLink]="['./deviceDetail']"
+                    [queryParams]="{objectType: 'Device',DevNum: element.logDevNum,isDetails:true,app:model.app}">{{element.logDevNum}}</a>
+                  <div class="form-group">
+                    <!-- <a target="_blank"
+                          (click)="onNavigate(element.productCode)" href="#">{{element.productCode}}</a> -->
+                  </div>
+                </mat-cell>
+              </ng-container>
+              <!-- Fourth Column -->
+              <ng-container matColumnDef="logInst">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'logsWidthClass'"> Log Instance Number
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'logsWidthClass'"> {{element.logInst }} </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="engineeringUnit">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'logsWidthClass'"> Engineering
+                  Units </mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'logsWidthClass'"> {{element.engineeringUnit }}
+                </mat-cell>
+              </ng-container>
+
+
+              <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" ></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"cdkDrag></mat-row>
+            </mat-table>
+            <!-- <div *ngIf="isLoading"
+                style="display: flex; justify-content: center; align-items: center; background: white;">
+               <mat-progress-spinner
+                 color="primary"
+                 mode="indeterminate">
+               </mat-progress-spinner>
+             </div> -->
+            <!-- <mat-paginator [hidden]="length < 10" #trendlogPaginator [pageSizeOptions]="[10, 20, 50, 100]"
+            (page)="getData($event)" showFirstLastButtons></mat-paginator> -->
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div *ngIf="!showSpinner">
+      <div *ngIf="length==0">
+        <div *ngIf="model.keyWord == null || model.keyWord == ''">
+            <div *ngIf="model.objectType == 'Energylog'">
+                <h5 style="text-align:center">No Results Found for <b>"Energy Log"</b></h5>
+            </div>
+            <div *ngIf="model.objectType != 'Energylog'">
+                <h5 style="text-align:center">
+                    No Results Found for <b>"{{model.objectType}}"</b>
+                </h5>
+            </div>
+        </div>
+        <div *ngIf="model.keyWord != null && model.keyWord != ''">
+            <div *ngIf="model.objectType == 'Energylog'">
+                <h5 style="text-align:center">No Results Found for <b>"{{model.keyWord}}"</b> in <b>"Energy
+                        Log"</b></h5>
+            </div>
+            <div *ngIf="model.objectType != 'Energylog'">
+                <h5 style="text-align:center">No Results Found for <b>"{{model.keyWord}}"</b> in
+                    <b>"{{model.objectType}}"</b></h5>
+            </div>
+        </div>
+      </div>
+    </div> -->
+  </div>
+</div>
+<router-outlet></router-outlet>
+
+

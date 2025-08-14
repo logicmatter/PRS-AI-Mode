@@ -1,0 +1,100 @@
+{
+  "durations": [
+    {
+      "label": "24 Hours",
+      "value": "_24HRS"
+    },
+    {
+      "label": "Today",
+      "value": "today"
+    },
+    {
+      "label": "Yesterday",
+      "value": "yesterday"
+    },
+    {
+      "label": "Last 7Days",
+      "value": "Last 7"
+    },
+    {
+      "label": "Last 30Days",
+      "value": "Last 30"
+    },
+    {
+      "label": "Last 90Days",
+      "value": "Last 90"
+    },
+    {
+      "label": "Week To Date",
+      "value": "WTD"
+    },
+    {
+      "label": "Week",
+      "value": "WEEK"
+    },
+    {
+      "label": "Month To Date",
+      "value": "MTD"
+    },
+    {
+      "label": "Last Month",
+      "value": "MONTH"
+    },
+    {
+      "label": "Quarter To Date",
+      "value": "QTD"
+    },
+    {
+      "label": "1 Quarter",
+      "value": "_1Q"
+    },
+    {
+      "label": "2 Quarter",
+      "value": "_2Q"
+    },
+    {
+      "label": "3 Quarter",
+      "value": "_3Q"
+    },
+    {
+      "label": "4 Quarter",
+      "value": "_4Q"
+    },
+    {
+      "label": "Year To Date",
+      "value": "YTD"
+    },
+    {
+      "label": "Year",
+      "value": "currentyear"
+    },
+    {
+      "label": "Last Year",
+      "value": "lastyear"
+    },
+    {
+      "label": "Last Year Quarter1",
+      "value": "lastyearq1"
+    },
+    {
+      "label": "Last Year Quarter2",
+      "value": "lastyearq2"
+    },
+    {
+      "label": "Last Year Quarter3",
+      "value": "lastyearq3"
+    },
+    {
+      "label": "Last Year Quarter4",
+      "value": "lastyearq4"
+    },
+    {
+      "label": "2 Years",
+      "value": "_2Y"
+    },
+    {
+      "label": "Custom",
+      "value": "custom"
+    }
+  ]
+}

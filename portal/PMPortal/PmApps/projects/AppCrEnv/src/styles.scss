@@ -1,0 +1,51 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~angular2-multiselect-dropdown/themes/default.theme.css";
+@import "../../../src/styles.scss";
+
+.mat-row:nth-child(even) {
+  background-color: rgb(255, 255, 255);
+}
+
+.fixedPosition1 {
+  top: 193px;
+  left: 70px;
+  width: 106%;
+}
+
+@media only screen and (min-width: 1500px) {
+  .scroller {
+    overflow: scroll;
+    height: 80vh;
+    overflow-x: hidden;
+  }
+
+}
+
+.scroller {
+  overflow: scroll;
+  height: 80vh;
+  overflow-x: hidden;
+}
+
+.pageTop {
+  background: #fbfafa !important;
+  height: 50px !important;
+  margin-top: -5px !important;
+  font-weight: 500;
+}
+
+.mat-row:nth-child(odd) {
+  background-color: #fafafa;
+}
+
+mat-header-cell,
+mat-cell {
+  justify-content: center;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: lightgrey;
+  border-right-color: lightgrey;
+  border-right-style: solid;
+  border-right-width: 1px;
+  padding-left: 8px;
+}

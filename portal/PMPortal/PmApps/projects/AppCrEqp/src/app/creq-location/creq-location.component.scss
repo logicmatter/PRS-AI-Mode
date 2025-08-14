@@ -1,0 +1,84 @@
+h3 {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+table {
+  width: 100%;
+}
+table,thead {
+  width: 100%;
+}
+td {
+  text-align: center;
+}
+
+// .mat-row {
+//   height: auto;
+// }
+// tr.mat-header-row {
+//   height: 56px;
+// }
+td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type, th.mat-header-cell:first-of-type {
+ // padding-left: 24px;
+ text-align: left;
+}
+td.mat-cell, td.mat-footer-cell, th.mat-header-cell {
+  padding: 0;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    justify-content: center;
+    /* border-bottom-width: 1px; */
+    border-bottom-style: solid;
+    border-bottom-color: lightgrey;
+    border-right-color: lightgrey;
+    border-right-style: solid;
+    border-right-width: 1px;
+    width: 0px;
+}
+// .customWidthClass{
+//   flex: 0 0 218px;
+//   width: 27px !important;
+// }
+
+// .locationWidthClass{
+//   flex: 0 0 169px;
+//   width: 14%!important;
+// }
+// .roomTypeWidthClass{
+//   flex: 0 0 302px;
+//   width: 25%!important;
+// }
+
+// .trendWidthClass{
+//   flex: 0 0 302px;
+//   width: 25%!important;
+// }
+
+// .actionsWidthClass{
+//   flex: 0 0 221px;
+// }
+
+
+// .mat-column-trend {
+//   flex: 0 0 300px;
+//   width: 25%;
+// }
+// .mat-column-actions {
+//   flex: 0 0 86px;
+// }
+.mat-header-cell {
+  display: table-cell !important;
+  padding: 0 0 0 15px !important;
+
+  justify-content: flex-start;
+}
+td.mat-cell{
+  text-align: left;
+  padding-left: 15px;
+}
+
+.filterText
+{
+  min-height: 40px;
+}
+

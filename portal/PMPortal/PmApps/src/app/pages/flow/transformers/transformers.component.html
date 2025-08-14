@@ -1,0 +1,98 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+    <li class="breadcrumb-item"><a
+        [routerLink]="'/tDashboard/' + tenantService.currentTenantValue.tenantId ">{{this.tenantService.currentTenantValue.tenantName}}</a>
+    </li>
+    <li class="breadcrumb-item"><a routerLink="/flow">Flow</a></li>
+    <ng-container>
+      <li class="breadcrumb-item" *ngIf="selectedTabIndex === 0"> <a [routerLink]="['/Transformers']"
+          [queryParams]="{tab: 0}">Importers</a></li>
+      <li class="breadcrumb-item" *ngIf="selectedTabIndex === 1"> <a [routerLink]="['/Transformers']"
+          [queryParams]="{tab: 1}">Transformers</a></li>
+      <li class="breadcrumb-item" *ngIf="selectedTabIndex === 2"> <a [routerLink]="['/Transformers']"
+          [queryParams]="{tab: 2}">Exporters</a></li>
+      <li class="breadcrumb-item" *ngIf="selectedTabIndex === 3"> <a [routerLink]="['/Transformers']"
+          [queryParams]="{tab: 3}">Maintainers</a></li>
+    </ng-container>
+    <li class="breadcrumb-item">
+      <a *ngIf="_utility.isCreateReport && !_utility.isReportRun && !_utility.isbreadEditReport"
+        [routerLink]="'/appCrEnv/' + _utility?.appID + '/create'">Create Report</a>
+      <a *ngIf="_utility.isReportRun || _utility.isbreadEditReport" [routerLink]="'/appCrEnv/' + _utility?.appID">{{
+        _utility.isReportRun ? 'Run' : 'Edit' }} Report</a>
+    </li>
+  </ol>
+</nav>
+
+<div style="display: flex; align-items: center;">
+  <span data-toggle="tooltip" title="Back" class="sla-back-icon refresh-icon">
+    <mat-icon mat-list-icon class="btn-primary click-event" (click)="navigate1()">arrow_back</mat-icon>
+  </span>
+  <h1 style="margin-left: 10px;">Data Flows</h1>
+</div>
+
+<app-spinner *ngIf="showSpinner"></app-spinner>
+<div *ngIf="!_utility.isCreateReport">
+  <div class="button-container" *ngIf="false">
+    <button *ngFor="let appName of appNames; let i = index" (click)="getAppDetails(appName)"
+      [ngClass]="{'selected': i === selectedAppIndex}">
+      {{ appName }}
+    </button>
+  </div>
+  <br>
+  <div class="row" *ngIf="!showSpinner">
+    <div class="col-auto" style="display: contents;">
+      <mat-tab-group #tabGroup (selectedTabChange)="onTabChange($event)" [hidden]="!showTransformers"
+        [selectedIndex]="selectedTabIndex">
+        <mat-tab label="Importer" [class.active-tab]="selectedTabIndex === 0">
+          <!-- Content for Importer tab -->
+        </mat-tab>
+        <mat-tab label="Transformers" [class.active-tab]="selectedTabIndex === 1">
+          <!-- Content for Transformers tab -->
+        </mat-tab>
+        <mat-tab label="Exporter" [class.active-tab]="selectedTabIndex === 2">
+          <!-- Content for Exporter tab -->
+        </mat-tab>
+        <mat-tab label="Maintainer" [class.active-tab]="selectedTabIndex === 3">
+          <!-- Content for Maintainer tab -->
+        </mat-tab>
+
+      </mat-tab-group>
+      <button *ngIf="!_utility.isTableHasDatasource" class="cpybtn2" (click)="Initialisation()">Initialization</button>
+      <button *ngIf="_utility.isTableHasDatasource" class="cpybtn" (click)="CopyTrans()">MasterCopy</button>
+    </div>
+
+
+  </div>
+  <div class="example-container mat-elevation-z8" *ngIf="!showSpinner">
+    <nav class="navbar navbar-expand-sm bg-light navbar-dark" *ngIf="!showSpinner &&  selectedTabIndex !== 0" >
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a>
+            <i class="" [ngClass]="_utility.isReportList ? 'nav-active' : 'nav-inactive'"
+              (click)="_utility.isCreateReport ? getTenants() : ''">
+              &nbsp;<span class="app-navs"></span>
+            </i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a>
+            <i class="fa fa-plus" [ngClass]="	
+                _utility.isCreateReport ? 'nav-active' : 'nav-inactive'	
+              " (click)="_utility.isReportList ? createReport() : ''">
+              &nbsp;<span class="app-navs">Create Report</span>
+            </i>
+          </a>
+        </li>
+      </ul>
+    </nav>
+<div *ngIf="selectedTabIndex === 0" style="margin-left: 15px;">
+  <app-data-source-list></app-data-source-list>
+</div><div *ngIf="_utility.isReportList && selectedTabIndex !== 0" style="margin-left: 15px;">
+  <app-rpt-list></app-rpt-list>
+</div>
+  </div>
+</div>
+<div *ngIf="_utility.isCreateReport">
+  <app-view-report></app-view-report>
+</div>

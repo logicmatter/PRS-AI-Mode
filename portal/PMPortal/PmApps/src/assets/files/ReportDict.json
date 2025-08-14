@@ -1,0 +1,121 @@
+[
+  [{
+      "id": 1,
+      "tabName": "Dashboard",
+      "jobject": {
+        "rptPath": "/SLAReports/Portal Dashboard",
+        "zoom": "100%",
+        "format": "HTML4.0",
+        "rptName": "Dashboard",
+        "repjob": "report",
+        "params": {},
+        "tenantId": "",
+        "dealerId": "",
+        "selectedTenant": "",
+        "hasChild": "false"
+      }
+    },
+    {
+      "id": 2,
+      "tabName": "Datasources",
+      "jobject": {
+        "rptPath": "/SLAReports/Data Collection Status ODS",
+        "zoom": "70%",
+        "format": "HTML4.0",
+        "rptName": "ODS Data Sync",
+        "repjob": "report",
+        "params": "",
+        "tenantId": "",
+        "dealerId": "",
+        "selectedTenant": "",
+        "hasChild": "false"
+      }
+    },
+    {
+      "id": 3,
+      "tabName": "Dataflows",
+      "jobject": {
+        "rptPath": "/SLAReports/Data Collection Status",
+        "zoom": "70%",
+        "format": "HTML4.0",
+        "rptName": "ADS Data Sync",
+        "repjob": "report",
+        "params": "",
+        "tenantId": "",
+        "dealerId": "",
+        "selectedTenant": "",
+        "hasChild": "false"
+      }
+    },
+    {
+      "id": 4,
+      "tabName": "Reports",
+      "jobject": {
+        "rptPath": "/SLAReports/Report Execution Log",
+        "zoom": "70%",
+        "format": "HTML4.0",
+        "rptName": "ReportExecution",
+        "repjob": "report",
+        "params": {
+          "StartDate": "",
+          "EndDate": ""
+        },
+        "tenantId": "",
+        "dealerId": "",
+        "selectedTenant": "",
+        "hasChild": "false",
+        "section": "1"
+      }
+    },
+    {
+      "id": 5,
+      "tabName": "Databases",
+      "jobject": {
+        "rptPath": "/SLAReports/Database Query Activity",
+        "zoom": "70%",
+        "format": "HTML4.0",
+        "rptName": "Database Query Activity",
+        "repjob": "report",
+        "params": {
+          "StartDate": "",
+          "EndDate": ""
+        },
+        "tenantId": "",
+        "dealerId": "",
+        "selectedTenant": "",
+        "hasChild": "false",
+        "section": "1"
+      }
+    }
+  ],
+  [{
+    "id": 4,
+    "tabName": "Dashboard",
+    "jobject": {
+      "rptPath": "/SLAReports/Portal Dashboard",
+      "zoom": "100%",
+      "format": "HTML4.0",
+      "rptName": "Dashboard",
+      "repjob": "report",
+      "params": {},
+      "tenantId": "",
+      "dealerId": "",
+      "selectedTenant": "",
+      "hasChild": "false"
+    }
+  }],
+  [{
+    "reportSettings": {
+      "reportFormat": "HTML4.0",
+      "resolutions": [
+        {"key":"Actual","value":"actual"},
+        {"key":"Hourly","value": "hourly"},
+        {"key": "Daily", "value" :"daily"},
+        {"key":"Weekly", "value" :"weekly"},
+        {"key":"Monthly", "value" :"monthly"},
+        {"key":"Quarterly", "value" :"quarterly"},
+        {"key":"Yearly", "value" :"yearly"}
+      ]
+    }
+  }]
+]

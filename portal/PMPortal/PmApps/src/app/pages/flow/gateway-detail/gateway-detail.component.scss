@@ -1,0 +1,60 @@
+.bg-icons-remove {
+  background: transparent !important;
+  padding-right: .75em !important;
+}
+.hidden {
+  display: none;
+}
+.disabled {
+  opacity: 0.5; // or any other styles to visually indicate the disabled state
+  cursor: not-allowed;
+}
+
+.custom-control-input:checked~.custom-control-label::before {
+  border-color: #e54f81;
+  background-color: #E91E63;
+}
+
+.custom-control-input:focus~.custom-control-label::before {
+  box-shadow: none;
+}
+
+.form-field {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -1px;
+}
+
+.content{
+  display: flex;
+
+}
+.input{
+  width: 35rem;
+}
+
+@media screen and (min-width:300px)and (max-width:900px){
+
+  
+  .col-md-3{
+    padding-left: 5px;
+  white-space: nowrap;
+  }
+  .content{
+    display: flex;
+  }
+  .col{
+    margin-right: -100px;
+    padding-top: 10px;
+  }
+  
+   }
+  
+

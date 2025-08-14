@@ -1,0 +1,163 @@
+<style>
+  @media screen and (min-width:360px)and (max-width:599px) {
+    .paginator {
+      width: 230%
+    }
+
+  }
+</style>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+    <li class="breadcrumb-item"><a [routerLink]="'/tDashboard/' + tenants.tenantId ">{{this.tenants.tenantName}}</a>
+    </li>
+    <li class="breadcrumb-item"><a routerLink="/flow">Flow</a></li>
+    <li class="breadcrumb-item"><a routerLink="/data-source-list">DataSource List</a></li>
+    <li class="breadcrumb-item"><a
+        [routerLink]="'/data-load-history/' + dataSourceId+ '/'+ tenantId ">Data-Load-History</a></li>
+  </ol>
+</nav>
+<div class="row">
+  <div class="col-md-8">
+    <h5>Data Loading History <span *ngIf="dataSourceName">-</span> {{dataSourceName}}</h5>
+  </div>
+  <div class="col-md-4 text-right" style="text-align: end;">
+    <input type="button" value="Refresh" class="btn btn-outline-primary mr-2" style="margin-right: 10px;"
+      (click)="reloadHistory()" />
+    <input type="button" value="Back" class="btn btn-outline-primary float-right" (click)="goBack()" />
+  </div>
+</div>
+<div class="col-md-6">
+</div>
+<app-spinner *ngIf="showSpinner"></app-spinner>
+
+<div class="" [hidden]="showSpinner">
+  <div class="div">
+
+    <div [hidden]="!isTableHasData || this.dataSource.data.length == 0">
+      <div class="div">
+        <mat-form-field class="col-md-4">
+          <mat-label>Filter</mat-label>
+          <input class="col-md-6" style="padding-bottom: 10px;" matInput (keyup)="applyFilter($event)" placeholder=""
+            #input>
+        </mat-form-field>
+        <div class="mat-elevation-z8" style="padding:0 20px;">
+          <table class="ml-2 w-100" mat-table matSort [dataSource]="dataSource" #TableOneSort="matSort" role="grid">
+            <ng-container matColumnDef="historyId">
+              <th mat-header-cell-1 *matHeaderCellDef mat-sort-header> ID </th>
+              <td *matCellDef="let row"> {{row.historyId}} </td>
+            </ng-container>
+            <ng-container matColumnDef="insertCount">
+              <th mat-header-cell-1 *matHeaderCellDef mat-sort-header> Insert Count </th>
+              <td *matCellDef="let row" style="padding-left: 23px;"> {{row.insertCount}} </td>
+            </ng-container>
+            <ng-container matColumnDef="updateCount">
+              <th mat-header-cell-1 *matHeaderCellDef mat-sort-header> Update Count </th>
+              <td *matCellDef="let row" style="padding-left: 23px;"> {{row.updateCount}} </td>
+            </ng-container>
+            <ng-container matColumnDef="failedCount">
+              <th mat-header-cell-1 *matHeaderCellDef mat-sort-header> Failed Count </th>
+              <td *matCellDef="let row" style="padding-left: 23px;"><a
+                  (click)="row.failedCount > 0 ? viewErrorRecords($event, row) : null"
+                  [ngClass]="row.failedCount > 0 ? 'click-event' : 'none'">{{row.failedCount}}</a></td>
+            </ng-container>
+            <ng-container matColumnDef="loadStatus">
+              <th mat-header-cell-1 *matHeaderCellDef mat-sort-header> Load Status </th>
+              <td *matCellDef="let row"> {{row.loadStatus}} </td>
+            </ng-container>
+            <ng-container matColumnDef="scheduleType">
+              <th mat-header-cell-1 *matHeaderCellDef mat-sort-header> Schedule Type </th>
+              <td *matCellDef="let row"> {{row.scheduleType}} </td>
+            </ng-container>
+            <ng-container matColumnDef="message">
+              <th mat-header-cell-1 *matHeaderCellDef mat-sort-header> Message </th>
+              <td *matCellDef="let row"> {{row.message}} </td>
+            </ng-container>
+            <ng-container matColumnDef="startDT">
+              <th mat-header-cell-1 *matHeaderCellDef mat-sort-header style="width:234px;"> Start Date </th>
+              <td *matCellDef="let row"> {{row.startDT | date:'medium'}} </td>
+            </ng-container>
+            <ng-container matColumnDef="endDT">
+              <th mat-header-cell-1 *matHeaderCellDef mat-sort-header> End Date </th>
+              <td *matCellDef="let row"> {{row.endDT | date:'medium'}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+          </table>
+
+          <mat-paginator class="paginator" [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
+        </div>
+      </div>
+      <div class="my-4" *ngIf="this.dataSource.data.length == 0">
+        No data available
+      </div>
+    </div>
+    <div *ngIf="!isTableHasData" class="d-flex justify-content-center align-items-center">
+      No data available
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <h5>Exception Log History <span *ngIf="dataSourceName">-</span> {{dataSourceName}}</h5>
+    </div>
+  </div>
+  <div class="col-md-6">
+  </div>
+  <div class="" [hidden]="showSpinner">
+    <div [hidden]="!isTableHasData1 || this.dataSource.data.length == 0">
+      <div class="div">
+        <mat-form-field class="col-md-4">
+          <mat-label>Filter</mat-label>
+          <input class="col-md-6" matInput (keyup)="applyLogFilter($event)" placeholder="" #inputexp>
+        </mat-form-field>
+
+        <div class="mat-elevation-z8" style="padding:0 20px;">
+          <table class="ml-2 w-100" mat-table matSort [dataSource]="exceptionLogDataSource" #TableTwoSort="matSort"
+            role="grid">
+            <ng-container matColumnDef="logdate">
+              <th mat-header-cell-1 *matHeaderCellDef mat-sort-header> Logged Date </th>
+              <td *matCellDef="let row"> {{row.logdate | date: 'medium'}} </td>
+            </ng-container>
+            <ng-container matColumnDef="exceptionMsg">
+              <th mat-header-cell-1 *matHeaderCellDef mat-sort-header> Exception Msg </th>
+              <td *matCellDef="let row"> {{row.exceptionMsg}} </td>
+            </ng-container>
+            <ng-container matColumnDef="exceptionType">
+              <th mat-header-cell-1 *matHeaderCellDef mat-sort-header> Exception Type </th>
+              <td *matCellDef="let row"> {{row.exceptionType}} </td>
+            </ng-container>
+            <!--<ng-container matColumnDef="exceptionSource">
+    <th mat-header-cell-1 *matHeaderCellDef mat-sort-header> Exception Source </th>
+    <td *matCellDef="let row"> {{row.exceptionSource}} </td>
+  </ng-container>-->
+            <ng-container matColumnDef="connectorType">
+              <th mat-header-cell-1 *matHeaderCellDef mat-sort-header> Connector Type </th>
+              <td *matCellDef="let row"> {{row.connectorType}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsExp"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsExp;"></tr>
+
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{inputexp.value}}"</td>
+            </tr>
+          </table>
+
+          <mat-paginator class="paginator" #TableTwoPaginator [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
+        </div>
+      </div>
+      <div class="my-4" *ngIf="this.dataSource.data.length == 0">
+        No data available
+      </div>
+    </div>
+
+    <div *ngIf="!isTableHasData1" class="d-flex justify-content-center align-items-center">
+      No data available
+    </div>
+  </div>

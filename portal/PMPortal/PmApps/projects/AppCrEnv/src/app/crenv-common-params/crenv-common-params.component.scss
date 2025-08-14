@@ -1,0 +1,44 @@
+.mat-form-field {
+  display: block !important;
+  //border-top: 0px !important;
+}
+.mat-form-field-infix {
+  //display: block !important;
+  border-top: 0px !important;
+}
+
+
+@media screen and (min-width:360px) and (max-width:599px)
+ {
+ .height{
+  height: 5em;
+ }
+}
+
+#template{
+  margin-top: 3px;
+  margin-left: 6px;
+}
+
+#template,#reportName,#reportDescription{
+  margin-top: 3px;
+  margin-left: -22px;
+}
+label{
+  margin-left: -20px;
+  margin-top: 10px;
+}
+input{
+  margin-left: -20px;
+  margin-top: 3px;
+}
+
+.mat-form-field-appearance-legacy {
+  width: 99%;
+}
+
+
+mat-form-field{
+  margin-left: -22px;
+  margin-top: 3px;
+}

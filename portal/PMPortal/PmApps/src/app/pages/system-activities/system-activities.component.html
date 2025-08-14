@@ -1,0 +1,35 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+    <li class="breadcrumb-item"><a
+        [routerLink]="'/tDashboard/' + tenantService.currentTenantValue.tenantId">{{this.tenantService.currentTenantValue.tenantName}}</a>
+    </li>
+    <li class="breadcrumb-item"><a routerLink="/sysactivity/Dashboard">SystemActivity</a></li>
+    <li class="breadcrumb-item" *ngIf="selectedTabIndex === 0"><a routerLink="/sysactivity/Dashboard">Dashboard</a></li>
+    <li class="breadcrumb-item" *ngIf="selectedTabIndex === 1"><a routerLink="/sysactivity/DataSources">DataSources</a>
+    </li>
+    <li class="breadcrumb-item" *ngIf="selectedTabIndex === 2"><a routerLink="/sysactivity/DataFlows">DataFlows</a></li>
+    <li class="breadcrumb-item" *ngIf="selectedTabIndex === 3"><a routerLink="/sysactivity/Reports">Reports</a></li>
+    <li class="breadcrumb-item" *ngIf="selectedTabIndex === 4"><a routerLink="/sysactivity/Databases">Databases</a></li>
+  </ol>
+</nav>
+<div>
+  <mat-card-title style="margin-top: 30px;">
+    <a id="report" *ngIf="reportHelper.hasChild">
+      <span data-toggle="tooltip" title="Back" data-placement="left" (click)="getReportData()"
+        class="cm-refresh-icon back-button"><mat-icon mat-list-icon
+          class="btn-primary click-event">arrow_back</mat-icon></span>
+    </a>
+    <app-pagination [pageNum]="reportHelper.pageNum"></app-pagination>
+  </mat-card-title>
+  <mat-tab-group [selectedIndex]="selectedTabIndex" (selectedTabChange)="tabSelectionChanged($event)"
+    class="plans-details-tabs salesport-tabs">
+    <mat-tab *ngFor="let rep of reportsList; let i = index" label="{{rep.tabName}}"
+      (click)="tabSelectionChanged({index: i, tab: { textLabel: rep.tabName }})">
+      <mat-card-content>
+        <app-spinner *ngIf="reportHelper.showSpinner"></app-spinner>
+        <app-report *ngIf="!reportHelper.showSpinner"></app-report>
+      </mat-card-content>
+    </mat-tab>
+  </mat-tab-group>
+</div>

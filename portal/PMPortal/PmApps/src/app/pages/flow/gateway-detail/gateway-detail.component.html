@@ -1,0 +1,123 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+    <li class="breadcrumb-item"><a routerLink="/flow">Flow</a></li>
+    <li class="breadcrumb-item"><a [routerLink]="'/tDashboard/' + tenants.tenantId ">{{this.tenants.tenantName}}</a>
+    </li>
+    <li class="breadcrumb-item"><a routerLink="/Gateway">Gateway-DataSource List</a></li>
+    <li class="breadcrumb-item">
+      <a routerLink="/gateway-detail/{{ dataSourceId }}">
+        {{ dataSourceId > 0 ? 'Edit' : 'Add' }} Datasource
+      </a>
+    </li>
+  </ol>
+</nav>
+<app-spinner *ngIf="showSpinner"></app-spinner>
+<div *ngIf="!showSpinner">
+  <div class=" sticky-top " style="background-color:#f8f9fa;">
+    <div class=" form-group form-inline content">
+      <label for="connectorList" class="col-md-3" style="display: block;">Select Connector</label>
+      <select class="form-select col-md-6 input " name="connectorList" [(ngModel)]="datasourceModel.connectorType"
+        (change)="onChangeConnector($event,'cChange')">
+        <option selected disabled value="-1">Select Connector</option>
+        <option *ngFor="let connector of connectorsList" [value]="connector.connectorId">
+          {{connector.connectorName}}
+        </option>
+      </select>
+    </div>
+    <!--save, update, back button -->
+    <div [hidden]="showSpinner" class=" form-group form-inline row"
+      style="border-bottom:solid 2px; margin-bottom:15px; border-color: gray; ">
+      <h4 class="col" style="text-align: left;">{{dataSourceId > 0 ? 'Edit': 'Setup'}} Gateway Source
+      </h4>
+      <div class="col " style="text-align: right;  margin-bottom:8px;">
+        <button class="btn btn-outline-primary ml-2" (click)="Navigate()" style="margin-right: 20px;">
+          Back
+        </button>
+        <button class=" btn btn-outline-primary" type="submit" (click)="saveDatasource()"
+          [disabled]="!datasource.valid || _utility.datesValidator">
+          {{dataSourceId == -1? "Save" : "Update"}}
+        </button>
+
+        <button class="btn btn-outline-primary" *ngIf="showLoadButton" disabled>
+          <span class="spinner-border spinner-border-sm"></span>
+          Loading...
+        </button>
+      </div>
+    </div>
+  </div>
+  <div [hidden]="showSpinner">
+    <form class="was-validated" [formGroup]="datasource">
+      <div class="form-group form-inline content" *ngFor="let field of fields" class="form-field">
+        <label for="dataSourceName" class="col-md-3" style="display: block;" *ngIf="!field.hidden">{{ field.label
+          }}</label>
+        <!-- check for text Input -->
+        <input type="text" required [name]="field.fieldName" *ngIf="field.type === 'text' && !field.hidden"
+          [formControlName]="field.fieldName" [readonly]="field.disableMessage"
+          class="form-control bg-icons-remove col-md-6 input" [placeholder]="field.placeHolder">
+
+        <input type="{{ showPassword ? 'text' : 'password' }}" required [placeholder]="field.placeHolder"
+          [name]="field.fieldName" *ngIf="field.type === 'password'  && !field.hidden "
+          [formControlName]="field.fieldName" [readonly]="field.disableMessage"
+          class="form-control bg-icons-remove col-md-6 input ">
+
+        <div class="input-group-append" style="margin-left: 10px;">
+          <button *ngIf="field.fieldName === 'password' && !field.hidden " class="btn btn-outline-secondary"
+            type="button" (click)="showPassword = !showPassword" [style.border-color]="showPassword ? 'red' : 'green'">
+            <i class="fa" [ngClass]="{ 'fa-eye': !showPassword, 'fa-eye-slash': showPassword }"
+              [ngStyle]="{'color': showPassword ? 'red' : 'green'}"></i>
+          </button>
+        </div>
+        <div class="invalid-feedback"
+          *ngIf="datasource.get(field.fieldName).invalid && datasource.get(field.fieldName).touched">
+          {{field.label}} is required
+        </div>
+        <!-- check for radio  -->
+        <div *ngIf="field.type === 'radio'" class="row">
+          <span *ngFor="let option of field.options" class="col-auto">
+            <div class="custom-control custom-radio">
+              <input [id]="option.key" id="radio" type="radio" class="custom-control-input"
+                (change)="authchange(option.key, field.fieldName)" [attr.disabled]="field.dis" [value]="option.key"
+                [formControlName]="field.fieldName">
+              <!-- [attr.disabled]="option.disabled" -->
+              <label class="form-control-label text-dark" [for]="option.key">{{option.value}}</label>
+            </div>
+          </span>
+        </div>
+        <!-- check for message -->
+        <input type="message" [placeholder]="field.placeHolder" [name]="field.fieldName" style="margin-left: 0px;"
+          *ngIf="field.type === 'message' && !field.hidden" [formControlName]="field.fieldName"
+          [readonly]="field.disableMessage" class="form-control bg-icons-remove col-md-6 input">
+        <!-- check for text Date -->
+        <input name="startDate" class="form-control bg-icons-remove col-md-6" style="width: 35rem; margin-left: 0px;"
+          [owlDateTime]="sdt" *ngIf="field.type === 'date' && field.fieldName === 'loadStartFrom' "
+          [(ngModel)]="startDate" required [formControlName]="field.fieldName" [owlDateTimeTrigger]="sdt"
+          (change)="validateDuration()" placeholder="Load start from date" />
+        <owl-date-time #sdt (afterPickerClosed)="validateDuration()"></owl-date-time>
+        <!-- check for text Date -->
+        <input name="endDate" class="form-control bg-icons-remove col-md-6" style="width: 35rem;  margin-left: 0px;"
+          [owlDateTime]="edt" *ngIf="field.type === 'date' && field.fieldName === 'loadEndTo' " [(ngModel)]="endDate"
+          required [formControlName]="field.fieldName" [owlDateTimeTrigger]="edt" (change)="validateDuration()"
+          placeholder="Load end to date" />
+        <owl-date-time #edt (afterPickerClosed)="validateDuration()"></owl-date-time>
+        <div *ngIf="_utility.datesValidator && field.fieldName === 'loadEndTo'" style="color: red;">
+          Start Date should be less than End Date
+        </div>
+        <!-- Select dropdown for setupflow -->
+        <select class="form-control col-md-6 input" required name="gatewayName"
+          style="font-size: 13px; margin-left: 0px;" *ngIf="field.fieldName === 'gatewayName'"
+          [formControlName]="field.fieldName" (change)="onChangeGateway($event)">
+          <option *ngFor="let gatewayName of gatewayNames" [value]="gatewayName">{{ gatewayName }}</option>
+        </select>
+        <select class="form-control col-md-6 input" required name="initialLoadingDays"
+          style="font-size: 13px; margin-left: 0px;" *ngIf="field.fieldName === 'initialLoadingDays'"
+          [formControlName]="field.fieldName" (change)="onintialdays($event)">
+          <option *ngFor="let initialLoadingDays of initialLoadingDays" [value]="initialLoadingDays">
+            {{ initialLoadingDays }}</option>
+        </select>
+      </div>
+    </form>
+  </div>
+  <div>
+  </div>
+</div>

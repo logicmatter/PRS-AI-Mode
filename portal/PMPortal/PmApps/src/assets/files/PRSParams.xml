@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PRSParameters>
+<ReportParameters>
+	<ReportParameter Name="rid">
+      <DataType>Integer</DataType>
+    </ReportParameter>
+	<ReportParameter Name="tip">
+      <DataType>String</DataType>
+	</ReportParameter>
+	<ReportParameter Name="tt">
+	  <DataType>String</DataType>
+	    <App Name="crenv">
+		    <ReportParameter Name="lid">
+				<DataType>String</DataType>
+			</ReportParameter>
+		</App>
+		<App Name="creqp">
+		    <ReportParameter Name="eid">
+				<DataType>String</DataType>
+			</ReportParameter>
+		</App>
+		<App Name="alarm">
+		    <ReportParameter Name="asid">
+				<DataType>String</DataType>
+			</ReportParameter>
+		</App>  		
+		<App Name="trend">
+			<ReportParameter Name="tsid">
+				<DataType>String</DataType>
+			</ReportParameter>
+		</App>
+		<App Name="energy">
+			<ReportParameter Name="esid">
+				<DataType>String</DataType>
+			</ReportParameter>
+		</App>
+	</ReportParameter>
+	<ReportParameter Name="ver">
+	  <DataType>String</DataType>	
+	</ReportParameter>	
+	<ReportParameter Name="sdt">
+	  <DataType>DateTime</DataType>
+	</ReportParameter>
+	<ReportParameter Name="edt">
+	  <DataType>DateTime</DataType>
+	</ReportParameter>
+</ReportParameters>	
+</PRSParameters>

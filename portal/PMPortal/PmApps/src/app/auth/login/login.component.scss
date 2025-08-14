@@ -1,0 +1,37 @@
+#input_img {
+    position:absolute;
+    bottom:2px;
+    right:5px;
+    width:24px;
+    height:24px;
+}
+.input-icons {
+    position: absolute;
+    cursor: pointer;
+    padding: 40px;
+    color: #310080;
+    margin-left: -67px;
+    font-size: 16px;
+}
+
+.pass{
+    margin-top: 22px;
+}
+#email,#password,#rem{
+    margin-top: 15px;
+    margin-left: auto;
+}
+#forgot{
+   float: right;
+    text-decoration: none;
+}
+
+.btn-block{
+    width:325px;
+}
+
+
+
+label{
+    margin-top: 1px;
+}

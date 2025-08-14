@@ -1,0 +1,44 @@
+      <div class="row" align="right" style="margin-top:10px">
+        <div class="col-md-12">
+          <button type="button" class="btn btn-outline-primary" style="margin-right: 5px" (click)="goBack()" tabindex="4">
+            Back
+          </button>
+
+          <button *ngIf="_util.showFacetBack" type="button" class="btn btn-outline-primary" (click)="updateFacet()"
+            [disabled]="saveDisable" style="margin-right: 5px" tabindex="3">
+            Update
+          </button>
+
+          <button type="button" *ngIf="!_util.showFacetBack" class="btn btn-outline-primary" style="margin-right: 5px"
+            [disabled]="saveDisable" (click)="onSave()" tabindex="3">
+            Save
+          </button>
+
+
+        </div>
+      </div>
+<h5 *ngIf="_util.showFacetBack" class="text-center" style="font-family: Arial, Helvetica, sans-serif;">UPDATE FACET</h5>
+<h5 *ngIf="!_util.showFacetBack" class="text-center " style="font-family: Arial, Helvetica, sans-serif;">ADD FACET</h5>
+
+<div class="card-text-center" >
+  <div class="col-md-12">
+    <div class="card " >
+      <div class="card-body">
+        <label for="facetName"><sup class="mandatory-indication">*</sup>Facet Name</label>
+
+        <input type="text" class="form-control" id="facetName" [(ngModel)]="facetName" placeholder="Facet Name" required
+          (ngModelChange)="disableButton()" tabindex="1" />
+        <label for="facetName"><sup class="mandatory-indication">*</sup>Facet Value</label>
+        <angular2-multiselect id="sel" [data]="dropdownFacetList" [(ngModel)]="selectedFacetItems"
+          [settings]="dropdownFacetSettings" (onSelect)="onFacetItemSelect($event)"
+          (onDeSelect)="OnFacetItemDeSelect($event)" (onDeSelectAll)="OnItemFacetDeSelectAll($event)" tabindex="1">
+        </angular2-multiselect>
+        <!-- <input type="text" class="form-control" id="facetUnit" [(ngModel)]="facetUnit" placeholder="Facet Value" required
+          (ngModelChange)="disableButton()" tabindex="2" /> -->
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- </form> -->

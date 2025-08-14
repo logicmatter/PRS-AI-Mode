@@ -1,0 +1,418 @@
+@import '../../../../styles.scss';
+
+.example-card {
+  margin: 20px;
+  padding: 0px;
+  padding-top: 10px;
+  margin-bottom: -15px;
+  cursor: pointer;
+}
+
+.container {
+  padding: 2rem 0rem;
+}
+
+a.disabled {
+  color: gray;
+  cursor: not-allowed;
+  text-decoration: underline;
+}
+
+h4 {
+  margin: 2rem 0rem 1rem;
+}
+
+.plotButton {
+  position: relative;
+  background-color: var(--primary-color);
+  font-weight: 500;
+  color: white;
+}
+
+.plotButton:hover {
+  background-color: #e85d1b;
+}
+
+.logWidthClass{
+  display: flex;
+  justify-content: flex-start;
+}
+
+
+
+
+.ibox-content {
+  background-color: #FFFFFF;
+  color: inherit;
+  padding: 15px 20px 20px 20px;
+  border-color: #E7EAEC;
+  border-image: none;
+  border-style: solid solid none;
+  border-width: 1px 0px;
+}
+
+.search-form {
+  margin-top: 10px;
+}
+
+.search-result h3 {
+  margin-bottom: 0;
+  color: #1E0FBE;
+}
+
+.search-result h3>a {
+  margin-bottom: 0;
+  color: #1E0FBE;
+}
+
+h3 {
+  font-size: 1.60em;
+}
+
+.search-result .search-link {
+  color: #006621;
+  cursor: default !important;
+}
+
+.search-result p {
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.hr-line-dashed {
+  border-top: 1px dashed #E7EAEC;
+  color: #ffffff;
+  background-color: #ffffff;
+  height: 1px;
+  margin: 20px 0;
+}
+
+
+.checkList {
+  text-align: left;
+  font: normal normal 600 16px/22px Arial;
+  letter-spacing: 0px;
+  color: var(--primary-color);
+  text-decoration: underline var(--primary-color);
+  opacity: 1;
+  padding: 8px;
+  float: left;
+  cursor: pointer;
+}
+
+.note {
+  background-color: #f0f7fb;
+  border-left: solid 4px #3498db;
+  line-height: 18px;
+  mc-auto-number-format: '{b}Note: {/b}';
+  overflow: hidden;
+  padding: 12px;
+  width: 24%;
+  margin-left: auto;
+  margin-right: 0;
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: 100;
+}
+
+
+ul#horizontal-list {
+  min-width: 696px;
+  list-style: none;
+  padding-top: 20px;
+}
+
+ul#horizontal-list li {
+  display: inline;
+}
+
+#wrapper {}
+
+.info {
+  float: right;
+  margin-top: 1px;
+  //background-color: #e7f3fe;
+  border-left: 3px solid #2196F3;
+  height: 26px;
+  padding: 4px;
+  font-size: 12px;
+}
+
+input[type="checkbox"][id^="cb"] {
+  display: none;
+}
+
+.cardtile {
+  border: 1px solid #fff;
+  padding: 10px;
+  display: block;
+  position: relative;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.cardtile:before {
+  background-color: white;
+  color: white;
+  content: " ";
+  display: block;
+  border-radius: 50%;
+  border: 1px solid grey;
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  line-height: 28px;
+  transition-duration: 0.4s;
+  transform: scale(0);
+}
+
+:checked+cardtile {
+  border-color: #ddd;
+}
+
+:checked+cardtile:before {
+  content: "✓";
+  background-color: grey;
+  transform: scale(1);
+}
+
+.checkList {
+  text-align: left;
+  font: normal normal 600 16px/22px Arial;
+  letter-spacing: 0px;
+  color: var(--primary-color);
+  text-decoration: underline var(--primary-color);
+  opacity: 1;
+  padding: 8px;
+  float: left;
+  cursor: pointer;
+}
+
+:checked+cardtile div {
+  transform: scale(0.9);
+  box-shadow: 0 0 5px #333;
+  z-index: -1;
+}
+
+.columns {
+  padding-top: 0;
+}
+
+.left-div {
+  display: inline-block;
+  max-width: 501px;
+  text-align: left;
+  border-radius: 3px;
+  margin: 5px;
+  vertical-align: top;
+  margin-left: -45px;
+}
+
+.icon {
+  padding: 10px;
+  color: rgba(112, 120, 125, 1);
+  min-width: 50px;
+  text-align: center;
+  font-size: 16px;
+  background: rgba(250, 250, 250, 1) 0% 0% no-repeat padding-box;
+  border: 1px solid rgba(204, 204, 204, 1);
+  border-radius: 4px 0px 0px 4px;
+  opacity: 1;
+}
+
+.input-container {
+  display: -ms-flexbox;
+  /* IE10 */
+  display: flex;
+  margin-bottom: 3px;
+}
+
+.right-div {
+  display: inline-block;
+  max-width: 501px;
+  text-align: left;
+  border-radius: 3px;
+  margin: 0px;
+  margin-top: 8px;
+  margin-left: 45px;
+}
+
+
+.nameWidthClass{
+  flex: 0 0 12%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.descrWidthClass{
+  flex: 0 0 24%;
+  display: flex;
+  justify-content: flex-start;
+}
+.countWidthClass{
+  flex: 0 0 10%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+mat-cell:first-of-type, mat-footer-cell:first-of-type, mat-header-cell:first-of-type {
+  padding-left: 0px !important;
+}
+@media screen and (max-width: 800px) {
+
+  .left-div,
+  .right-div {
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+
+
+.colStyle {
+  white-space: nowrap;
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.rowStyle {
+  white-space: nowrap;
+}
+
+.checkStyle {
+  margin-top: -17px;
+  text-align: center;
+  margin-left: 4px;
+}
+
+.my-pagination ::ng-deep .ngx-pagination .current {
+  background: #193A7E;
+}
+
+.colStyle {
+  white-space: nowrap;
+  background-color: #1A3A7F;
+  color: white;
+}
+
+.rowStyle {
+  white-space: nowrap;
+}
+
+a.disabled {
+  pointer-events: none;
+  cursor: default;
+}
+
+ul {
+  list-style-type: none;
+}
+
+li {
+  display: inline-block;
+}
+
+input[type="checkbox"][id^="cb"] {
+  display: none;
+}
+
+label {
+  border: 1px solid #fff;
+  padding: 5px;
+  display: block;
+  position: relative;
+  margin: 10px;
+  cursor: pointer;
+}
+
+label:before {
+  background-color: white;
+  color: white;
+  content: " ";
+  display: block;
+  border-radius: 50%;
+  border: 1px solid grey;
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  line-height: 28px;
+  transition-duration: 0.4s;
+  transform: scale(0);
+}
+
+label img {
+  height: 100px;
+  width: 100px;
+  transition-duration: 0.2s;
+  transform-origin: 50% 50%;
+}
+
+:checked+label {
+  border-color: #ddd;
+}
+
+:checked+label:before {
+  content: "✓";
+  background-color: grey;
+  transform: scale(1);
+}
+
+:checked+label img {
+  transform: scale(0.9);
+  box-shadow: 0 0 5px #333;
+  z-index: -1;
+}
+
+@media(min-width:960px) and (max-width:1024px) {}
+
+@media only screen and (max-width: 787px) and (min-width: 600px) {
+
+  .dashboard-content .mat-card {
+    top: 45px !important;
+  }
+}
+
+.filter-input{
+  width: 80%;
+  border-radius: 0px;
+  margin-left: 0px;
+}
+
+
+@media only screen and (min-width: 300px) and (max-width: 600px) {
+  .input-container {
+      flex-direction: row; /* Stack items vertically on smaller screens */
+  }
+
+  
+}
+
+@media only screen and (max-width: 768px) {
+  .paginator-container {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    padding-bottom: 35px; 
+}
+
+.mat-paginator-page-size,
+.mat-paginator-range-label {
+    white-space: nowrap;
+}
+mat-table{
+  width: 100%;
+}
+
+
+
+}
+

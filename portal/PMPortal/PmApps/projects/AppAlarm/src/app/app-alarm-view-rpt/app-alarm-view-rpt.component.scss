@@ -1,0 +1,59 @@
+.sidenav {
+  height: 100%;
+  width: 0;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
+  transition: 0.5s;
+}
+
+.rhead {
+  padding: 15px 50px;
+}
+
+#main {
+  transition: margin-left 0.5s;
+  padding: 10px 0px 0px 15px;
+}
+
+.row {
+  margin-right: 0px;
+}
+
+.alarm {
+  padding: 15px 35px;
+}
+
+.my-custom-span {
+  margin-bottom: 10px;
+}
+
+.my-custom-icon {
+  font-size: 24px;
+}
+
+@media screen and (min-width:700px) {
+
+  .alarm {
+    padding: 15px 4px;
+  }
+
+  .col-3 {
+    flex: 0 0 13%;
+  }
+}
+
+
+@media screen and (min-width:360px) and (max-width:650px) {
+
+
+  .col-3 {
+    flex: 0 0 10%;
+    max-width: 33%;
+  }
+
+  .row {
+    margin-right: -619px;
+  }
+}

@@ -1,0 +1,256 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+    <li class="breadcrumb-item"><a
+        [routerLink]="'/tDashboard/' + tenantService.currentTenantValue.tenantId">{{this.tenantService.currentTenantValue.tenantName}}</a>
+    </li>
+    <li class="breadcrumb-item"><a routerLink="/admin">Admin</a></li>
+    <li class="breadcrumb-item" *ngIf="tabGroup.selectedIndex === 0 ">Manage Users</li>
+    <li class="breadcrumb-item" *ngIf="tabGroup.selectedIndex === 1">Manage Reports</li>
+  </ol>
+</nav>
+<div>
+  <mat-tab-group #tabGroup (selectedTabChange)="tabChanged($event)" class="plans-details-tabs salesport-tabs admintabs">
+    <mat-tab label="Manage Users">
+      <div style="margin-top: 1%;">
+        <!-- <h4 style="text-transform:uppercase" align="center">Users</h4> -->
+      </div>
+      <app-spinner *ngIf="showSpinner"></app-spinner>
+      <div *ngIf="!showSpinner">
+
+        <div class="row">
+          <div class="col-md-3">
+            <div class="col-md-3">
+              <div class="input-container" style="float:left">
+                <i class="fa fa-filter icon" matTooltip="Filter"></i>
+                <input class="form-control" type="text" name="search" placeholder="Filter"
+                  (keyup)="applyFilter1($event.target.value)" style="border-radius:0px;width:auto; margin-left: 0px">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8" align="right">
+            <a>
+              <i class="fa fa-plus nav-inactive " *ngIf="userObj.roles === 'Manager'" matTooltip="Create New User"
+                (click)="createNewUser()" style="cursor: pointer;">
+                &nbsp;<span class="app-navs">Create User</span>
+              </i>
+            </a>
+            <!-- <button class="btn btn-outline-primary" *ngIf="userObj.roles === 'Manager'" routerLink="new-user">Create New User</button>-->
+          </div>
+        </div>
+        <div *ngIf="length > 0">
+          <div class="example-container mat-elevation-z8">
+            <mat-table #table [dataSource]="userList" #userSort="matSort" matSort>
+              <ng-container matColumnDef="SNo">
+                <mat-header-cell *matHeaderCellDef [ngClass]="'noWidthClass'">#</mat-header-cell>
+                <mat-cell *matCellDef="let item; let i = index" [ngClass]="'noWidthClass'">
+                  {{ i + 1 }}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="firstName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'nameWidthClass'">First
+                  Name</mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'nameWidthClass'"
+                  id="reg">{{element.firstName}}</mat-cell>
+              </ng-container>
+
+
+              <ng-container matColumnDef="lastName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'nameWidthClass'"> Last Name
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'nameWidthClass'">{{element.lastName}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="roles">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'nameWidthClass'"> Role </mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'nameWidthClass'">{{element.roles}}</mat-cell>
+              </ng-container>
+
+
+              <ng-container matColumnDef="tenant">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'nameWidthClass'"> Tenant Access
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'nameWidthClass1'">
+                  <ng-container>
+                    <div *ngFor="let t of element.tenant"> {{t}} </div>
+                  </ng-container>
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="email">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'emailWidthClass'"> Email
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'emailWidthClass'">{{element.email}}</mat-cell>
+              </ng-container>
+
+
+              <ng-container matColumnDef="isActive">
+                <mat-header-cell *matHeaderCellDef [ngClass]="'nameWidthClass'"> <span class="Act">Active/
+                    Inactive</span> </mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'nameWidthClass'">
+                  <mat-slide-toggle color="primary" disabled="{{userObj.roles === 'User'}}"
+                    checked="{{element.isActive}}" (change)="userActiveDialog($event,element)">
+                    {{element.isActive ? 'Active' : 'Inactive'}}
+                  </mat-slide-toggle>
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="actions">
+                <mat-header-cell *matHeaderCellDef [ngClass]="'actnWidthClass'"> Actions </mat-header-cell>
+                <mat-cell *matCellDef="let element" [ngClass]="'actnWidthClass'">
+                  <div> <img src="assets/icons/noun_Eye_1791508.svg" [ngClass]="'image'"
+                      class="toggle-tenants mx-2 click-event" aria-hidden="false" matTooltip="Assign Reports" matTooltipClass="tooltip"
+                      (click)="getUserAccessReports(element.id)" />
+                    <img src="assets/icons/noun_edit_1644623.svg" [ngClass]="'image'"
+                      class="toggle-tenants mx-2 click-event" aria-hidden="false" matTooltip="Edit User" matTooltipClass="tooltip"
+                      (click)="editUser(element)" />
+                  </div>
+                </mat-cell>
+              </ng-container>
+
+              <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+            <mat-paginator [hidden]="length < 10" #userPaginator [pageSizeOptions]="[50, 75, 100, 150]"
+              (page)="getData($event)" [showFirstLastButtons]="true">
+            </mat-paginator>
+          </div>
+        </div>
+        <h5 align="center" *ngIf="length == 0">No Users Available</h5>
+      </div>
+
+    </mat-tab>
+    <mat-tab label="Manage Reports">
+      <div style="margin-top: 1%;">
+        <!-- <h4 style="text-transform:uppercase" align="center">Reports</h4>
+            <div align="right"></div> -->
+      </div>
+      <app-spinner *ngIf="showSpinner"></app-spinner>
+      <div *ngIf="!showSpinner">
+        <div>
+          <div class="row">
+            <div class="col-md-3">
+              <div class="input-container" style="float:left">
+                <i class="fa fa-filter icon" matTooltip="Filter"></i>
+                <input class="form-control" type="text" name="search" placeholder="Filter"
+                  (keyup)="applyFilter($event.target.value)" style="border-radius:0px;width:auto">
+              </div>
+            </div>
+            <!-- <app-filter [placeHolderText]="'Filter'"></app-filter> -->
+          </div>
+          <!-- <div class="card" style="margin-top: 5px;margin-left: 10px;margin-right: 10px;margin-bottom: 20px">
+              <div class="card-header" style="font-size: 15px;"> -->
+          <div class="example-container mat-elevation-z8">
+            <mat-table #table1 [dataSource]="reportsList" #reportSort="matSort" matSort>
+
+              <ng-container matColumnDef="appName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'nameWidthClass3'">App
+                  Name</mat-header-cell>
+                <mat-cell class="text-center" *matCellDef="let element" [ngClass]="'nameWidthClass3'">
+                  <div><img src="{{'assets/icons/'+element.normalizedAppName+'.svg'}}" width="26px" height="26px"
+                      class="toggle-tenants" aria-hidden="false" matTooltip="{{element.appName}}" />
+                    {{element.appName}}
+                  </div>
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="reportName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'nameWidthClass2'">Report
+                  Name</mat-header-cell>
+                <mat-cell class="repName" *matCellDef="let  element" (click)="runReport(element)"
+                  [ngClass]="'nameWidthClass2'" style="word-break:break-all;">{{element.reportName}}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="createdBy">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'nameWidthClass2'">Created
+                  By</mat-header-cell>
+                <mat-cell *matCellDef="let  element" [ngClass]="'nameWidthClass2'">{{element.createdBy}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="lastModifiedOn">
+                <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'nameWidthClass2'">Last
+                  Modified</mat-header-cell>
+                <mat-cell *matCellDef="let  element" [ngClass]="'nameWidthClass2'">{{ element.lastModifiedOn | date:
+                  "yyyy-MM-dd HH:mm:ss" }}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="ac">
+                <mat-header-cell *matHeaderCellDef [ngClass]="'actnWidthClass1'">Actions</mat-header-cell>
+                <mat-cell *matCellDef="let  element" [ngClass]="'actnWidthClass1'">
+                  <div><img src="assets/icons/noun_Eye_1791508.svg" [ngClass]="'image'"
+                      class="toggle-tenants mx-2 click-event" aria-hidden="false" matTooltip="Assign Users"
+                      (click)="getReportAccessUsers(element)" />
+                    <img src="assets/icons/noun_edit_1644623.svg" [ngClass]="'image'"
+                      class="toggle-tenants mx-2 click-event" aria-hidden="false" matTooltip="Edit"
+                      (click)="editReport(element)" />
+                    <img src="assets/icons/noun_play_1939987.svg" [ngClass]="'image'"
+                      class="toggle-tenants mx-2 click-event" aria-hidden="false" matTooltip="Run"
+                      (click)="runReport(element)" />
+                    <img [src]="element.scheduleId ? 'assets/icons/Group 230.svg' : 'assets/icons/Group 215.svg'"
+                      [ngClass]="'image'" class="toggle-tenants mx-2 click-event" aria-hidden="false"
+                      matTooltip="Schedule" (click)="schedule(element)" />
+                    <img src="assets/icons/noun_Folder_3604475.svg" [ngClass]="'image'"
+                      class="toggle-tenants mx-2 click-event" aria-hidden="false" matTooltip="View Files"
+                      (click)="getScheduledFiles(element)" />
+                    <img src="assets/icons/Group 216.svg" [ngClass]="'image'" class="toggle-tenants mx-2 click-event"
+                      aria-hidden="false" matTooltip="Delete" (click)="deleteReportDialog($event,element)" />
+                  </div>
+                </mat-cell>
+              </ng-container>
+
+              <mat-header-row *matHeaderRowDef="displayedColumnsrep; sticky: true"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumnsrep;"></mat-row>
+            </mat-table>
+            <mat-paginator [hidden]="length < 10" #reportPaginator [pageSizeOptions]="[50, 75, 100, 150]"
+              (page)="getData($event)" [showFirstLastButtons]="true">
+
+            </mat-paginator>
+            <!-- <pagination-controls *ngIf="reportsList.length > 0" id="reports" (pageChange)="p1 = $event" autoHide=true class="my-pagination"></pagination-controls>  -->
+            <!-- <h5 align="center" *ngIf="reportsList.length == 0">No reports Available</h5> -->
+          </div>
+          <!-- <div *ngIf="!showSpinner">
+              <div class="row">
+                <div class="col-md-3" style="margin-left:10px;">
+                  <app-filter [placeHolderText]="'Filter'"></app-filter>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-bordered tableStyles" *ngIf="reportsList.length > 0">
+                  <thead class="headerStyle">
+                    <tr>
+                      <th>#</th>
+                      <th>App Name</th>
+                      <th>Report Name</th>
+                      <th>Description</th>
+                      <th>Created By</th>
+                      <th>Assigned Users</th>
+                      <th>Schedule</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let rpt of reportsList  | filter: coreService.filter | paginate: { id: 'reports', itemsPerPage:  config.itemsPerPage, currentPage: p1 }; let rowNo1 = index">
+                      <td style="width: 2%;">{{ rowNo1+1 }}</td>
+                      <td style="width: 12%;">{{ rpt.appName }}</td>
+                      <td style="width: 12%;">{{ rpt.reportName }}</td>
+                      <td style="width: 35%;">{{ rpt.reportDescription }}</td>
+                      <td style="width: 15%;">{{rpt.createdBy}}</td>
+                      <td style="width: 10%;">
+                        <button class="btn btn-outline-primary" (click)="geReportAccessUsers(rpt)">View</button>
+                      </td>
+                      <td style="width: 8%;"><button class="btn btn-outline-primary" (click)="schedule(rpt)">Schedule</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </div>
+            </div> -->
+        </div>
+        <br>
+        <h5 align="center" style="text-align:center;padding: 25px;" *ngIf="length == 0">No reports Available</h5>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>

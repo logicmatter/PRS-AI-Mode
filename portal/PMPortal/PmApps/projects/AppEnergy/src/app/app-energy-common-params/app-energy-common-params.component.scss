@@ -1,0 +1,52 @@
+.mat-form-field {
+  display: block !important;
+  //border-top: 0px !important;
+}
+.mat-form-field-infix {
+  //display: block !important;
+  border-top: 0px !important;
+}
+.info {
+  float: right;
+  margin-top: -11px;
+  border-left: 2px solid #2196F3;
+  height: 17px;
+  padding: 2px;
+  font-size: 12px;
+  margin-left: 17px;
+}
+
+#energy,#template{
+  margin-top: 3px;
+  margin-left: 0px;
+}
+
+#template,#reportName,#reportDescription,#select,#energy1{
+  margin-top: 3px;
+  margin-left: 6px;
+}
+
+label{
+  margin-left: 6px;
+  margin-top: 10px;
+}
+#space{
+  margin-left: 5px;
+}
+
+#dr{
+  margin-left: 5px;
+}
+
+#resolution{
+  margin-top: 8px;
+  margin-left: 6px;
+}
+
+#resolution1{
+  margin-left: 6px;
+}
+
+.mat-form-field-appearance-legacy {
+  width: 104%;
+}

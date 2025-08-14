@@ -1,0 +1,169 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+    <li class="breadcrumb-item"><a routerLink="/flow">Flow</a></li>
+    <li class="breadcrumb-item"><a [routerLink]="'/tDashboard/' + tenants.tenantId ">{{this.tenants.tenantName}}</a>
+    </li>
+    <li class="breadcrumb-item"><a routerLink="/data-source-list">DataSource List</a></li>
+    <li class="breadcrumb-item">
+      <a routerLink="/data-source-detail/{{ dataSourceId }}">
+        {{ dataSourceId > 0 ? 'Edit' : 'Add' }} Datasource
+      </a>
+    </li>
+  </ol>
+</nav><app-spinner *ngIf="showSpinner"></app-spinner>
+<div *ngIf="!showSpinner">
+  <div class=" sticky-top " style="background-color:#f8f9fa;">
+    <div class=" form-group form-inline " style="display: flex;">
+      <label for="connectorList" class="col-md-3" style="display: block;" id="lab">Select Connector</label>
+      <select class="form-select col-md-6" style="width: 35rem;" name="connectorList"
+        [(ngModel)]="datasourceModel.connectorType" (change)="onChangeConnector($event,'cChange')">
+        <option disabled value="-1">Select Connector</option>
+        <option *ngFor="let connector of connectorsList" [value]="connector.connectorId">
+          {{connector.connectorName}}
+        </option>
+      </select>
+    </div>
+    <div [hidden]="showSpinner" class=" form-group form-inline row"
+      style="border-bottom:solid 2px; margin-bottom:15px; border-color: gray; ">
+      <h4 class="col" style="text-align: left;">{{dataSourceId > 0 ? 'Edit': 'Add'}} Datasource
+      </h4>
+      <div class="col " style="text-align: right;  margin-bottom:8px; ">
+        <button class="btn btn-outline-primary ml-2" (click)="Navigate()" style="margin-right: 20px;">
+          Back
+        </button>
+        <button class=" btn btn-outline-primary"  type="submit" (click)="saveDatasource()"
+          [disabled]="!datasource.valid || _utility.datesValidator">
+          {{dataSourceId == -1? "Save" : "Update"}}
+        </button>
+
+        <button class="btn btn-outline-primary" *ngIf="showLoadButton" disabled>
+          <span class="spinner-border spinner-border-sm"></span>
+          Loading...
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+  <div [hidden]="showSpinner">
+    <form class="was-validated" [formGroup]="datasource">
+      <div class="form-group form-inline" *ngFor="let field of fields" class="form-field">
+        <label for="dataSourceName" class="col-md-3" style="display: block;" *ngIf="!field.hidden">{{ field.label
+          }}</label>
+        <!-- check for text Input -->
+        <input type="text" required [name]="field.fieldName" *ngIf="field.type === 'text' && !field.hidden"
+          [formControlName]="field.fieldName" [readonly]="field.disableMessage"
+          class="form-control bg-icons-remove col-md-6" style="width: 35rem;" [placeholder]="field.placeHolder"
+          (input)="onInputChange($event,field.fieldName)">
+        <a *ngIf="dataSourceId > -1 && field?.fieldName == 'sourceGoogleSheetId' && !field.hidden && datasourceModel.connectorType != '1454C60D-B03D-42A7-8154-0ED6A6DA253B'"
+          [hidden]="datasource.get(field.fieldName).invalid" class="nav-link"
+          [ngClass]="{ 'hidden': disableLinkButton1 }"
+          [routerLink]="['../../subscription-edit/spreadSheet/' + dataSourceId]"><img alt="Edit"
+            style="margin-left: 10px;" src="assets/icons/noun_edit_1644623.svg" width="25px" height="25px"
+            matTooltip="edit" /></a>
+        <input type="password" required [placeholder]="field.placeHolder" [name]="field.fieldName"
+          *ngIf="field.type === 'password'  && !field.hidden " [formControlName]="field.fieldName"
+          [readonly]="field.disableMessage" class="form-control bg-icons-remove col-md-6" style="width: 35rem;">
+        <div class="invalid-feedback"
+          *ngIf="datasource.get(field.fieldName).invalid && datasource.get(field.fieldName).touched">
+          {{field.label}} is required
+        </div>
+        <!-- check for text Radio -->
+        <div *ngIf="field.type === 'radio'" class=" row">
+          <span *ngFor="let option of field.options" class="col-auto ">
+            <div class="form-check form-radio">
+              <input [id]="option.key" type="radio" class="form-check-input"
+                (change)="onChangeRadio(option.key, field.fieldName)" [value]="option.key"
+                [attr.disabled]="option.disabled" [formControlName]="field.fieldName">
+              <label class="form-check-label text-dark" style="margin-top: 0px;"
+                [for]="option.key">{{option.value}}</label>
+            </div>
+
+          </span>
+        </div>
+
+        <input type="message" [placeholder]="field.placeHolder" [name]="field.fieldName"
+          *ngIf="field.type === 'message' && !field.hidden" [formControlName]="field.fieldName"
+          [readonly]="field.disableMessage" class="form-control bg-icons-remove col-md-6" style="width: 35rem;">
+
+        <div *ngIf="field.type === 'button' && !field.hidden" style="margin-left: 20px;">
+          <mat-button-toggle-group [value]="selectedToggle" [disabled]="field.disabled">
+            <mat-button-toggle *ngFor="let option of field.options" [value]="option.key"
+              (change)="changeToggle(option.key)">
+              <span *ngIf="option.hideToggle != true"> {{option.value}} </span>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+        <!-- <section  > -->
+        <input type="text" required readonly style="width: 35rem;"
+          *ngIf="field.type === 'file' && !field.hidden && dataSourceId == -1 "
+          class="form-control bg-icons-remove col-md-6" accept=".xlsx" (change)="sourceFileInputOnchange($event)"
+          name="sourceFileLocation" [formControlName]="field.fieldName" [placeholder]="field.placeHolder"
+          style="border-color: green; width: 35rem;">
+        <!--   -->
+
+        <button *ngIf="field.type === 'file' && !field.hidden && dataSourceId == -1 " type="button"
+          (click)="fileInput.click()" class="btn btn-white p">
+          <img alt="Upload" src="assets/icons/Icon feather-upload.svg" width="25px" height="25px"
+            class="toggle-tenants mx-2 click-event" aria-hidden="true" matTooltip="Upload" />
+
+          <input type="file" accept=".xlsx" #fileInput (change)="sourceFileInputOnchange($event)"
+            style="display:none; width: 35rem;" required id="sourceFileLocation" name="sourceFileLocation">
+        </button>
+
+        <!-- </section> -->
+
+        <input type="password" readonly *ngIf="field.type === 'file' && !field.hidden && dataSourceId > -1 "
+          class="form-control bg-icons-remove col-md-6" accept=".xlsx" (change)="sourceFileInputOnchange($event)"
+          name="sourceFileLocation" [formControlName]="field.fieldName" [placeholder]="field.placeHolder"
+          style="border-color: green; width: 35rem;">
+        <!--   -->
+
+        <button *ngIf="field.type === 'file' && !field.hidden && dataSourceId > -1 " type="button"
+          (click)="fileInput.click()" class="btn btn-white p">
+          <img alt="Upload" src="assets/icons/Icon feather-upload.svg" width="25px" height="25px"
+            class="toggle-tenants mx-2 click-event" aria-hidden="true" matTooltip="Upload" />
+
+          <input type="file" accept=".xlsx" #fileInput (change)="sourceFileInputOnchange($event)"
+            style="display:none; width: 35rem;" required id="sourceFileLocation" name="sourceFileLocation">
+        </button>
+        <!-- check for text Date -->
+        <input name="startDate" class="form-control bg-icons-remove col-md-6" style="width: 35rem;" [owlDateTime]="sdt"
+          *ngIf="field.type === 'date' && field.fieldName === 'loadStartFrom' " [(ngModel)]="startDate" required
+          [formControlName]="field.fieldName" [owlDateTimeTrigger]="sdt" (change)="validateDuration()"
+          placeholder="Load start from date" (change)="validateDuration()" />
+        <owl-date-time #sdt (afterPickerClosed)="validateDuration()"></owl-date-time>
+
+
+        <!-- check for text Date -->
+        <input name="endDate" class="form-control bg-icons-remove col-md-6" style="width: 35rem;" [owlDateTime]="edt"
+          *ngIf="field.type === 'date' && field.fieldName === 'loadEndTo' " [(ngModel)]="endDate" required
+          [formControlName]="field.fieldName" [owlDateTimeTrigger]="edt" (change)="validateDuration()"
+          placeholder="Load end to date" (change)="validateDuration()" />
+        <owl-date-time #edt (afterPickerClosed)="validateDuration()"></owl-date-time>
+
+        <div *ngIf="_utility.datesValidator && field.fieldName === 'loadEndTo'" style="color: red;">
+          Start Date should be less than End Date
+        </div>
+
+        <!-- Select dropdown for setupflow -->
+        <select class="form-control bg-icons-remove col-md-6 " name="defineFlow"
+          style="font-size: 13px; width: 35rem; margin-right: 10px;"
+          *ngIf="field.type === 'select' && field.fieldName != 'gatewayName'" [formControlName]="field.fieldName"
+          (change)="updateDatasource('template')">
+          <option selected disabled value="-1">Select an item</option>
+          <option *ngFor="let template of templatesList" [ngValue]="template.templateEmbedUrl">
+            Google sheet: {{template.templateEmbedUrl}}
+          </option>
+        </select>
+        <a *ngIf="dataSourceId > -1 && 'true' && field.type === 'select' && field.fieldName != 'gatewayName'"
+          [ngClass]="{ 'hidden': disableLinkButton }" class="nav-link color"
+          [routerLink]="['../../subscription-edit/dataSource/' + dataSourceId]">Edit</a>
+
+      </div>
+    </form>
+  </div>
+  <div>
+  </div>
+</div>

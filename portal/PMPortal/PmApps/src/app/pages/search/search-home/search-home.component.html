@@ -1,0 +1,119 @@
+<div>
+  <div *ngIf="utility.patternShow && !searchUtility.showSpinner" class="note">
+    <b>Note:</b><br />
+    <h6 style="font-size:12px; display:inline-block !important;color: #1a3a7f;"><b>" * "</b> - Represents zero or more
+      characters</h6><br />
+    <h6 style="font-size:12px; display:inline-block !important;color: #1a3a7f;"><b>" ? "</b> - Represents a single
+      character</h6>
+  </div>
+  <div *ngIf="this.model.app == 'adhoc'">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+        <li class="breadcrumb-item"><a
+            [routerLink]="'/tDashboard/' + tenantService.currentTenantValue.tenantId">{{this.tenantService.currentTenantValue.tenantName}}</a>
+        </li>
+        <li class="breadcrumb-item"><a routerLink="/apps">Apps</a></li>
+        <li class="breadcrumb-item">
+          <a [routerLink]="['./alarm']" [queryParams]="{ objectType: 'Alarm', keyword: model.keyWord, app: 'adhoc' }">
+            AdhocAnalysis
+          </a>
+        </li>
+        <ng-container *ngIf="model.objectType === 'Alarm'">
+          <li class="breadcrumb-item">
+            <a [routerLink]="['./alarm']"
+              [queryParams]="{ objectType: model.objectType, keyword: model.keyWord, app: 'adhoc' }">
+              Alarm
+            </a>
+          </li>
+        </ng-container>
+        <ng-container *ngIf="model.objectType === 'Trendlog'">
+          <li class="breadcrumb-item">
+            <a [routerLink]="['./trendlog']"
+              [queryParams]="{ objectType: model.objectType, keyword: model.keyWord, app: 'adhoc' }">
+              Trendlog
+            </a>
+          </li>
+        </ng-container>
+      </ol>
+    </nav>
+    <nav class="navbar navbar-expand-sm bg-light navbar-dark margin">
+      <!-- Brand/logo -->
+      <!-- <a class="navbar-brand" style="color:#000;">{{_utility.appName | uppercase}}</a> -->
+      <img src="assets/icons/Group 202.svg" width="30px" height="30px" class="toggle-tenants mx-2" aria-hidden="false"
+        matTooltip="AppName" />
+      <a class="navbar-brand appName">Adhoc Analysis</a>
+    </nav>
+  </div>
+  <div *ngIf="this.model.app == 'search'">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+        <li class="breadcrumb-item"><a
+            [routerLink]="'/tDashboard/' + tenantService.currentTenantValue.tenantId">{{this.tenantService.currentTenantValue.tenantName}}</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a [routerLink]="['./alarm']" [queryParams]="{ objectType: 'Alarm', keyword: model.keyWord, app: 'search' }">
+            Search
+          </a>
+        </li>
+        <ng-container *ngIf="model.objectType === 'Alarm'">
+          <li class="breadcrumb-item">
+            <a [routerLink]="['./alarm']"
+              [queryParams]="{ objectType: model.objectType, keyword: model.keyWord, app: 'search' }">
+              Alarm
+            </a>
+          </li>
+        </ng-container>
+        <ng-container *ngIf="model.objectType === 'Trendlog'">
+          <li class="breadcrumb-item">
+            <a [routerLink]="['./trendlog']"
+              [queryParams]="{ objectType: model.objectType, keyword: model.keyWord, app: 'search' }">
+              Trendlog
+            </a>
+          </li>
+        </ng-container>
+        <ng-container *ngIf="model.objectType === 'Energylog'">
+          <li class="breadcrumb-item">
+            <a [routerLink]="['./energylog']"
+              [queryParams]="{ objectType: model.objectType, keyword: model.keyWord, app: 'search' }">
+              Energylog
+            </a>
+          </li>
+        </ng-container>
+        <ng-container *ngIf="model.objectType === 'Reports'">
+          <li class="breadcrumb-item">
+            <a [routerLink]="['./reports']"
+              [queryParams]="{ objectType: model.objectType, keyword: model.keyWord, app: 'search' }">
+              Reports
+            </a>
+          </li>
+        </ng-container>
+        <ng-container *ngIf="model.objectType === 'Device'">
+          <li class="breadcrumb-item">
+            <a [routerLink]="['./device']"
+              [queryParams]="{ objectType: model.objectType, keyword: model.keyWord, app: 'search' }">
+              Device
+            </a>
+          </li>
+        </ng-container>
+        <ng-container *ngIf="model.objectType === 'Points'">
+          <li class="breadcrumb-item">
+            <a [routerLink]="['./points']"
+              [queryParams]="{ objectType: model.objectType, keyword: model.keyWord, app: 'search' }">
+              Points
+            </a>
+          </li>
+        </ng-container>
+      </ol>
+    </nav>
+  </div>
+  <nav mat-tab-nav-bar class="plans-details-tabs salesport-tabs">
+    <a mat-tab-link *ngFor="let link of navLinks | slice:1 ; let i = index;" [routerLink]="link.link"
+      [queryParams]="{objectType: link.label,keyword: model.keyWord,app: model.app}" routerLinkActive
+      #rla="routerLinkActive" (click)="activeLinkIndex = i" [active]="rla.isActive">
+
+      {{link.label}} </a>
+  </nav>
+  <router-outlet></router-outlet>
+</div>

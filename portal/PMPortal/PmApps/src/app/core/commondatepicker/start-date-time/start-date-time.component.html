@@ -1,0 +1,13 @@
+<div class="form-inline">
+  <div class="col-sm-6 sdt">
+  <label for="start" class="control-label gdp-label">Start Date</label>
+ 
+    <input [(ngModel)]="datePickerHelper.arsStartDate" class="selectpicker" [owlDateTime]="arsStartDate1" [disabled]="datePickerHelper.disableTime" [max]="maxDate"
+           [owlDateTimeTrigger]="arsStartDate1" (ngModelChange)="startDateSelection($event, 'date')"
+           readonly >
+    <owl-date-time [pickerType]="'calendar'" #arsStartDate1></owl-date-time>
+    <input [(ngModel)]="datePickerHelper.arsStartDate" class="selectpicker" [owlDateTimeTrigger]="dt41" [owlDateTime]="dt41"
+           [disabled]="datePickerHelper.disableTime" (ngModelChange)="startDateSelection($event, 'time')" readonly>
+    <owl-date-time [pickerType]="'timer'" [hour12Timer]="'false'" #dt41></owl-date-time>
+  </div>
+</div>

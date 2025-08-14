@@ -1,0 +1,108 @@
+<div
+  *ngIf="_utility.isCreateReport && _utility.createRpt && !_utility.isReportRun && !_utility.isbreadEditReport && !_utility.isObjectSelection">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+      <li class="breadcrumb-item"><a
+          [routerLink]="'/tDashboard/' + commonModel.tenantId">{{this.commonModel.tenantName}}</a></li>
+      <li class="breadcrumb-item"><a routerLink="/apps">Apps</a></li>
+      <li class="breadcrumb-item"> <a [routerLink]="'/appEnergy/' + _utility?.appID">Energy</a></li>
+      <li class="breadcrumb-item"><a
+          *ngIf="_utility.isCreateReport &&  _utility.createRpt && !_utility.isReportRun && !_utility. isbreadEditReport"
+          [routerLink]="'/appEnergy/' + _utility?.appID + '/create'">CreateReport</a></li>
+    </ol>
+  </nav>
+</div>
+<div class="app-content mt-3">
+  <div class="row justify-content-start " style="margin-bottom: 20px;">
+    <div class="col-3 back">
+      <button class="btn btn-outline-primary" (click)="discard()">
+        Back
+      </button>
+    </div>
+    <div class="col-3 save">
+      <div *ngIf="_utility.createRpt && _utility.toggle">
+        <button type="button" class="btn btn-outline-primary" (click)="comParam.saveReport()"
+          [disabled]="
+        _utility.btnLoading  || (!_utility.validTemplateForm || _utility.reportNameExists || _utility.hasReportNameValid || _utility.isReportNameEmpty || (_utility.isObjectSelectionEnable ? _Adhocutility.checkedList.length == 0 : false))">
+          <span *ngIf="_utility.btnLoading" class="spinner-border spinner-border-sm mr-1"></span>
+          Save
+        </button>
+      </div>
+      <div *ngIf="!_utility.createRpt && _utility.toggle">
+        <button type="button"
+          [disabled]="_utility.btnLoading  || (!_utility.validTemplateForm || _utility.isReportNameEmpty || _utility.reportNameExists || _utility.hasReportNameValid || (_utility.isObjectSelectionEnable ? _Adhocutility.checkedList.length == 0 : false))"
+          class="btn btn-outline-primary" (click)="comParam.UpdateReportDialog()">
+          <span *ngIf="_utility.btnLoading" class="spinner-border spinner-border-sm mr-1"></span>
+          Update
+        </button>
+      </div>
+    </div>
+
+    <div class="col-3 preview">
+      <button class="btn btn-outline-primary" (click)="comParam.previewReport()"
+        [disabled]="!_utility.validTemplateForm  || _utility.hasReportNameValid || _utility.isReportNameEmpty || (_utility.isObjectSelectionEnable ? _Adhocutility.checkedList.length == 0 : false)"
+        *ngIf="_utility.toggle">
+        Preview
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <strong style="cursor:pointer;" (click)="openNav()">&#9776; Parameters</strong>
+    </div>
+    <div class="col-md-3">
+      <strong>{{ reportObj.ReportName }}</strong>
+    </div>
+    <div class="col-md-3" style="text-align: end;" *ngIf="_utility.isRunFeatures  && !_utility.isGrafana">
+      <app-rpt-pagination [appType]="'energylogDashboard'"></app-rpt-pagination>
+    </div>
+    <div class="col-md-2" style="text-align: end;" *ngIf="_utility.isRunFeatures">
+      <span matTooltip="Download as PDF" style="color:brown;cursor: pointer;"><i class="fa fa-file-pdf-o"
+          style="font-size: 27px;" (click)="downloadPdf()"></i></span>
+      <span matTooltip="Download as EXCEL" style="color:green;margin:5px;cursor: pointer;"><i class="fa fa-file-excel-o"
+          style="font-size: 27px;" (click)="downloadExcel()"></i></span>
+      <span matTooltip="Download as CSV" style="color:blue;cursor: pointer;" *ngIf="!_utility.csvDownloadFlag"><i
+          class="fa fa-file-text-o" style="font-size: 27px;" (click)="downloadCSV()"></i></span>
+    </div>
+  </div>
+  <div class="row">
+    <div id="mySidenav" class="sidenav col-md-4" [ngStyle]="{
+        width: _utility.isClickedToggle ? '34%' : '0', display: _utility.isClickedToggle ? 'block' : 'none'
+      }">
+
+      <div class="energy">
+        <app-energy-common-params [id]="id" #comParam></app-energy-common-params>
+      </div>
+    </div>
+    <div id="main" class="col-md d-md-block" [ngStyle]="{
+        width: _utility.mainWidthToggle ? '66%' : '100%'
+      }">
+      <hr />
+      <!-- <app-spinner *ngIf="_utility.showSpinner"></app-spinner> -->
+      <!-- Resolution Buttons in side Report -->
+      <div class="row resolutions" id="btn1"
+        *ngIf="_utility.isRunFeatures && _utility.isEnableResolution && !_utility.isGrafana">
+        <app-rpt-resolutions *ngFor="let resolution of coreService.resolutions; let last = last"
+          [buttonLabel]="resolution.key" (resClick)="comParam.onClickResolutionBtn($event)"
+          [style.margin-right.px]="(_utility.isClickedToggle ? 10 : 70) * (last ? 0 : 1)">
+        </app-rpt-resolutions>
+      </div>
+      <div *ngIf="_utility.isGrafana; else energyReport">
+        <!-- <iframe src="http://localhost:3000/d/ADoVAMQVzqa/global-alarm-summary-dashboard?orgId=1&from=1692592376801&to=1692613976801"  width="100%" height="1000px"  frameborder="0"></iframe> -->
+        <!-- <span (click)="goBack()" class="sla-back-icon refresh-icon my-custom-span">
+          <mat-icon mat-list-icon class="btn-primary click-event my-custom-icon">arrow_back</mat-icon>
+        </span> -->
+        <iframe id="myFrame" [src]="_utility.Grafanaurl" width="100%" height="600px" frameborder="0"></iframe>
+      </div>
+      <ng-template #energyReport>
+        <app-energy-show-report [rptData]="_utility.reportData"></app-energy-show-report>
+      </ng-template>
+
+
+      <div *ngIf="_utility.isObjectSelection">
+        <app-energylog [selectionObjInput1]="model"></app-energylog>
+      </div>
+    </div>
+  </div>
+</div>

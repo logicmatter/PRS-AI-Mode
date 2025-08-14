@@ -1,0 +1,105 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+    <li class="breadcrumb-item"><a
+        [routerLink]="'/tDashboard/' + tenantService.currentTenantValue.tenantId">{{this.tenantService.currentTenantValue.tenantName}}</a>
+    </li>
+    <li class="breadcrumb-item"><a routerLink="/admin">Admin</a></li>
+    <li class="breadcrumb-item"><a routerLink="/admin">Manage Users</a></li>
+    <li class="breadcrumb-item"><a routerLink="/admin/user-reports/">Assign-reports</a></li>
+  </ol>
+</nav>
+<div style="margin:12px">
+  <h5 style="text-transform:uppercase" align="center">Assign Reports to User</h5>
+  <app-spinner *ngIf="showSpinner"></app-spinner>
+  <div *ngIf="!showSpinner">
+    <mat-card-content>
+      <div class="container border rounded" style="padding:10px 10px;margin-top:35px;max-width: 1230px ">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="input-group mb-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm">User Name</span>
+              </div>
+              <label class="form-control"
+                style="margin-top: 0px;">{{usersReportsObj.firstName}}&nbsp;{{usersReportsObj.lastName}}</label>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="input-group mb-1">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Email</span>
+              </div>
+              <label class="form-control" style="margin-top: 0px;">{{usersReportsObj.email}}</label>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="col-md-3 " style="margin-top:12px;">
+        <app-filter [placeHolderText]="'Filter'"></app-filter>
+      </div>
+      <mat-card-actions style="float: right;">
+        <div align="center">
+          <a style="cursor:pointer; margin-right: 10px;" (click)="cancel()" class="btn btn-outline-primary">Cancel</a>
+          <button class="btn btn-outline-primary mr-2" *ngIf="reportsList.length > 0 && userObj.roles !== 'Manager'"
+            (click)="updateAssignReports()">Update User Access</button>
+        </div>
+      </mat-card-actions>
+
+      <div class="table-responsive" style="margin-top: 70px;">
+        <table class="table table-bordered tableStyles " *ngIf="reportsList.length > 0">
+          <thead class="headerStyle">
+            <tr>
+              <th>#</th>
+
+              <th *ngIf="userObj.roles !== 'Manager'">Assigned</th>
+              <th scope="col" style="width: 29%; justify-content: left;" [class.active]="key === 'appName'"
+                (click)="sort('appName')">
+                App Name
+                <span [hidden]="reverse">▼</span>
+                <span [hidden]="!reverse">▲</span>
+              </th>
+              <th scope="col" style="width: 29%" [class.active]="key === 'reportName'" (click)="sort('reportName')">
+                Report Name
+                <span [hidden]="reverse">▼</span>
+                <span [hidden]="!reverse">▲</span>
+              </th>
+              <th scope="col" style="width: 29%" [class.active]="key === 'reportDescription'"
+                (click)="sort('reportDescription')">
+                Description
+                <span [hidden]="reverse">▼</span>
+                <span [hidden]="!reverse">▲</span>
+              </th>
+              <th scope="col" style="width: 29%" [class.active]="key === 'createdBy'" (click)="sort('createdBy')">
+                Created By
+                <span [hidden]="reverse">▼</span>
+                <span [hidden]="!reverse">▲</span>
+              </th>
+              <!--<th>Schedule</th>-->
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="table-light"
+              *ngFor="let rpt of reportsList | orderBy: key : !reverse : true | filter: coreService.filter; let rowNo = index; ">
+              <td style="width: 2%;">{{ rowNo+1 }}</td>
+              <td class="table-light" *ngIf="userObj.roles !== 'Manager'" style="padding-left: 45px;">
+                <div *ngIf="usersReportsObj.email!==rpt.createdBy"><input type="checkbox" [ngClass]="'align2'"
+                    [disabled]="usersReportsObj.email==rpt.createdBy ? 'disabled':''" [checked]=rpt.isAssigned
+                    (change)="checkAssign(rpt)" /></div>
+              </td>
+              <td style="width: 15%; ">{{ rpt.appName }}</td>
+              <td style="width: 20%;">{{ rpt.reportName}}</td>
+              <td style="width: 35%;">{{ rpt.reportDescription}}</td>
+              <td style="width: 15%;">{{ rpt.createdBy}}</td>
+              <!--<td><button class="btn btn-primary" (click)="schedule(rpt)">Schedule</button></td>-->
+            </tr>
+          </tbody>
+        </table>
+        <h5 align="center" *ngIf="reportsList.length == 0">No Reports available</h5>
+      </div>
+
+    </mat-card-content>
+
+  </div>
+</div>

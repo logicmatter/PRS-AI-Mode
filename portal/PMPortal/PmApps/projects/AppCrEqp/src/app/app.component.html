@@ -1,0 +1,140 @@
+<div>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+      <li class="breadcrumb-item"><a
+          [routerLink]="'/tDashboard/' + commonModel.tenantId">{{this.commonModel.tenantName}}</a></li>
+      <li class="breadcrumb-item"><a routerLink="/apps">Apps</a></li>
+      <li class="breadcrumb-item"> <a (click)="reportList()">Critical Equipment</a></li>
+      <ng-container *ngIf="_utility.isCreateReport && _utility.createRpt && !_utility.isReportRun && !_utility.isbreadEditReport &&
+        !_utility.isObjectSelection">
+        <li class="breadcrumb-item"><a
+            *ngIf="_utility.isCreateReport &&  _utility.createRpt && !_utility.isReportRun && !_utility. isbreadEditReport"
+            [routerLink]="'/appCrEq/' + _utility?.appID">CreateReport</a></li>
+      </ng-container>
+      <ng-container *ngIf="_utility.isReportRun || _utility.isbreadEditReport">
+        <li class="breadcrumb-item">
+          <a *ngIf="_utility.isReportRun || _utility.isbreadEditReport" [routerLink]="'/appCrEq/' + _utility?.appID">
+            {{ _utility.isReportRun ? 'RunReport' : 'EditReport' }}
+          </a>
+        </li>
+      </ng-container>
+      <ng-container *ngIf="_utility.isConfigure">
+        <li class="breadcrumb-item"
+          *ngIf="(_utility.isConfigure && _utility.isFacet) || (_utility.isConfigure && _utility.isStandard) || (_utility.isConfigure && _utility.isLocation)">
+          <a (click)="goBack()">
+            {{ _utility.isFacet ? 'Facet' : _utility.isStandard ? 'Standard' : 'Equipment' }}
+          </a>
+        </li>
+        <li class="breadcrumb-item"
+          *ngIf="(_utility.isConfigure && _utility.showFacet &&_utility.isFacet) || (_utility.isConfigure && _utility.showStandard && _utility.isStandard) || (_utility.isConfigure && _utility.showLocation && _utility.isLocation)">
+          <a [routerLink]="'/home/apps/appCrEq/' + _utility?.appID">
+            {{ _utility.showFacet && _utility.isFacet ? (_utility.facetObject.FacetName ? 'Edit Facet' : 'Add Facet') :
+            _utility.showStandard && _utility.isStandard ? (_utility.standardObject.SID ? 'Edit Standard' : 'Add
+            Standard') :
+            (_utility.eqpLocationObject.ID ? 'Edit Equipment' : 'Add Equipment') }}
+          </a>
+        </li>
+      </ng-container>
+    </ol>
+  </nav>
+  <nav class="navbar navbar-expand-sm bg-light navbar-dark">
+    <!-- Brand/logo -->
+    <!-- <a class="navbar-brand" style="color:#000;">{{_utility.appName | uppercase}}</a> -->
+    <div class="d-flex align-items-center"> 
+    <img src="{{'assets/icons/'+_utility.normalizedAppName+'.svg'}}" width="30px" height="30px"
+      class="toggle-tenants mx-2" aria-hidden="false" matTooltip="{{_utility.appName}}" />
+    <a class="navbar-brand appName">{{_utility.appName}}</a>
+</div>
+    <!-- Links -->
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item">
+        <a>
+          <i class="fa fa-cogs" [ngClass]="_utility.isConfigure ? 'nav-active' : 'nav-inactive'" (click)="configure()">
+            &nbsp; <span class="app-navs">Configure |</span>
+          </i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a>
+          <i class="fa fa-list" [ngClass]="_utility.isReportList ? 'nav-active' : 'nav-inactive'"
+            (click)="(_utility.isCreateReport || _utility.isConfigure) ? reportList() : ''">
+            &nbsp; <span class="app-navs">Reports List |</span>
+          </i>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a>
+          <i class="fa fa-plus" [ngClass]="
+                _utility.isCreateReport ? 'nav-active' : 'nav-inactive'
+              " (click)="(_utility.isReportList || _utility.isConfigure) ? createReport() : ''">
+            &nbsp;<span class="app-navs"> Create Report</span>
+          </i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <!--
+    <div class="row" style="margin-top: 5px;margin-bottom: 5px;float: right">
+       <button
+      type="button"
+      class="btn btn-primary "
+      style="margin-right: 5px"
+      (click)="configure()"
+      [disabled]="_utility.isConfigure"
+    >
+      Configure
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      style="margin-right: 5px"
+      (click)="reportList()"
+      [disabled]="_utility.isReportList"
+    >
+      Reports List
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      style="margin-right: 5px"
+      (click)="createReport()"
+      [disabled]="_utility.isCreateReport"
+    >
+      Create Report
+    </button>
+
+      <a>
+        <i class="fa fa-cogs"
+           [ngClass]="_utility.isConfigure ? 'nav-active' : 'nav-inactive'"
+           (click)="configure()">
+          &nbsp; Configure |
+        </i>
+      </a>
+      <a>
+        <i class="fa fa-list"
+           [ngClass]="_utility.isReportList ? 'nav-active' : 'nav-inactive'"
+           (click)="reportList()">
+          &nbsp; Reports List |
+        </i>
+      </a>
+      <a>
+        <i class="fa fa-plus"
+           [ngClass]="_utility.isCreateReport ? 'nav-active' : 'nav-inactive'"
+           (click)="createReport()">
+          &nbsp;Create Report
+        </i>
+      </a>
+  </div>
+      <hr style="background-color: #1a3a7f;margin-top: 2rem" />
+           -->
+  <div *ngIf="_utility.isConfigure">
+    <app-configure></app-configure>
+  </div>
+  <div *ngIf="_utility.isReportList">
+    <app-rpt-list></app-rpt-list>
+  </div>
+  <div *ngIf="_utility.isCreateReport">
+    <app-creq-view-rpt></app-creq-view-rpt>
+  </div>
+</div>

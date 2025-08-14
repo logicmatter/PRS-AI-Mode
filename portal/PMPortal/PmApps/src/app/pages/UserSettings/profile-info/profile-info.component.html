@@ -1,0 +1,133 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+    <li class="breadcrumb-item"><a
+        [routerLink]="'/tDashboard/' + tenantService.currentTenantValue.tenantId">{{this.tenantService.currentTenantValue.tenantName}}</a>
+    </li>
+    <li class="breadcrumb-item"><a [routerLink]="'/profile/' + userId">Profile</a></li>
+  </ol>
+</nav>
+<div>
+  <div class="container h-100">
+    <div class="row justify-content-md-center h-100">
+      <div class="card-wrapper">
+        <div class="brand">
+          <!-- <img src="img/logo.jpg"> -->
+        </div>
+        <div class="card fat card">
+          <div class="card-body">
+            <h5 class="card-title">Personal Information</h5>
+            <form [formGroup]="userProfile" (ngSubmit)="updateUserProfile()">
+              <div class="form-group">
+                <label for="firstName"><sup class="mandatory-indication">*</sup>First Name</label>
+                <input id="firstName" type="text" class="form-control input" title="First Name"
+                  formControlName="firstName" readonly>
+              </div>
+              <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input id="lastName" type="text" title="Last Name" class="form-control input "
+                  formControlName="lastName" readonly>
+              </div>
+              <div class="form-group">
+                <label for="email"><sup class="mandatory-indication">*</sup>Email Address</label>
+                <input id="email" type="email" title="example@xyz.com" class="form-control input"
+                  pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$" formControlName="email" readonly>
+              </div>
+              <div class="form-group" style="margin-bottom: 10px;">
+                <label for="role">Role</label>
+                <input id="role" type="text" title="Manager" class="form-control input" formControlName="role" readonly>
+              </div>
+              <button class="btn btn-outline-primary" type="button" *ngIf="!showResetForm"
+                (click)="showResetForm = !showResetForm">
+                <i class="fas fa-lock"></i> Change Password</button>
+            </form>
+            <form [formGroup]="resetForm" (ngSubmit)="resetPassword()">
+              <div *ngIf="showResetForm" class="mt-2">
+                <div class="form-group">
+                  <label for="currentPassword"><sup class="mandatory-indication">*</sup>Current Password</label>
+                  <span (click)="showHide2()">
+                    <i class="input-icons" style="margin-left: 33px;" data-toggle="tooltip"
+                      [title]="old ? 'Hide Password' : 'Show Password'"
+                      [ngClass]="old ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                  </span>
+                  <!-- <i class="input-icons-check" [ngClass]="f.currentPassword.valid ? 'fas fa-check' : ''"></i> -->
+                  <input (change)="validateCurrentPassword()" [type]="oPass" class="form-control input"
+                    formControlName="currentPassword" required data-eye />
+                  <mat-error *ngIf="this.errMsg">
+                    Enter valid password
+                  </mat-error>
+                  <!-- <div *ngIf="f.newPassword.errors && (f.newPassword.touched || f.newPassword.dirty)" class="">
+                          <mat-error *ngIf="f.newPassword.errors.required">Password is required</mat-error><br />
+                          <mat-error *ngIf="f.newPassword.errors.hasNumber">Password must contain atleast 1 Number </mat-error><br />
+                          <mat-error *ngIf="f.newPassword.errors.hasCapitalCase">Password must contain atleast 1 Capital case</mat-error><br />
+                          <mat-error *ngIf="f.newPassword.errors.hasSmallCase">Password must contain atleast 1 Smallcase</mat-error><br />
+                          <mat-error *ngIf="f.newPassword.errors.hasSpecialCharacters">Password must contain atleast 1 of #$^!*@%& Special characters</mat-error><br />
+                          <mat-error *ngIf="f.newPassword.errors.minlength">Password must be atleast 8 characters length</mat-error>
+                        </div> -->
+                </div>
+
+                <div>
+                  <div class="form-group">
+                    <label for="newPassword"><sup class="mandatory-indication">*</sup>New Password</label>
+                    <span (click)="showHide()">
+                      <i class="input-icons" data-toggle="tooltip" [title]="hide ? 'Hide Password' : 'Show Password'"
+                        [ngClass]="hide ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                    </span>
+                    <!-- <i class="input-icons-check2" [ngClass]="f.newPassword.valid ? 'fas fa-check' : ''"></i> -->
+                    <input [type]="pass" class="form-control input" formControlName="newPassword" required data-eye />
+                    <div class="form-text text-muted">
+                      Make sure your password is strong and easy to remember
+                    </div>
+                    <div *ngIf="f.newPassword.errors && (f.newPassword.touched || f.newPassword.dirty)" class="">
+                      <mat-error *ngIf="f.newPassword.errors">Please provide valid password</mat-error><br />
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="confirmPassword"><sup class="mandatory-indication">*</sup>Confirm Password</label>
+                    <span (click)="showHide1()">
+                      <i class="input-icons1" data-toggle="tooltip"
+                        [title]="confirm ? 'Hide Password' : 'Show Password'"
+                        [ngClass]="confirm ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                    </span>
+                    <!-- <i class="input-icons-check1" [ngClass]="valid ? 'fas fa-check' : ''"></i> -->
+                    <input [type]="cPass" class="form-control input" formControlName="confirmPassword" required
+                      data-eye />
+                    <div *ngIf="f.confirmPassword.errors && (f.confirmPassword.touched || f.confirmPassword.dirty)"
+                      class="">
+                      <mat-error *ngIf="f.confirmPassword.errors.required">Confirm Password is required</mat-error>
+                      <mat-error *ngIf="f.confirmPassword.hasError('NoPassswordMatch')">Password does not match
+                      </mat-error>
+                    </div>
+                  </div>
+                  <div class="form-group no-margin">
+                    <button type="submit" class="btn btn-outline-primary ml-2" (click)="showResetForm=!showResetForm" style="margin-right: 10px;margin-top: 10px;">
+                      Cancel
+                    </button>
+                    <button type="submit" class="btn btn-outline-primary ml-2" [disabled]="resetForm.invalid" style="margin-top: 10px;">
+                      Reset Password
+                      <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                    </button>
+
+                  </div>
+                  <table border="1" class="mt-2">
+                    <h5>Security Tips</h5>
+                    <ul style="font-size: 13px;">
+                      <li>Password is required</li>
+                      <li>Password must contain atleast 1 Number</li>
+                      <li>Password must contain atleast 1 Smallcase</li>
+                      <li>Password must contain atleast 1 Capital case</li>
+                      <li>Password must be atleast 8 characters length</li>
+                      <li>Password must contain atleast 1 of #$^!*@%& Special characters</li>
+                    </ul>
+                  </table>
+                </div>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

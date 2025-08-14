@@ -1,0 +1,26 @@
+<mat-sidenav-container class="example-container" autosize>
+  <mat-sidenav #sidenav class="example-sidenav" mode="side" opened="true" (mouseenter)="mouseenter()"
+    (mouseleave)="mouseleave()">
+    <mat-nav-list *ngFor="let nav of navCntrl">
+      <mat-list-item (click)="showSubmenu = !showSubmenu" class="cust-mat mat-item-active"
+    [matTooltip]="nav.toolTip" [matTooltipPosition]="'right'" [matTooltipClass]="'tooltip'"
+    [routerLinkActive]="['active']" [routerLink]="nav.value">
+    <span>
+        <img [src]="nav.icon" width="18px" height="18px" class="mx-2" aria-hidden="false" />
+    </span>
+    <span class="full-width ml-2 mt-1" *ngIf="_isExpand || isShowing">{{nav.name}}</span>
+</mat-list-item>
+
+
+
+    </mat-nav-list>
+    <mat-nav-list>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <div class="example-sidenav-content">
+    <app-tenant-header></app-tenant-header>
+    <router-outlet></router-outlet>
+  </div>
+
+</mat-sidenav-container>

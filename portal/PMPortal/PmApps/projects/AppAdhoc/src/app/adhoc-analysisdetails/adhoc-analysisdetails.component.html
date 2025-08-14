@@ -1,0 +1,457 @@
+
+<div class="dashboard-content">
+    <mat-card style="min-height:100vh">
+        <div *ngIf="count!=0">
+            <div *ngIf="adhocModel.objectType == 'Device'">
+                <app-spinner *ngIf="showSpinner"></app-spinner>
+                <div *ngIf="!showSpinner">
+                    <div *ngFor="let d of searchList">
+                        <span data-toggle="tooltip" title="Back" (click)="backParent()" class="sla-back-icon refresh-icon"><mat-icon mat-list-icon class="btn-primary click-event"></mat-icon></span>
+                        <h5 style="text-align:center"><b>{{adhocModel.objectType}}</b> Details for <b>{{d.devDescription}}({{d.objName}})</b></h5>
+                        <table class="table table-bordered">
+                            <!-- -->
+                            <thead>
+                                <tr>
+                                    <th colspan="2" class="table_header">{{adhocModel.objectType}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>Dev Inst</th>
+                                    <td>
+                                        {{d.devInst}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Obj Name</th>
+                                    <td>{{d.objName}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Max Trends</th>
+                                    <td>{{d.maxTrends}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Unit Type</th>
+                                    <td>{{d.unitType}}</td>
+                                </tr>
+                                <tr>
+                                    <th>DDC Rep</th>
+                                    <td>{{d.ddcRep}}</td>
+                                </tr>
+                                <tr>
+                                    <th>DDC Job</th>
+                                    <td>{{d.ddcJob}}</td>
+                                </tr>
+                                <tr>
+                                    <th>DDC App</th>
+                                    <td>{{d.ddcApp}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Dev Description</th>
+                                    <td>{{d.devDescription}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Trend Host Inst</th>
+                                    <td>{{d.trendHostInst}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Sched Host Inst</th>
+                                    <td>{{d.schedHostInst}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Alarm Host Inst</th>
+                                    <td>{{d.alarmHostInst}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Network</th>
+                                    <td>{{d.network}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Mac Addr</th>
+                                    <td>{{d.macAddr}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Dev Model</th>
+                                    <td>{{d.devModel}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Dev Location</th>
+                                    <td>{{d.devLocation}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Dev Firmware</th>
+                                    <td>{{d.devFirmware}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Omf Autodown</th>
+                                    <td>{{d.omfAutodown}}</td>
+                                </tr>
+                                <tr>
+                                    <th>DDC Autodown</th>
+                                    <td>{{d.ddcAutodown}}</td>
+                                </tr>
+                                <tr>
+                                    <th>UTC coffSet</th>
+                                    <td>{{d.utCoffset}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Comm Alarm Enabled</th>
+                                    <td>{{d.commAlarmEnabled}}</td>
+
+                                </tr>
+                                <tr>
+                                    <th>Comm Alarm Host Inst</th>
+                                    <td>{{d.CommAlarmHostInst}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Comm Alarm Not Class</th>
+                                    <td>{{d.commAlarmNotClass}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Comm Alarm Freq</th>
+                                    <td>{{d.commAlarmFreq}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Enable Mstp Proxy</th>
+                                    <td>{{d.enableMstpProxy}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Data Source ID</th>
+                                    <td>{{d.dataSourceId}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Commissioning Date</th>
+                                    <td>{{d.commissioningDate}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Commissioned By</th>
+                                    <td>{{d.commissionedBy}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Supervisor Host Id</th>
+                                    <td>{{d.supervisorHostId}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Supervisor Host Name</th>
+                                    <td>{{d.supervisorHostName}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Rep Job Id</th>
+                                    <td>{{d.repJobId}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Rep Job Name</th>
+                                    <td>{{d.repName}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="adhocModel.objectType == 'Trendlog'">
+                <app-spinner *ngIf="showSpinner"></app-spinner>
+                <div *ngIf="!showSpinner">
+                    <div *ngFor="let d of searchList">
+                        <span data-toggle="tooltip" title="Back" (click)="backParent()" class="sla-back-icon refresh-icon"><mat-icon mat-list-icon class="btn-primary click-event">arrow_back</mat-icon></span>
+                        <h5 style="text-align:center"><b>{{adhocModel.objectType}}</b> Details for <b>{{d.logDescription}} ({{d.objName}})</b></h5>
+                        <!-- <span>
+        <button mat-raised-button color="primary" style="background-color: #0078a6;font-weight:500;" (click)="getSelected()"><i class="fa fa-line-chart" style="font-size: 16px;font-weight: 500;"></i> Plot</button>
+    </span> -->
+                        <table class="table table-bordered">
+
+                            <thead>
+                                 <tr>
+                                    <th colspan="2" class="table_header">
+                                      <span style="visibility: unset;">{{adhocModel.objectType}}</span>
+                                      <span mat-raised-button matTooltip="Plot" class="plotButton" (click)="getSelectedSid(d)" style="visibility: unset;"><i class="fa fa-line-chart" style="font-size: 16px;font-weight: 500;"></i> Plot</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>Log Dev num</th>
+                                    <td>{{d.logDevNum}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Log Inst</th>
+                                    <td>{{d.logInst}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Obj Name</th>
+                                    <td>{{d.objName}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Dev Num</th>
+                                    <td>{{d.devNum}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Object type</th>
+                                    <td>{{d.objectType}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Obj Inst</th>
+                                    <td>{{d.objInst}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Property</th>
+                                    <td>{{d.property}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Index</th>
+                                    <td>{{d.index}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Maxtbl Samples</th>
+                                    <td>{{d.maxtblSamples}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Interval</th>
+                                    <td>{{d.interval}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Engineering Unit</th>
+                                    <td>{{d.engineeringUnit}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Log Description</th>
+                                    <td>{{d.logDescription}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Not Class</th>
+                                    <td>{{d.notClass}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Buf Size</th>
+                                    <td>{{d.bufSize}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Not Thresh</th>
+                                    <td>{{d.notThresh}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Engucust</th>
+                                    <td>{{d.engucust}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Start Time</th>
+                                    <td>{{d.startTime}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Stop time</th>
+                                    <td>{{d.stopTime}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Covtlog</th>
+                                    <td>{{d.covtlog}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Cov Increment</th>
+                                    <td>{{d.covIncrement}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Cov Resub Interval</th>
+                                    <td>{{d.covResubInterval}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Cov Flags</th>
+                                    <td>{{d.covFlags}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Created Date</th>
+                                    <td>{{d.createdDate}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Data Source ID</th>
+                                    <td>{{d.dataSourceId}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Supervisor Host Name</th>
+                                    <td>{{d.supervisorHostName}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="adhocModel.objectType == 'Alarm'">
+                <app-spinner *ngIf="showSpinner"></app-spinner>
+                <div *ngIf="!showSpinner">
+                    <div *ngFor="let d of searchList">
+                        <span data-toggle="tooltip" title="Back" (click)="backParent()" class="sla-back-icon refresh-icon"><mat-icon mat-list-icon class="btn-primary click-event">arrow_back</mat-icon></span>
+                        <h5 style="text-align:center"><b>{{adhocModel.objectType}}</b> Details for <b>{{d.description}} ({{d.objName}})</b></h5>
+                        <table class="table table-bordered">
+
+                            <thead>
+                                 <tr>
+                                    <th colspan="2" class="table_header">
+                                      <span style="visibility: unset;">{{adhocModel.objectType}}</span>
+                                      <span mat-raised-button matTooltip="Plot" class="plotButton" (click)="getSelectedSid(d)" style="visibility: unset;"><i class="fa fa-line-chart" style="font-size: 16px;font-weight: 500;"></i> Plot</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>Dev Inst</th>
+                                    <td>{{d.devInst}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Obj Name</th>
+                                    <td>{{d.objName}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Obj Type</th>
+                                    <td>{{d.objectType}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Obj Inst</th>
+                                    <td>{{d.objInst}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Property</th>
+                                    <td>{{d.property}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Description</th>
+                                    <td>{{d.description}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Property Object Description</th>
+                                    <td>{{d.propDescr}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Event Type</th>
+                                    <td>{{d.eventType}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Event Typedesc</th>
+                                    <td>{{d.eventTypedesc}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Notify Type</th>
+                                    <td>{{d.notifyType}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Prop Dev Inst</th>
+                                    <td>{{d.propDevInst}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Prop Obj Type</th>
+                                    <td>{{d.propObjType}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Not Class</th>
+                                    <td>{{d.notClass}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Prop Obj Inst</th>
+                                    <td>{{d.propObjInst}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Prop index</th>
+                                    <td>{{d.propIndex}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Prop Descr</th>
+                                    <td>{{d.propIndex}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Not Class Descr</th>
+                                    <td>{{d.notClassDescr}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Event Enable</th>
+                                    <td>{{d.eventEnable}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep type</th>
+                                    <td>{{d.ep_Type}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep time Delay</th>
+                                    <td>{{d.ep_TimeDelay}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep List of Values</th>
+                                    <td>{{d.ep_ListOfValues}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Created Date</th>
+                                    <td>{{d.createdDate}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep Bit Mask</th>
+                                    <td>{{d.ep_BitMask}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep Ref Prop Inc</th>
+                                    <td>{{d.ep_RefPropInc}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep Feedback Prop Ref</th>
+                                    <td>{{d.ep_FeedbackPropRef}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Data Source ID</th>
+                                    <td>{{d.dataSourceID}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Supervisor Host Name</th>
+                                    <td>{{d.supervisorHostName}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Rep Job Name</th>
+                                    <td>{{d.repName}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep Feedbackpropref descr</th>
+                                    <td>{{d.ep_Feedbackpropref_descr}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep Set Point Ref</th>
+                                    <td>{{d.supervisorHostName}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep Setpoint Ref descr</th>
+                                    <td>{{d.ep_SetPointRef}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep High Limit</th>
+                                    <td>{{d.ep_HighLimit}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep Low Limit</th>
+                                    <td>{{d.ep_LowLimit}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep Deadband</th>
+                                    <td>{{d.ep_Deadband}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep List Of Alarm Values</th>
+                                    <td>{{d.ep_ListOfAlarmValues}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep List Of Life Safety Values</th>
+                                    <td>{{d.ep_ListOfLifeSafetyValues}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ep Mode Prop Ref</th>
+                                    <td>{{d.ep_ModePropRef}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Almlink Url</th>
+                                    <td>{{d.almlink_Url}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="count==0">
+            <div>
+                <h5 style="text-align:center">No Results Found for <b>"{{adhocModel.objectType}}"</b></h5>
+            </div>
+        </div>
+    </mat-card>
+</div>

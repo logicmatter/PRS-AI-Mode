@@ -1,0 +1,17 @@
+.template{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: start;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.card{
+  height: auto;
+}
+@media screen and (min-width:360px) and (max-width:599px) {
+  .template{
+    font-size: medium;
+  }
+}

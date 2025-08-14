@@ -1,0 +1,62 @@
+<app-spinner *ngIf="showSpinner"></app-spinner>
+<div *ngIf="!showSpinner">
+  <div class="row fixedPosition1">
+    <div class="col-md-3 mr-2" style="margin-left:3px;">
+      <!-- <app-filter [placeHolderText]="'Filter'"></app-filter> -->
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text filterText"><i class="fa fa-filter" aria-hidden="true"></i></span>
+        </div>
+        <input type="text" class="form-control" (keyup)="applyFilter1($event.target.value)" placeholder="Filter" />
+      </div>
+    </div>
+    <div class="col-md-3 mr-1"></div>
+    <div class="col-md-5 float-right ml-4 mr-0">
+      <mat-paginator [hidden]="length < 10" #crenvlocPaginator [pageSizeOptions]="[10, 25, 50, 100]" [pageSize]="currentPageSize"
+      (page)="getData($event)" [showFirstLastButtons]="true" >
+    </mat-paginator>
+    </div>
+  </div>
+  <div class="scroller">
+    <table mat-table [dataSource]="locObjs" class="mat-elevation-z8" #crenvlocSort="matSort" matSort multiTemplateDataRows>
+      <ng-container matColumnDef="roomName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'customWidthClass'"> Environment Name </th>
+        <td mat-cell *matCellDef="let data;let i = dataIndex" [ngClass]="'customWidthClass'" [attr.rowspan]="getRowSpan('Room Name',i)"
+        [style.display]="getRowSpan('Room Name', i) ? '' : 'none'"> {{data.roomName}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="location">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'locationWidthClass'"> Profile Name </th>
+        <td mat-cell *matCellDef="let data;let i = dataIndex" [ngClass]="'locationWidthClass'" [attr.rowspan]="getRowSpan('Location',i)"
+        [style.display]="getRowSpan('Location', i) ? '' : 'none'"> {{data.location}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="roomType">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'roomTypeWidthClass'"> Environment Type </th>
+        <td mat-cell *matCellDef="let data;let i = dataIndex" [ngClass]="'roomTypeWidthClass'"> {{data.roomType}} </td>
+      </ng-container>
+      <ng-container matColumnDef="pointType">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Point Type </th>
+        <td mat-cell *matCellDef="let data;let i = dataIndex"> {{data.pointType}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="trend">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'trendWidthClass'"> Trend </th>
+        <td mat-cell *matCellDef="let data" [ngClass]="'trendWidthClass'"> {{data.trend}} </td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef [ngClass]="'actionsWidthClass'"> Actions </th>
+        <td mat-cell *matCellDef="let data;let i = dataIndex" [ngClass]="'actionsWidthClass'"[attr.rowspan]="getRowSpan('Room Name',i)"
+        [style.display]="getRowSpan('Room Name', i) ? '' : 'none'" class="justify-content-center">
+          <img src="assets/icons/noun_edit_1644623.svg" width="20px" height="20px"
+              class="toggle-tenants mx-1 click-event" aria-hidden="false" matTooltip="Edit"  (click)="editLocation(data)"/>
+              <img src="assets/icons/Group 216.svg" width="20px" height="20px" class="toggle-tenants mx-0 click-event"
+              aria-hidden="false" matTooltip="Delete"  (click)="openDialog(data)"/> </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+
+
+</div>

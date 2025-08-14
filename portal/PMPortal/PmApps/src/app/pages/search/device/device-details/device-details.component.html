@@ -1,0 +1,157 @@
+<div class="app-content">
+    <mat-card style="min-height:100vh">
+        <div *ngIf="count!=0">
+            <div *ngIf="model.objectType == 'Device'">
+                <app-spinner *ngIf="showSpinner"></app-spinner>
+                <div *ngIf="!showSpinner">
+                    <div *ngFor="let d of searchList">
+                        <span data-toggle="tooltip" title="Back" (click)="backParent()" class="sla-back-icon refresh-icon"><mat-icon mat-list-icon class="btn-primary click-event">arrow_back</mat-icon></span>
+                        <h5 style="text-align:center"><b>{{model.objectType}}</b> Details for <b>{{d.devDescription}}({{d.objName}})</b></h5>
+                        <table class="table table-bordered">
+                            <!-- -->
+                            <thead>
+                                <tr>
+                                    <th colspan="2" class="table_header">{{model.objectType}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>Dev Inst</th>
+                                    <td>
+                                        {{d.devInst}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Obj Name</th>
+                                    <td>{{d.objName}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Max Trends</th>
+                                    <td>{{d.maxTrends}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Unit Type</th>
+                                    <td>{{d.unitType}}</td>
+                                </tr>
+                                <tr>
+                                    <th>DDC Rep</th>
+                                    <td>{{d.ddcRep}}</td>
+                                </tr>
+                                <tr>
+                                    <th>DDC Job</th>
+                                    <td>{{d.ddcJob}}</td>
+                                </tr>
+                                <tr>
+                                    <th>DDC App</th>
+                                    <td>{{d.ddcApp}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Dev Description</th>
+                                    <td>{{d.devDescription}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Trend Host Inst</th>
+                                    <td>{{d.trendHostInst}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Sched Host Inst</th>
+                                    <td>{{d.schedHostInst}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Alarm Host Inst</th>
+                                    <td>{{d.alarmHostInst}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Network</th>
+                                    <td>{{d.network}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Mac Addr</th>
+                                    <td>{{d.macAddr}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Dev Model</th>
+                                    <td>{{d.devModel}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Dev Location</th>
+                                    <td>{{d.devLocation}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Dev Firmware</th>
+                                    <td>{{d.devFirmware}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Omf Autodown</th>
+                                    <td>{{d.omfAutodown}}</td>
+                                </tr>
+                                <tr>
+                                    <th>DDC Autodown</th>
+                                    <td>{{d.ddcAutodown}}</td>
+                                </tr>
+                                <tr>
+                                    <th>UTC coffSet</th>
+                                    <td>{{d.utCoffset}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Comm Alarm Enabled</th>
+                                    <td>{{d.commAlarmEnabled}}</td>
+
+                                </tr>
+                                <tr>
+                                    <th>Comm Alarm Host Inst</th>
+                                    <td>{{d.CommAlarmHostInst}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Comm Alarm Not Class</th>
+                                    <td>{{d.commAlarmNotClass}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Comm Alarm Freq</th>
+                                    <td>{{d.commAlarmFreq}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Enable Mstp Proxy</th>
+                                    <td>{{d.enableMstpProxy}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Data Source ID</th>
+                                    <td>{{d.dataSourceId}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Commissioning Date</th>
+                                    <td>{{d.commissioningDate}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Commissioned By</th>
+                                    <td>{{d.commissionedBy}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Supervisor Host Id</th>
+                                    <td>{{d.supervisorHostId}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Supervisor Host Name</th>
+                                    <td>{{d.supervisorHostName}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Rep Job Id</th>
+                                    <td>{{d.repJobId}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Rep Job Name</th>
+                                    <td>{{d.repName}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="count==0">
+            <div>
+                <h5 style="text-align:center">No Results Found for <b>"{{model.objectType}}"</b></h5>
+            </div>
+        </div>
+    </mat-card>
+</div>

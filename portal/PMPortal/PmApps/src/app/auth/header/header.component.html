@@ -1,0 +1,9 @@
+<div class="login-container--header">
+  <div class="login-container--logo">
+    <img [src]="websiteService.siteTopLogo ? websiteService.siteTopLogo : 'assets/images/Pointmatter_logo_primary.png'"
+    class="logoDisplay ml-3" />
+  </div>
+  <div>
+    <a routerLink="/auth/login" *ngIf="userService.userObject.bearerToken == null">Login</a>
+  </div>
+</div>

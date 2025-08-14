@@ -1,0 +1,16 @@
+.mat-tab-label, .mat-tab-link {
+    color: #323C43;
+}
+
+a.disabled {
+    pointer-events: none;
+    cursor: default;
+ }
+@media only screen and (max-width: 900px) {
+    .salesport-tabs {
+        
+        width: 140%; 
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}

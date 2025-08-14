@@ -1,0 +1,52 @@
+
+    <!-- <div class="col-md-5 ">
+        <div class="row">
+            <div class="col-md-4">
+                <button class="btn btn-outline-primary" value="actual" (click)="setResolution($event)">
+                    Actual
+                </button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-outline-primary" value="hourly" (click)="setResolution($event)">
+                    Hourly
+                </button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-outline-primary" value="daily" (click)="setResolution($event)">
+                    Daily
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 ">
+        <div class="row">
+            <div class="col-md-4">
+                <button class="btn btn-outline-primary" value="weekly" (click)="setResolution($event)">
+                    Weekly
+                </button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-outline-primary" value="monthly" (click)="setResolution($event)">
+                    Monthly
+                </button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-outline-primary" value="quarterly" (click)="setResolution($event)">
+                    Quarterly
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-1">
+        <div class="row">
+            <button class="btn btn-outline-primary" value="yearly" (click)="setResolution($event)">
+                Yearly
+            </button>
+        </div>
+    </div> -->
+
+     
+
+<button class="btn btn-outline-primary ml-2" id="btn" [value]="buttonLabel" (click)="onClick()" [disabled]="this._utility.showSpinner">
+    {{buttonLabel}}
+</button>

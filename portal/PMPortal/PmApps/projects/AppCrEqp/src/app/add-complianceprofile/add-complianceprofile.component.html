@@ -1,0 +1,110 @@
+<div class="row" align="right" style="margin-top:10px">
+    <div class="col-md-12">
+      <button type="button" class="btn btn-outline-primary" style="margin-right: 5px" (click)="goBack()" tabindex="10">
+        Back
+      </button>
+      <button *ngIf="_util.compprofileedit" type="button" class="btn btn-outline-primary" style="margin-right: 5px"
+        [disabled]="saveDisable || _util.saveDisable" (click)="updateLocation()" tabindex="9">
+        Update
+      </button>
+      <button *ngIf="!_util.compprofileedit" type="submit" class="btn btn-outline-primary" style="margin-right: 5px"
+        [disabled]="saveDisable || _util.saveDisable" (click)="onSave()" tabindex="8">
+        Save
+      </button>
+    </div>
+  </div>
+
+  <h5 *ngIf="_util.showCompilanceprofileBack" class="text-center">UPDATE ENVIRONMENT PROFILE</h5>
+  <h5 *ngIf="!_util.showCompilanceprofileBack" class="text-center">DEFINE ENVIRONMENT PROFILE</h5>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-3">
+          <label for="location"><sup class="mandatory-indication">*</sup>Equipment Type</label>
+          <angular2-multiselect [data]="dropdownLocationList" [(ngModel)]="selectedLocationsItems"
+            [settings]="dropdownLocationsSettings" (onSelect)="onLocationsItemSelect($event)"
+            (onDeSelect)="OnLocationsItemDeSelect($event)" (onDeSelectAll)="OnLocationsItemDeSelectAll($event)" tabindex="4">
+          </angular2-multiselect>
+        </div>
+
+        <div class="col-md-3">
+          <label for="profileName"><sup class="mandatory-indication">*</sup>Profile Name</label>
+          <input type="text" class="form-control" id="profileName" [(ngModel)]="profileName" (ngModelChange)="onProfileNameChange($event)" 
+            placeholder="Profile Name" required tabindex="1" />
+        </div>
+
+        <div class="col-md-3">
+          <label for="site"><sup class="mandatory-indication">*</sup>Site</label>
+          <input type="text" class="form-control" id="site" [(ngModel)]="site" placeholder="Site" required
+             tabindex="1" disabled style="background-color: white;margin-left: 0px;" />
+        </div>
+      </div>
+
+      <br>
+
+      <div *ngIf="roomTypeSelected">
+        <mat-accordion>
+          <mat-expansion-panel #expansionPanel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Facet Details
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div class="mt-3 body">
+              <div class="example-container mat-elevation-z8">
+                <mat-table [dataSource]="dataSource" matSort>
+
+                  <!-- Checkbox Column -->
+                  <ng-container matColumnDef="select">
+                    <mat-header-cell *matHeaderCellDef class="checkbox-header custom-checkbox-header"></mat-header-cell>
+                    <mat-cell *matCellDef="let row" class="checkbox-cell custom-checkbox-cell">
+                      <mat-checkbox  [(ngModel)]="row.isChecked"  (change)="toggleDropdown(row)"></mat-checkbox>
+                    </mat-cell>
+                  </ng-container>
+
+                  <!-- ID Column -->
+                  <ng-container matColumnDef="id">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+                    <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
+                  </ng-container>
+
+                  <!-- Facet Name Column -->
+                  <ng-container matColumnDef="facetName">
+                    <mat-header-cell *matHeaderCellDef class="checkbox-header custom-checkbox-header" mat-sort-header>Facet Name</mat-header-cell>
+                    <mat-cell *matCellDef="let row" class="checkbox-cell custom-checkbox-cell">{{ row.facetName }}</mat-cell>
+                  </ng-container>
+
+                  <!-- Facet Rule Code Column -->
+                  <ng-container matColumnDef="facetRuleCode">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Facet Rule Code</mat-header-cell>
+                    <mat-cell *matCellDef="let row">{{ row.facetRuleCode || 'No rule code available' }}</mat-cell>
+                  </ng-container>
+
+                  <!-- Dropdown Column -->
+                  <ng-container matColumnDef="dropdown">
+                    <mat-header-cell *matHeaderCellDef>Standard Details</mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                      <ng-container *ngIf="row.showDropdown">
+                        <mat-select placeholder="Select an option" [(ngModel)]="row.selectedOption"
+                          (selectionChange)="onSelectionChange(row)">
+                          <mat-option *ngFor="let option of row.dropdownOptions" [value]="option">
+                            {{ option }}
+                          </mat-option>
+                        </mat-select>
+                      </ng-container>
+                    </mat-cell>
+                  </ng-container>
+
+                  <!-- Table Rows -->
+                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+              </div>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </div>
+  </div>

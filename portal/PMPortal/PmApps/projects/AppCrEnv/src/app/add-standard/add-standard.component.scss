@@ -1,0 +1,39 @@
+label {
+  font-variant-caps: all-small-caps;
+}
+span{
+  background-color: #1a3a7f;
+  border: 1px #1a3a7f;
+  color: #fff;
+}
+.error{
+  color:red;
+}
+sup{
+  margin-top: 8px;
+}
+
+::ng-deep .dropdown-list ul li{
+  z-index: unset !important;
+}
+
+.dropdown-list ::after, ::before {
+  box-sizing: border-box !important;
+  z-index: unset !important;
+}
+::ng-deep .dropdown-list-top {
+  z-index: unset !important;
+}
+
+.dropdown-list-top {
+  z-index: unset !important;
+}
+.dropdown-list-top ::after, ::before {
+  box-sizing: border-box !important;
+}
+::ng-deep .dropdown-list-top {
+  z-index: unset !important;
+}
+::ng-deep .cuppa-dropdown {
+  position: initial !important;
+}

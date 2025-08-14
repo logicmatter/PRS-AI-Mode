@@ -1,0 +1,31 @@
+label {
+  font-variant-caps: all-small-caps;
+}
+
+span {
+  background-color: #1a3a7f;
+  border: 1px #1a3a7f;
+  color: #fff;
+}
+
+.error {
+  color: red;
+}
+
+sup {
+  margin-top: 8px;
+}
+
+::ng-deep .cuppa-dropdown {
+  position: initial !important;
+}
+
+@media screen and (min-width:768px) {
+  .mat-header-cell {
+    font-size: 10px;
+  }
+
+  .mat-cell {
+    font-size: 10px;
+  }
+}

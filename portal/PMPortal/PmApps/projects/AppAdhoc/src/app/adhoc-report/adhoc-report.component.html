@@ -1,0 +1,187 @@
+<div>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+      <li class="breadcrumb-item"><a
+          [routerLink]="'/tDashboard/' + adhocUtility.tenantID">{{this.tenantService.currentTenantValue.tenantName}}</a>
+      </li>
+      <li class="breadcrumb-item"><a routerLink="/apps">Apps</a></li>
+      <li class="breadcrumb-item"><a href="javascript:void(0);"
+          (click)=" goBack()">{{adhocUtility.reportParams.objectType}}</a></li>
+      <li class="breadcrumb-item"><a routerLink="/appAdhoc/search">{{adhocUtility.reportParams.objectType}}
+          analysis</a>
+      </li>
+    </ol>
+  </nav>
+
+  <nav class="navbar navbar-expand-sm bg-light navbar-dark" style="margin-left: -14px;">
+    <!-- Brand/logo -->
+    <!-- <a class="navbar-brand" style="color:#000;">{{_utility.appName | uppercase}}</a> -->
+    <img src="assets/icons/Group 202.svg" class="toggle-tenants mx-2 widthHeight" aria-hidden="false"
+      matTooltip="AppName" />
+    <a class="navbar-brand appName">Adhoc Analysis</a>
+  </nav>
+  <div style="margin-bottom:30px;" *ngIf="showBackButton">
+    <a style="position: sticky;color: #fff;top: 0px;">
+      <span data-toggle="tooltip" title="Back to Previous Page" style="margin-top: 0px;margin-left: 10px;"
+        data-placement="left" (click)="goBack()" class="cm-refresh-icon refresh-icon">
+        <mat-icon mat-list-icon class="btn-primary click-event">arrow_back</mat-icon>
+      </span>
+    </a>
+  </div>
+  <div>
+    <h5 class="report-header" *ngIf="adhocUtility.reportParams.objectType == 'Alarm'">
+      Alarm Occurrence Count Report
+    </h5>
+    <h5 class="report-header" *ngIf="adhocUtility.reportParams.objectType == 'Trendlog'">
+      Trendlog Report
+    </h5>
+    <h6 class="report-header">Time Period</h6>
+    <div class="row">
+      <div class="col-md-5 col-border">
+        <div class="row">
+          <div class="col-md-4  col-border">
+            <strong class="timeHeader">Duration</strong>
+          </div>
+          <div class="col-md-8  col-border">
+            <select class="form-control" [(ngModel)]="dr" id="dr" (ngModelChange)="changeDuration()">
+              <option *ngFor="let duration of durations" [value]="duration.value">
+                {{duration.label}}</option>
+            </select>
+          </div>
+        </div>
+        <!-- <app-duration  [allowed]="dr"></app-duration> -->
+
+
+
+        <div class="row">
+          <div class="col-md-4  col-border">
+            <strong class="timeHeader">Report Resolution</strong>
+          </div>
+          <div class="col-md-8  col-border">
+            <select class="form-control" [(value)]="adhocUtility.resolution" [(ngModel)]="resolution" id="resolution">
+              <option value="actual">Actual</option>
+              <option value="hourly">Hourly</option>
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+              <option value="quarterly">Quarterly</option>
+              <option value="yearly">Yearly</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <!--<app-resolution [duration]="resolution" hidden></app-resolution>-->
+      <div class="col-md-5 col-border">
+        <div class="row">
+          <div class="col-md-3 col-border">
+            <strong class="timeHeader">Start Date</strong>
+          </div>
+          <div class="col-md-9 col-border">
+            <input id="startDate" class="form-control" [owlDateTime]="sdt" [owlDateTimeTrigger]="sdt"
+              [(ngModel)]="startDate" placeholder="Date Time" [disabled]="dr != 'custom'" />
+            <owl-date-time #sdt (afterPickerClosed)="changeDateDuration()"></owl-date-time>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3 col-border">
+            <strong class="timeHeader">End Date</strong>
+          </div>
+          <div class="col-md-9 col-border">
+            <input id="endDate" class="form-control" [owlDateTime]="edt" [owlDateTimeTrigger]="edt"
+              [(ngModel)]="endDate" placeholder="Date Time" [disabled]="dr != 'custom'" />
+            <owl-date-time #edt (afterPickerClosed)="changeDateDuration()"></owl-date-time>
+          </div>
+        </div>
+        <p [ngStyle]="{'color':'#a94442','font-size':'12px','margin-top':'0px','height':'2px','margin-left':'8px'}"
+          *ngIf="!isDateRangeValid">{{dateError}}</p>
+      </div>
+      <!-- <app-start-date-time [duration]="startDate" hidden></app-start-date-time>
+              <app-end-date-time [duration]="endDate" hidden></app-end-date-time> -->
+      <div class="col-md-2 col-border btn-align-center">
+        <div class="row">
+          <button class="btn btn-outline-primary" (click)="getReportData()"
+            [disabled]="!isDateRangeValid">Apply</button>
+        </div>
+      </div>
+    </div>
+    <div class="row col-border">
+      <div class="col-md-5">
+        <div class="row">
+          <div class="col-md-4">
+            <button class="btn btn-outline-primary" value="actual" (click)="setResolution($event)"
+              [disabled]="!isDateRangeValid">
+              Actual
+            </button>
+          </div>
+          <div class="col-md-4">
+            <button class="btn btn-outline-primary" value="hourly" (click)="setResolution($event)"
+              [disabled]="!isDateRangeValid">
+              Hourly
+            </button>
+          </div>
+          <div class="col-md-4">
+            <button class="btn btn-outline-primary" value="daily" (click)="setResolution($event)"
+              [disabled]="!isDateRangeValid">
+              Daily
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-7 ">
+        <div class="row">
+          <div class="col-md-3">
+            <button class="btn btn-outline-primary" value="weekly" (click)="setResolution($event)"
+              [disabled]="!isDateRangeValid">
+              Weekly
+            </button>
+          </div>
+          <div class="col-md-3">
+            <button class="btn btn-outline-primary" value="monthly" (click)="setResolution($event)"
+              [disabled]="!isDateRangeValid">
+              Monthly
+            </button>
+          </div>
+          <div class="col-md-3">
+            <button class="btn btn-outline-primary" value="quarterly" (click)="setResolution($event)"
+              [disabled]="!isDateRangeValid">
+              Quarterly
+            </button>
+          </div>
+          <div class="col-md-3">
+            <button class="btn btn-outline-primary" value="yearly" (click)="setResolution($event)"
+              [disabled]="!isDateRangeValid">
+              Yearly
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="col-md-2">
+          <div class="row">
+            <button class="btn btn-outline-primary" value="yearly" (click)="setResolution($event)" [disabled]="!isDateRangeValid">
+              Yearly
+            </button>
+          </div>
+        </div> -->
+      <!-- <app-report-resolution></app-report-resolution> -->
+
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <app-spinner *ngIf="adhocUtility.adhocShowSpinner"></app-spinner>
+        <div [hidden]="adhocUtility.adhocShowSpinner">
+          <div *ngIf="!adhocUtility.adhocDurationChg">
+            <h3>No Data Available</h3>
+          </div>
+          <div>
+            <canvas [hidden]="!adhocUtility.adhocDurationChg" id="myChart"></canvas>
+          </div>
+
+
+        </div>
+        <div class="legend" id="top10Legend"></div>
+      </div>
+    </div>
+  </div>
+</div>

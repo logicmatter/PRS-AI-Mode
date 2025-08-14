@@ -1,0 +1,95 @@
+<div class="form-group form-inline">
+  <!--<label for="connectorList" class="col-md-3" style="display: block;">Select Transform</label>
+  <select class="form-control col-md-6" name="connectorList" [(ngModel)]="dataFlowModel.connectorType" (change)="onChangeConnector($event)">
+    <option selected disabled value="-1">Select Connector</option>
+    <option *ngFor="let connector of connectorsList" [value]="connector.connectorId">
+      {{connector.connectorName}}
+    </option>
+  </select>-->
+</div>
+<div>
+  <div class="form-group form-inline" style="border-bottom:solid 2px; margin-bottom:15px; border-color: gray;">
+    <h4 class="col-md-6" style="text-align: left;"> Data Flow Definition</h4>
+    <a class="col-md-6" style="text-align: right; font-weight: bold; cursor:pointer;" data-toggle="tooltip"
+       title="Data Flow Definition">  &#63;</a>
+  </div>
+</div>
+<app-spinner *ngIf="showSpinner"></app-spinner>
+<div [hidden]="showSpinner">
+  <form class="was-validated" #dsForm="ngForm">
+    <div class="form-group form-inline">
+      <label for="dataFlowName" class="col-md-3" style="display: block;">Name</label>
+      <input type="text" [(ngModel)]="dataFlowModel.dataFlowName" #dataFlowName="ngModel" required name="dataFlowName"
+             class="form-control bg-icons-remove col-md-6" placeholder=" Data Flow Name">
+      <div class="invalid-feedback" *ngIf="dataFlowName.invalid && dataFlowName.touched">
+         Data Flow Name is required
+      </div>
+    </div>
+    <div class="form-group form-inline">
+      <label for="dataFlowDescription" class="col-md-3" style="display: block;">Descripion</label>
+      <input type="text" [(ngModel)]="dataFlowModel.dataFlowDescription" #dataFlowDescription="ngModel" required name="dataFlowDescription"
+             class="form-control bg-icons-remove col-md-6" placeholder=" Data Flow Description">
+      <div class="invalid-feedback" *ngIf="dataFlowDescription.invalid && dataFlowDescription.touched">
+         Data Flow Description is required
+      </div>
+    </div>
+    <div class="form-group form-inline">
+      <label for="defineFlow" class="col-md-3" style="display: block;">Define Flow</label>
+      <select class="form-select bg-icons-remove col-md-6" name="defineFlow" [(ngModel)]="dataFlowModel.defineFlow">
+        <option selected disabled value="-1">Select Template</option>
+        <option *ngFor="let template of templatesList" [value]="template.templateId">
+          {{template.templateName}} - Google sheet id: {{template.templateSheetId}}
+        </option>
+      </select>
+      <a *ngIf="dataFlowId > -1" class="nav-link" [routerLink]="['../../subscription-edit/dataFlow/' + dataFlowId]">Edit</a>
+    </div>
+
+    <!--<div class="form-group form-inline" *ngIf="showFields">
+      <label for="serverUrl" class="col-md-3" style="display: block;">Server URL</label>
+      <input type="text" [(ngModel)]="dataFlowModel.serverUrl" #serverUrl="ngModel" required name="serverUrl"
+             class="form-control bg-icons-remove col-md-6" placeholder="Server Url">
+      <div class="invalid-feedback" *ngIf="serverUrl.invalid && serverUrl.touched">
+        Server Url is required
+      </div>
+    </div>-->
+    <!--<div class="form-group form-inline" *ngIf="!showFields">
+      <label for="username" class="col-md-3" style="display: block;">Username</label>
+      <input type="text" [(ngModel)]="dataFlowModel.username" #username="ngModel" required name="username"
+             class="form-control bg-icons-remove col-md-6" placeholder="Username">
+      <div class="invalid-feedback" *ngIf="username.invalid && username.touched">
+        Username is required
+      </div>
+    </div>
+    <div class="form-group form-inline" *ngIf="!showFields">
+      <label for="password" class="col-md-3" style="display: block;">Password</label>
+      <input type="password" [(ngModel)]="dataFlowModel.password" #password="ngModel" required name="password"
+             class="form-control bg-icons-remove col-md-6" placeholder="Password">
+      <div class="invalid-feedback" *ngIf="password.invalid && password.touched">
+        Password is required
+      </div>
+    </div>-->
+    <div class="form-group form-inline" *ngIf="showFields">
+      <label for="connectorOptions" class="col-md-3" style="display: block;">Connector Options(optional)</label>
+      <textarea [(ngModel)]="dataFlowModel.connectorOptions" #connectorOptions="ngModel" name="connectorOptions"
+                class="form-control bg-icons-remove col-md-6" placeholder="Connector Options"></textarea>
+      <!--<div class="invalid-feedback" *ngIf="connectorOptions.invalid && connectorOptions.touched">
+        Connector Options is required
+      </div>-->
+    </div>
+    <div class="col-md-12">
+      <button class="btn btn-outline-primary ml-2"
+      (click)="Navigate()">
+Back
+</button>
+      <button class="btn btn-outline-primary" *ngIf="!showLoadButton" type="submit"
+              [disabled]="dsForm.invalid" (click)="saveDataFlow()">
+        Save
+      </button>
+
+      <button class="btn btn-outline-primary" *ngIf="showLoadButton" disabled>
+        <span class="spinner-border spinner-border-sm"></span>
+        Loading...
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,31 @@
+<div *ngIf="route.children.length === 0">
+    <div *ngIf="count!=0">
+      <app-spinner *ngIf="showSpinner"></app-spinner>
+      <div *ngIf="reportList">
+      <app-rpt-list [searchModelInput]="model"></app-rpt-list>
+      </div>
+    </div>
+      <div *ngIf="count==0">
+          <div *ngIf="model.keyWord == null || model.keyWord == ''">
+              <div *ngIf="model.objectType == 'Energylog'">
+                  <h5 style="text-align:center">No Results Found for <b>"Energy Log"</b></h5>
+              </div>
+              <div *ngIf="model.objectType != 'Energylog'">
+                  <h5 style="text-align:center">
+                      No Results Found for <b>"{{model.objectType}}"</b>
+                  </h5>
+              </div>
+          </div>
+          <div *ngIf="model.keyWord != null && model.keyWord != ''">
+              <div *ngIf="model.objectType == 'Energylog'">
+                  <h5 style="text-align:center">No Results Found for <b>"{{model.keyWord}}"</b> in <b>"Energy
+                          Log"</b></h5>
+              </div>
+              <div *ngIf="model.objectType != 'Energylog'">
+                  <h5 style="text-align:center">No Results Found for <b>"{{model.keyWord}}"</b> in
+                      <b>"{{model.objectType}}"</b></h5>
+              </div>
+          </div>
+      </div>
+  </div>
+  <router-outlet></router-outlet>

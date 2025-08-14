@@ -1,0 +1,208 @@
+<div class="app-content">
+  <legend style="text-align: start; padding: 13px 0px 0px 1px; font-weight:bold;">SSRS Template Deployment</legend>
+  <mat-card>
+    <app-spinner *ngIf="isLoading"></app-spinner>
+    <div *ngIf="!isLoading">
+      <div>
+        <div class="col-md-12 mb-2">
+          <fieldset class="common-note">
+            <div>
+              <b>Note: </b><span>Template Deployment form helps to deploy the valid PRS supported Templates and allows to use them in Apps</span>
+            </div>
+          </fieldset>
+        </div>
+        <form class="was-validated" #templateDeploymentForm="ngForm">
+          <div class="form-group form-inline content" [class.has-error]="templateFile.invalid && templateFile.touched"
+               [class.has-success]="templateFile.valid">
+            <label for="templateFile" class="col-md-3" style="display: block;" (click)="false">Template(RDL) file path</label>
+            <input type="file" accept=".rdl" class="form-control form-control-file col-md-6 bg-icons-remove input" [(ngModel)]="templateInfo.templateFile" [(value)]="templateInfo.templateFile"
+                   (change)="validateTemplate($event)" #templateFile="ngModel" required id="templateFile" name="templateFile" placeholder="Template location">
+
+            <div class="invalid-feedback" *ngIf="templateFile.invalid && templateFile.touched" style="padding-left:1%;">
+              Template file(RDL) is required
+            </div>
+
+            <div class="loader " *ngIf="showFadeOutLoader">
+              <app-spinner *ngIf="isLoading"></app-spinner><p><em>Validating RDL...</em></p>
+          </div>
+
+
+          </div>
+          <div class="row" style="width:75%;margin-top: .25rem; padding-left:1%;" *ngFor="let err of templateValidationErrors">
+            <span class="col-md-4"></span>
+            <span class="col-md-6"  style="color:#dc3545;">{{err}}</span>
+          </div>
+          <div class="form-group form-inline content">
+            <label for="" class="col-md-3" style="display: block;" (click)="false">App</label>
+            <label class="form-control form-control-file col-md-6 input" style="height:auto; min-height:36px;">{{templateInfo.appName}}</label>
+          </div>
+          <div class="form-group form-inline content">
+            <label for="" class="col-md-3" style="display: block;" (click)="false">Template Name</label>
+            <input type="text" class="form-control form-control-file col-md-6 bg-icons-remove input" [(ngModel)]="templateInfo.templateName" #templateName="ngModel"
+                   required id="templateName" name="templateName" placeholder="Template Name" (change)="verifyTemplateNameExists($event.target.value)">
+            <div class="invalid-feedback" *ngIf="templateName.invalid && templateName.touched" style="padding-left:1%;">
+              Template name is required
+            </div>
+            <!--<label class="form-control form-control-file col-md-6" style="height:auto;min-height:36px;">{{templateInfo.templateName}}</label>-->
+          </div>
+          <div class="form-group form-inline content">
+            <label for="" class="col-md-3" style="display: block;" (click)="false">Template Description</label>
+            <!--<textarea class="form-control form-control-file col-md-6" [(ngModel)]="templateInfo.description" #description="ngModel"
+              required id="description" name="description" placeholder="Template Description"></textarea>
+    <div class="invalid-feedback" *ngIf="description.invalid && description.touched">
+      Template description is required
+    </div>-->
+            <label class="form-control form-control-file col-md-6 input" style="height:auto; min-height:36px;">{{templateInfo.description}}</label>
+          </div>
+          <div class="form-group form-inline content">
+            <label for="" class="col-md-3" style="display: block;" (click)="false">Report Type</label>
+            <label class="form-control form-control-file col-md-6 input" style="height:auto; min-height:36px;">{{templateInfo.reportType}}</label>
+          </div>
+            <!--<div class="" style="width:100%;margin-top: .25rem;padding-left:17%;" *ngIf="userValidationMsg">
+      <span style="color:#dc3545">{{userValidationMsg}}</span>
+    </div>-->
+            <div class="col-md-12">
+              <button class="btn btn-outline-primary margin-right" *ngIf="!showLoadButton" [disabled]="showFadeOutLoader || (templateValidationErrors.length>0 || templateFile.invalid)"
+                      name="submit" (click)="saveTemplate()">
+                Deploy
+              </button>
+              <button class="btn btn-outline-primary margin-right" *ngIf="showLoadButton" disabled>
+                <span class="spinner-border spinner-border-sm"></span>
+                Loading...
+              </button>
+            </div>
+        </form>
+      </div>
+
+    </div>
+
+  </mat-card>
+  <div *ngIf="_utility.licenseInfo.isGrafanaInstalled">
+    <legend style="text-align: start; padding: 13px 0px 0px 1px; font-weight:bold;">Grafana Template Deployment</legend>
+    <mat-card>
+      <app-spinner *ngIf="isLoading"></app-spinner>
+      <div *ngIf="!isLoading">
+        <div>
+          <div class="col-md-12 mb-2">
+            <fieldset class="common-note">
+              <div>
+                <b>Note: </b><span>Grafana Template Deployment form helps to deploy the valid PRS supported Templates and allows to use them in Apps</span>
+              </div>
+            </fieldset>
+          </div>
+          <form class="was-validated" #templategrafanaDeploymentForm="ngForm">
+            <div class="form-group form-inline content" [class.has-error]="GrafanatemplateFile.invalid && GrafanatemplateFile.touched"
+            [class.has-success]="GrafanatemplateFile.valid">
+         <label for="GrafanatemplateFile" class="col-md-3" style="display: block;" (click)="false">TemplateGrafana(Json) file path</label>
+         <input type="file" accept=".json" class="form-control form-control-file col-md-6 bg-icons-remove input" [(ngModel)]="templateInfo.GrafanatemplateFile" [(value)]="templateInfo.GrafanatemplateFile"
+                (change)="validateGrafanaTemplate($event)" #GrafanatemplateFile="ngModel" required id="GrafanatemplateFile" name="GrafanatemplateFile" placeholder="Grafana Template location">
+         <div class="invalid-feedback" *ngIf="GrafanatemplateFile.invalid && GrafanatemplateFile.touched" style="padding-left:1%;">
+          Grafana Template file(Json) is required
+         </div>
+         <div class="loader" *ngIf="GrafanashowFadeOutLoader">
+           <app-spinner *ngIf="isLoading"></app-spinner><p><em>Validating Json...</em></p>
+       </div>
+
+           </div>
+           <div class="row" style="width:75%;margin-top: .25rem; padding-left:1%;" *ngFor="let err of GrafanatemplateValidationErrors">
+            <span class="col-md-4"></span>
+            <span class="col-md-6"  style="color:#dc3545;">{{err}}</span>
+          </div>
+
+
+            <div class="form-group form-inline content">
+              <label for="" class="col-md-3" style="display: block;" (click)="false">App</label>
+              <label class="form-control form-control-file col-md-6 input" style="height:auto; min-height:36px;">{{templateInfo.GrafanaappName}}</label>
+            </div>
+            <div class="form-group form-inline content">
+              <label for="" class="col-md-3" style="display: block;" (click)="false">Template Name</label>
+              <input type="text" class="form-control form-control-file col-md-6 bg-icons-remove input" [(ngModel)]="templateInfo.GrafanatemplateName" #GrafanatemplateName="ngModel"
+                     required id="GrafanatemplateName" name="GrafanatemplateName" placeholder="GrafanatemplateName" (change)="verifyGrafanatemplateNameExists($event.target.value)">
+              <div class="invalid-feedback" *ngIf="GrafanatemplateName.invalid && GrafanatemplateName.touched" style="padding-left:1%;">
+                Template name is required
+              </div>
+              <!--<label class="form-control form-control-file col-md-6" style="height:auto;min-height:36px;">{{templateInfo.templateName}}</label>-->
+            </div>
+            <div class="form-group form-inline content">
+              <label for="" class="col-md-3" style="display: block;" (click)="false">Template Description</label>
+              <!--<textarea class="form-control form-control-file col-md-6" [(ngModel)]="templateInfo.description" #description="ngModel"
+                required id="description" name="description" placeholder="Template Description"></textarea>
+      <div class="invalid-feedback" *ngIf="description.invalid && description.touched">
+        Template description is required
+      </div>-->
+              <label class="form-control form-control-file col-md-6 input" style="height:auto; min-height:36px;">{{templateInfo.Grafanadescription}}</label>
+            </div>
+            <div class="form-group form-inline content">
+              <label for="" class="col-md-3" style="display: block;" (click)="false">Report Type</label>
+              <label class="form-control form-control-file col-md-6 input" style="height:auto; min-height:36px;">{{templateInfo.GrafanareportType}}</label>
+            </div>
+              <!--<div class="" style="width:100%;margin-top: .25rem;padding-left:17%;" *ngIf="userValidationMsg">
+        <span style="color:#dc3545">{{userValidationMsg}}</span>
+      </div>-->
+              <div class="col-md-12">
+                <button class="btn btn-outline-primary margin-right" *ngIf="!showLoadButton1" [disabled]="GrafanashowFadeOutLoader || (GrafanatemplateValidationErrors.length>0 || GrafanatemplateFile.invalid)"
+                        name="submit" (click)="saveGrafanaTemplate()">
+                  Deploy
+                </button>
+                <button class="btn btn-outline-primary margin-right" *ngIf="showLoadButton1" disabled>
+                  <span class="spinner-border spinner-border-sm"></span>
+                  Loading...
+                </button>
+              </div>
+          </form>
+        </div>
+
+      </div>
+
+    </mat-card>
+  </div>
+
+
+</div>
+<style>
+  .content{
+  display: flex;
+  margin-bottom: 7px;
+
+}
+.input{
+  width: 40rem;
+}
+.form-control[type=file]:not(:disabled):not([readonly]) {
+    cursor: pointer;
+    height: 37px;
+}
+
+.was-validated .form-control:invalid, .form-control.is-invalid {
+
+    height: 37px;
+}
+
+@media screen and (min-width: 300px) and (max-width:900px) {
+  .form-group.form-inline.content {
+    display: flex;
+    flex-wrap: wrap;
+
+  }
+
+
+  }
+
+  @media screen and (min-width: 700px) and (max-width:1100px) {
+  .form-group.form-inline.content {
+    display: flex;
+    flex-wrap: wrap;
+
+  }
+  label{
+    white-space:nowrap;
+
+  }
+  .input{
+    width: 35rem;
+  }
+
+
+  }
+
+</style>

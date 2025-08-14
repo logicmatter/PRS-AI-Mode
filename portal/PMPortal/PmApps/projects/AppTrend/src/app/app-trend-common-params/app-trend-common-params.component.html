@@ -1,0 +1,328 @@
+<div class="row">
+  <div class="form-group col-md-12" id="trend">
+    <label for="template" matTooltip="Select a template" matTooltipPosition="right">Select Template</label>
+    <select class="form-select" id="template" [(value)]="templateID" (change)="changeTemplate()"
+     [(ngModel)]="templateID" [disabled]="_utility.isReportRun">
+      <option *ngFor="let templateObj of _utility.templateObjects" [value]="templateObj.id">
+        {{ templateObj.templateName }}
+      </option>
+    </select>
+    <!-- <mat-form-field>
+      <mat-select
+        [(value)]="_utility.templateID"
+        id="template"
+        (change)="changeTemplate($event.target.value)"
+      >
+        <mat-option
+          *ngFor="let templateObj of _utility.templateObjects"
+          [value]="templateObj.id"
+        >
+          {{ templateObj.templateName }}</mat-option
+        >
+      </mat-select>
+    </mat-form-field> -->
+  </div>
+</div>
+<form [formGroup]="form">
+  <div class="row">
+    <div class="form-group col-md-12" id="trend">
+      <label for="reportName" matTooltip="Type a report name" matTooltipPosition="right">
+        <sup class="mandatory-indication">*</sup>Report
+        Name
+      </label>
+      <input type="text" class="form-control" id="reportName" formControlName="reportName" placeholder="Report name"
+             (input)="checkReportName()" />
+      <div style="margin-left: 6px; margin-right: -4px;" *ngIf="form.get('reportName').touched">
+        <div *ngIf="form.get('reportName').value.toString().trim() == ''" class="alert alert-danger">
+          Report name should not be empty
+        </div>
+        <div *ngIf="_utility.reportNameExists" class="alert alert-danger">
+          Report name has already exists
+        </div>
+        <div *ngIf="_utility.hasReportNameValid" class="alert alert-danger">
+          Report name can only contain of A-Z a-z 0-9 _ ! @ $ % ^ and -
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-12" id="trend">
+      <label for="reportDescription" matTooltip="Type a report description" matTooltipPosition="right">Report Description</label>
+      <textarea class="form-control" id="reportDescription" formControlName="reportDescription"
+                placeholder="Report Description"></textarea>
+      <!-- <input type="text" class="form-control" id="reportDescription" formControlName="reportDescription"
+        placeholder="Report Description" /> -->
+    </div>
+  </div>
+</form>
+<div class="row" *ngIf="_utility.isObjectSelectionEnable">
+  <div class="form-group col-md-12">
+    <app-object-selection></app-object-selection>
+    <!-- <label for="selectTrend" matTooltip="Select an object"><sup class="mandatory-indication">*</sup>Select
+      Objects</label>
+    <angular2-multiselect [data]="dropdownList" [(ngModel)]="selectedItems" [settings]="dropdownSettings"
+      (onSelect)="onItemSelect($event)" (onDeSelect)="OnItemDeSelect($event)" (onSelectAll)="onSelectAll($event)"
+      (onDeSelectAll)="onDeSelectAll($event)" (onFilterSelectAll)="onFilterSelectAll($event)"
+      (onFilterDeSelectAll)="onFilterDeSelectAll($event)"></angular2-multiselect> -->
+  </div>
+  <!-- <div class="info">
+    <p>Select up to 25 Objects for Analysis</p>
+  </div> -->
+
+</div>
+<form [formGroup]="drForm" id="space">
+  <div *ngIf="_utility.reportID" class="my-3 mr-sm-2" id="trend1">
+    <!--<input type="checkbox" class="custom-control-input" id="customControlInline" (checked)="showReportDates" (change)="onCheckboxChange()" >-->
+    <a class="" style="cursor:pointer;color:#007bff;" (click)="onCheckboxChange()">Show saved duration</a>
+  </div>
+  <div class="row" style="margin-top: 15px;">
+    <div class="form-group col-md-12">
+      <label for="dr" id="dr" matTooltip="Select a duration" matTooltipPosition="right"><sup class="mandatory-indication">*</sup>Duration</label>
+      <mat-form-field style="width: 100%;">
+        <mat-select [(value)]="dr"  id="dr" formControlName="dr" (selectionChange)="changeDuration()">
+          <mat-option *ngFor="let duration of durations" [value]="duration.value">
+            {{duration.label}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <!-- <app-duration [durationChange]="dr" hidden></app-duration> -->
+  <div class="row" *ngIf="dr === 'custom'">
+    <div class="form-group col-md-12">
+      <label for="startDate" matTooltip="Pick a date" matTooltipPosition="right"><sup class="mandatory-indication">*</sup>Start Date</label>
+      <input id="startDate" class="form-control" [owlDateTime]="sdt" [owlDateTimeTrigger]="sdt" [(value)]="startDate"
+             formControlName="startDate" placeholder="Date Time" />
+      <owl-date-time #sdt (afterPickerClosed)="validateDuration()"></owl-date-time>
+      <!-- <input
+        type="date"
+        class="form-control"
+        id="startDate"
+        formControlName="startDate"
+        [value]="startDate | date: 'yyyy-MM-dd'"
+      /> -->
+    </div>
+  </div>
+  <!-- <div class="row"></div> -->
+  <div class="row" *ngIf="dr === 'custom'">
+    <div class="form-group col-md-12" id="endDate">
+      <label for="endDate" matTooltip="Pick a date" matTooltipPosition="right"><sup class="mandatory-indication">*</sup>End Date</label>
+      <input  id="endDate" class="form-control" [owlDateTime]="edt" [owlDateTimeTrigger]="edt" [(value)]="endDate"
+             formControlName="endDate" placeholder="Date Time" />
+      <owl-date-time #edt (afterPickerClosed)="validateDuration()"></owl-date-time>
+      <!-- <input
+        type="date"
+        class="form-control"
+        id="endDate"
+        formControlName="endDate"
+        [value]="endDate | date: 'yyyy-MM-dd'"
+      /> -->
+      <div *ngIf="_utility.datesValidator" class="alert alert-danger">
+        Start Date should be less than End Date
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="_utility.isEnableResolution">
+    <div class="form-group col-md-12">
+      <label id="resolution" for="resolution" matTooltip="Select a report resolution" matTooltipPosition="right">
+        <sup class="mandatory-indication">*</sup>Report
+        Resolution
+      </label>
+      <mat-form-field style="width: 100%;">
+        <mat-select [(ngModel)]="_utility.resolution" [(value)]="_utility.resolution" id="resolution1" formControlName="resolution"   >
+          <mat-option *ngFor="let resolution of _core.resolutions" [value]="resolution.value">{{resolution.key}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <!-- <mat-form-field>
+        <mat-select [(value)]="_utility.resolution" id="resolution" formControlName="resolution">
+          <mat-option value="actual">Actual</mat-option>
+          <mat-option value="hourly">Hourly</mat-option>
+          <mat-option value="daily">Daily</mat-option>
+          <mat-option value="weekly">Weekly</mat-option>
+          <mat-option value="monthly">Monthly</mat-option>
+          <mat-option value="quarterly">Quarterly</mat-option>
+          <mat-option value="yearly">Yearly</mat-option>
+        </mat-select>
+      </mat-form-field> -->
+    </div>
+  </div>
+</form>
+<div *ngIf="templateChanged">
+  <form [formGroup]="DataForm">
+    <div class="row">
+      <div class="form-group col-md-12" *ngFor="let promptParam of promptParameters">
+        <!-- <label for="{{ promptParam['name'] }}">{{ promptParam["prompt"] }}</label> -->
+        <label for="{{ promptParam['name'] }}" matTooltip="{{ tempObj[promptParam['name']] }}" matTooltipPosition="right">
+          <sup class="mandatory-indication">*</sup>{{ promptParam["prompt"] }}
+        </label>
+        <div *ngIf="promptParam['parameterTypeName'] == 'String' ">
+          <div *ngIf="!(promptParam['multiValue']) && promptParam['validValues'] == undefined">
+            <input class="form-control" type="text" [placeholder]="promptParam['defaultValues'] ? '' : promptParam['defaultValues']"
+                   formControlName="{{ promptParam['name'] }}" (keyup)="_utility.validatorTemplateForm(DataForm, form, drForm)"
+                   (change)="_utility.validatorTemplateForm(DataForm, form, drForm)" />
+            <div style="margin-left: 6px; margin-right: -4px;" *ngIf="(DataForm.get(promptParam.name).dirty || DataForm.get(promptParam.name).touched)">
+              <div *ngIf="(DataForm.get(promptParam.name).value.trim() == '')" class="alert alert-danger">
+                {{promptParam["prompt"]}} should not be empty
+              </div>
+              <div *ngIf="(DataForm.get(promptParam.name).hasError('required'))" class="alert alert-danger">
+                {{promptParam["prompt"]}} is Required
+              </div>
+              <div *ngIf="(DataForm.get(promptParam.name).hasError('whitespace'))" class="alert alert-danger">
+                Please enter valid data
+              </div>
+            </div>
+          </div>
+          <div *ngIf="(promptParam['multiValue']) && promptParam['validValues'] == undefined">
+            <input class="form-control" type="text" [placeholder]="promptParam['defaultValues'] ? '' : promptParam['defaultValues']"
+                   formControlName="{{ promptParam['name'] }}" (keyup)="_utility.validatorTemplateForm(DataForm, form, drForm);_utility.checkMultiValidation($event.target.value,promptParam)"
+                   (change)="_utility.validatorTemplateForm(DataForm, form, drForm);_utility.checkMultiValidation($event.target.value,promptParam)" />
+            <div style="margin-left: 6px; margin-right: -4px;" *ngIf="(DataForm.get(promptParam.name).dirty || DataForm.get(promptParam.name).touched)">
+              <div *ngIf="(DataForm.get(promptParam.name).value.trim() == '')" class="alert alert-danger">
+                {{promptParam["prompt"]}} should not be empty
+              </div>
+              <div *ngIf="(DataForm.get(promptParam.name).hasError('required'))" class="alert alert-danger">
+                {{promptParam["prompt"]}} is Required
+              </div>
+              <div *ngIf="(DataForm.get(promptParam.name).hasError('whitespace'))" class="alert alert-danger">
+                Please enter valid data
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div *ngIf="promptParam['parameterTypeName'] == 'Integer' ">
+          <div *ngIf="!(promptParam['multiValue']) && promptParam['validValues'] == undefined">
+            <input (keyup)="_utility.validatorTemplateForm(DataForm, form, drForm)"
+                   (click)="_utility.validatorTemplateForm(DataForm, form, drForm)" class="form-control" type="number"
+                   [placeholder]="promptParam['defaultValues'] ? '' : promptParam['defaultValues']" formControlName="{{ promptParam['name'] }}" />
+            <div style="margin-left: 6px; margin-right: -4px;" *ngIf="(DataForm.get(promptParam.name).dirty || DataForm.get(promptParam.name).touched)">
+              <div *ngIf="(DataForm.get(promptParam.name).value == null )" class="alert alert-danger">
+                {{promptParam["prompt"]}} should not be empty
+              </div>
+              <div *ngIf="(DataForm.get(promptParam.name).hasError('required'))" class="alert alert-danger">
+                {{promptParam["prompt"]}} is Required
+              </div>
+              <div *ngIf="(DataForm.get(promptParam.name).hasError('whitespace'))" class="alert alert-danger">
+                Please enter valid data
+              </div>
+            </div>
+          </div>
+          <div *ngIf="promptParam['multiValue'] && promptParam['validValues'] == undefined">
+            <input (keyup)="_utility.checkMultiValidation($event.target.value,promptParam);_utility.validatorTemplateForm(DataForm, form, drForm)"
+                   (click)="_utility.checkMultiValidation($event.target.value,promptParam);_utility.validatorTemplateForm(DataForm, form, drForm)" class="form-control" type="text"
+                   [placeholder]="promptParam['defaultValues'] ? '' : promptParam['defaultValues']" formControlName="{{ promptParam['name'] }}" />
+            <div style="margin-left: 6px; margin-right: -4px;" *ngIf="(DataForm.get(promptParam.name).dirty || DataForm.get(promptParam.name).touched)">
+              <div *ngIf="(DataForm.get(promptParam.name).value == null || _utility.isEmptyValue == true)" class="alert alert-danger">
+                {{promptParam["prompt"]}} should not be empty
+              </div>
+              <div *ngIf="(DataForm.get(promptParam.name).hasError('required'))" class="alert alert-danger">
+                {{promptParam["prompt"]}} is Required
+              </div>
+              <div *ngIf="_utility.validType" class="alert alert-danger">
+                {{promptParam["prompt"]}} accepts only Numbers
+              </div>
+              <div *ngIf="(DataForm.get(promptParam.name).hasError('whitespace'))" class="alert alert-danger">
+                Please enter valid data
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div *ngIf="promptParam['parameterTypeName'] == 'Float' ">
+          <div *ngIf="promptParam['multiValue'] && promptParam['validValues'] == undefined">
+            <input (keyup)="_utility.checkMultiValidation($event.target.value,promptParam);_utility.validatorTemplateForm(DataForm, form, drForm)"
+                   (click)="_utility.checkMultiValidation($event.target.value,promptParam);_utility.validatorTemplateForm(DataForm, form, drForm)" class="form-control" type="text"
+                   [placeholder]="promptParam['defaultValues'] ? '' : promptParam['defaultValues']" formControlName="{{ promptParam['name'] }}" />
+            <div style="margin-left: 6px; margin-right: -4px;" *ngIf="(DataForm.get(promptParam.name).dirty || DataForm.get(promptParam.name).touched)">
+              <div *ngIf="(DataForm.get(promptParam.name).value == null || _utility.isEmptyValue == true)" class="alert alert-danger">
+                {{promptParam["prompt"]}} should not be empty
+              </div>
+              <div *ngIf="(DataForm.get(promptParam.name).hasError('required'))" class="alert alert-danger">
+                {{promptParam["prompt"]}} is Required
+              </div>
+              <div *ngIf="_utility.validType" class="alert alert-danger">
+                {{promptParam["prompt"]}} accepts only float
+              </div>
+              <div *ngIf="(DataForm.get(promptParam.name).hasError('whitespace'))" class="alert alert-danger">
+                Please enter valid data
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="!(promptParam['multiValue']) && promptParam['validValues'] == undefined">
+            <input (keyup)="_utility.validatorTemplateForm(DataForm, form, drForm)"
+                   (click)="_utility.validatorTemplateForm(DataForm, form, drForm)" class="form-control" type="number"
+                   step="0.0001" [placeholder]="promptParam['defaultValues'] ? '' : promptParam['defaultValues']" formControlName="{{ promptParam['name'] }}" />
+            <div style="margin-left: 6px; margin-right: -4px;" *ngIf="(DataForm.get(promptParam.name).dirty || DataForm.get(promptParam.name).touched)">
+              <div *ngIf="(DataForm.get(promptParam.name).value == null)" class="alert alert-danger">
+                {{promptParam["prompt"]}} should not be empty
+              </div>
+              <div *ngIf="(DataForm.get(promptParam.name).hasError('required'))" class="alert alert-danger">
+                {{promptParam["prompt"]}} is Required
+              </div>
+              <div *ngIf="(DataForm.get(promptParam.name).hasError('whitespace'))" class="alert alert-danger">
+                Please enter valid data
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+
+        <div *ngIf="promptParam['parameterTypeName'] == 'TIME' && promptParam['validValues'] == undefined">
+          <input class="form-control" type="time"
+                 formControlName="{{ promptParam['name'] }}" (keyup)="_utility.validatorTemplateForm(DataForm, form, drForm)"
+                 (change)="_utility.validatorTemplateForm(DataForm, form, drForm)" />
+        </div>
+        <div *ngIf="promptParam['parameterTypeName'] == 'DateTime' && promptParam['validValues'] == undefined">
+          <input class="form-control" type="date"
+                 formControlName="{{ promptParam['name'] }}" (keyup)="_utility.validatorTemplateForm(DataForm, form, drForm)"
+                 (change)="_utility.validatorTemplateForm(DataForm, form, drForm)" />
+        </div>
+        <div *ngIf="promptParam['parameterTypeName'] == 'Boolean' && promptParam['validValues'] == undefined"
+             class="form-check">
+          <!-- True -->
+          <div class="form-check-inline">
+            <input class="form-check-input" type="radio" value='True' formControlName="{{ promptParam['name'] }}"
+                   (keyup)="_utility.validatorTemplateForm(DataForm, form, drForm)"
+                   (change)="_utility.validatorTemplateForm(DataForm, form, drForm)" /> True
+          </div>
+          <!-- False -->
+          <div class="form-check-inline">
+            <label class="form-check-label">
+              <input class="form-check-input" type="radio" value='False' formControlName="{{ promptParam['name'] }}"
+                     (keyup)="_utility.validatorTemplateForm(DataForm, form, drForm)"
+                     (change)="_utility.validatorTemplateForm(DataForm, form, drForm)" /> False
+            </label>
+          </div>
+        </div>
+        <div *ngIf="promptParam['validValues'] != undefined">
+          <div *ngIf="promptParam['multiValue']">
+            <mat-form-field style="margin-left: 10px; width:100%">
+              <mat-select (selectionChange)="
+                _utility.validatorTemplateForm(DataForm, form, drForm)
+              " (click)="_utility.validatorTemplateForm(DataForm, form, drForm)" multiple
+                          [(value)]="promptParam['defaultValues']" formControlName="{{ promptParam['name'] }}">
+                <mat-option *ngFor="let validValue of promptParam['validValues']" [value]="validValue['value']" >
+                  {{ validValue["label"] }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div *ngIf="!promptParam['multiValue']">
+            <mat-form-field style="margin-left: 10px;width:100%">
+              <mat-select (selectionChange)="
+                _utility.validatorTemplateForm(DataForm, form, drForm)
+              " (click)="_utility.validatorTemplateForm(DataForm, form, drForm)"
+                          [(value)]="promptParam['defaultValues']" formControlName="{{ promptParam['name'] }}">
+                <mat-option *ngFor="let validValue of promptParam['validValues']" [value]="validValue['value']" style="margin-left: 10px;">
+                  {{ validValue["label"] }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,71 @@
+@import '../../../src/styles.scss';
+thead {
+  background-color: var(--primary-color);
+  color: #fff;
+  font-size: 14px;
+}
+tbody {
+  font-size: 12px;
+}
+
+.fa-lg {
+  font-size: 1.35em !important;
+}
+.columns {
+  padding-top: 0;
+}
+
+.left-div {
+  display: inline-block;
+  max-width: 501px;
+  text-align: left;
+  border-radius: 3px;
+  margin: 5px;
+  vertical-align: top;
+  margin-left: -45px;
+}
+
+.icon {
+  padding: 10px;
+  color: rgba(112, 120, 125, 1);
+  min-width: 50px;
+  text-align: center;
+  font-size: 16px;
+  background: rgba(250, 250, 250, 1) 0% 0% no-repeat padding-box;
+  border: 1px solid rgba(204, 204, 204, 1);
+  border-radius: 4px 0px 0px 4px;
+  opacity: 1;
+}
+.input-container {
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  margin-bottom: 3px;
+}
+
+.right-div {
+  display: inline-block;
+  max-width: 501px;
+  text-align: left;
+  border-radius: 3px;
+  margin: 0px;
+  margin-top:8px;
+  margin-left: 45px;
+}
+.my-pagination ::ng-deep .ngx-pagination .current {
+  background: #193A7E;
+}
+.facetWidthClass{
+  flex: 0 0 35%;
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 20px;
+}
+.fixedPosition {
+
+  width: 109%;
+}
+
+.filterText
+{
+  min-height: 40px;
+}

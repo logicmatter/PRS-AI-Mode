@@ -1,0 +1,201 @@
+@import '../../../src/styles.scss';
+thead {
+  background-color: var(--primary-color);
+  color: #fff;
+  font-size:14px;
+}
+tbody {
+  font-size: 12px;
+}
+
+.filterText{
+  color: rgba(112, 120, 125, 1);
+  min-width: 40px;
+  text-align: center;
+  font-size: 16px;
+  background: rgba(250, 250, 250, 1) 0% 0% no-repeat padding-box;
+  border: 1px solid rgba(204, 204, 204, 1);
+  border-radius: 4px 0px 0px 4px;
+  opacity: 1;
+}
+.fa-lg {
+  font-size: 1.35em !important;
+}
+.columns {
+  padding-top: 0;
+}
+
+.left-div {
+  display: inline-block;
+  max-width: 501px;
+  text-align: left;
+  border-radius: 3px;
+  margin: 5px;
+  vertical-align: top;
+  margin-left: -45px;
+}
+
+.icon {
+  padding: 10px;
+    color: rgba(112, 120, 125, 1);
+    min-width: 50px;
+    text-align: center;
+    font-size: 16px;
+    background: rgba(250, 250, 250, 1) 0% 0% no-repeat padding-box;
+    border: 1px solid rgba(204, 204, 204, 1);
+    border-radius: 4px 0px 0px 4px;
+    opacity: 1;
+}
+.input-container {
+  display: -ms-flexbox; /* IE10 */
+  display: flex;
+  margin-bottom: 3px;
+}
+.image{
+  width:20px;
+   height:20px
+}
+
+.right-div {
+  display: inline-block;
+  max-width: 501px;
+  text-align: left;
+  border-radius: 3px;
+  margin: 0px;
+  margin-top:8px;
+  margin-left: 45px;
+}
+.my-pagination ::ng-deep .ngx-pagination .current {
+  background: #193A7E;
+}
+.nameWidthClass{
+  // flex: 0 0 8%;
+  display: flex;
+  justify-content: flex-start;
+
+
+}
+.descrWidthClass {
+  display: flex;
+  // flex: 0 0 54px;
+  justify-content: flex-start;
+  overflow-wrap: anywhere;
+}
+.standWidthClass{
+  // flex: 0 0 25%;
+  display: flex;
+  justify-content: flex-start;
+  word-break: break-word;
+}
+.critWidthClass {
+  // flex: 0 0 15%;
+  display: flex;
+  justify-content: flex-start;
+}
+.actnWidthClass {
+  // flex: 0 0 6%;
+  display: flex;
+  justify-content: flex-start;
+
+}
+.fixedPosition {
+
+  width: 109%;
+}
+.regulation{
+  font-size:larger;
+  padding-top:14px;
+  text-align:center;
+}
+.fixedPosition1 {
+  width: 100%;
+}
+.mx-0{
+  margin-left: 12px;
+}
+
+@media screen and (max-width: 786px) {
+
+  .actnWidthClass {
+    flex-wrap: wrap;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+
+
+}
+@media only screen and (max-width: 768px){
+  .mat-header-cell {
+    font: normal normal bold 10px/12px Arial;
+}
+.mat-cell {
+  font-size: 12px;
+
+}
+
+}
+
+@media screen and (max-width: 800px) {
+  .mat-header-cell {
+
+    font: normal normal bold 14px Arial;
+  }
+}
+@media screen and (min-width: 360px)and (max-width: 550px) {
+  .mat-header-cell {
+    font: normal normal bold 10px/12px Arial;
+}
+.mat-cell {
+  font-size: 7px;
+  word-break: break-word;
+}
+.fixedPosition1[_ngcontent-lvc-c33] {
+  width: 106%;
+  font-size: 11px;
+}
+.regulation{
+  font-size:medium;
+
+}
+.option{
+  font-size:10px
+}
+.page {
+  margin: 0 5px 0 5px;
+}
+.nameWidthClass{
+  // flex: 0 0 15%;
+  display: flex;
+  justify-content: flex-start;
+
+
+}
+.image{
+  width:16px;
+   height:16px
+}
+.scroller{
+  overflow: visible;
+  height: 90vh;
+  overflow-x: visible;
+  justify-content: flex-start;
+  display: contents;
+}
+.actnWidthClass{
+  padding-right: 2px;
+}
+.page {
+  margin: 0 1px 0 5px;
+}
+.descrWidthClass {
+  display: flex;
+  flex: 0 0 54px;
+  justify-content: flex-start;
+  overflow-wrap: anywhere;
+}
+
+}
+
+
+

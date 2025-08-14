@@ -1,0 +1,114 @@
+
+<div class="dashboard-content">
+    <mat-card style="min-height:100vh">
+        <div *ngIf="count!=0">
+            <div *ngIf="model.objectType == 'Energylog'">
+                <app-spinner *ngIf="showSpinner"></app-spinner>
+                <div *ngIf="!showSpinner">
+                    <div *ngFor="let d of searchData">
+                        <span data-toggle="tooltip" title="Back" (click)="backParent()" class="sla-back-icon refresh-icon"><mat-icon mat-list-icon class="btn-primary click-event">arrow_back</mat-icon></span>
+                        <h5 style="text-align:center"><b>Energy Log</b> Details for <b>{{d.energyLog}}</b></h5>
+                        <table class="table table-bordered">
+
+                            <thead>
+                                <tr>
+                                    <th colspan="2" class="table_header">Energy Log</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th style="width:25%">Energy Log Description</th>
+                                    <td style="width:25%">{{d.energyLog}}</td>
+                                </tr>
+                                <tr>
+                                    <th style="width:25%">Report Number</th>
+                                    <td style="width:25%">{{d.energyLogID}}</td>
+                                </tr>
+
+                                <tr>
+                                    <th style="width:25%">Demand Window Size</th>
+                                    <td>{{d.demandWindowSize}}</td>
+                                </tr>
+                                <tr>
+                                    <th style="width:25%">Decimal Places</th>
+                                    <td style="width:25%">{{d.decimalPlaces}}</td>
+                                </tr>
+                                <tr>
+                                    <th style="width:25%">Report Units</th>
+                                    <td style="width:25%"></td>
+                                </tr>
+                                <tr>
+                                    <th style="width:25%">Demand Units</th>
+                                    <td style="width:25%">{{d.reportDemandUnits}}</td>
+                                </tr>
+                                <tr>
+                                    <th style="width:25%">Consumption Units</th>
+                                    <td style="width:25%">{{d.reportConsumptionUnits}}</td>
+                                </tr>
+                                <tr>
+                                    <th style="width:25%">Total Floor Area</th>
+                                    <td style="width:25%">{{d.floarArea}}</td>
+                                </tr>
+                                <tr>
+                                    <th style="width:25%">Enable Energy Index</th>
+                                    <td style="width:25%">{{d.energyIndexUnits}}</td>
+                                </tr>
+                                <tr>
+                                    <th style="width:25%">Enable Energy Units</th>
+                                    <td style="width:25%">{{d.enableEnergyIndex}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div *ngFor="let d of searchList">
+                            <table class="table table-bordered meter"  >
+
+                                <thead>
+                                    <tr>
+                                        <th colspan="2" class="table_header" style="text-align:center">Energy Meter</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <th style="width:25%">Meter Number</th>
+                                    <td style="width:25%">{{d.meterID}}</td>
+                                  </tr>
+                                  <tr>
+                                    <th style="width:25%">Meter Type</th>
+                                    <td style="width:25%">{{d.meterTypeName}}</td>
+                                  </tr>
+
+                                  <tr>
+                                    <th style="width:25%">Meter Name</th>
+                                    <td>{{d.meterName}}</td>
+                                  </tr>
+                                  <tr>
+                                    <th style="width:25%">Device Instance</th>
+                                    <td>{{d.rateDevNum}}</td>
+                                  </tr>
+                                  <tr>
+                                    <th style="width:25%">Demand Units</th>
+                                    <td style="width:25%">{{d.decimalPlaces}}</td>
+                                  </tr>
+                                  <tr>
+                                    <th style="width:25%">Trendlog Description</th>
+                                    <td style="width:25%">{{d.trendLogDescription}}</td>
+                                  </tr>
+                                  <tr>
+                                    <th style="width:25%">Conversion Factor</th>
+                                    <td style="width:25%">{{d.conversionFactor}}</td>
+                                  </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="count==0">
+            <div>
+                <h5 style="text-align:center">No Results Found for <b>"{{model.objectType}}"</b></h5>
+            </div>
+        </div>
+    </mat-card>
+</div>

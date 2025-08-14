@@ -1,0 +1,126 @@
+<app-spinner *ngIf="showSpinner"></app-spinner>
+<div *ngIf="length == 0">
+  <div *ngIf="!showSpinner">
+    <h5 class="text-sm-center">No Standards Configured</h5>
+  </div>
+</div>
+<div *ngIf="length != 0">
+  <div *ngIf="!showSpinner">
+    <div class="row fixedPosition1">
+      <div class="col-md-3 mr-1" style="margin-left:3px;">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text filterText" style="height: 39px"><i class="fa fa-filter" aria-hidden="true"></i></span>
+          </div>
+          <input type="text" class="form-control" (keyup)="applyFilter1($event.target.value)" placeholder="Filter" />
+        </div>
+      </div>
+
+      <div class="col-auto" style="margin-left:3px;">
+        <label class="regulation" style="margin-right: 10px;">Select Regulation</label>
+        <mat-form-field>
+          <mat-select class="option" [(ngModel)]="selectedLocation" (ngModelChange)="onChangeLocation()">
+            <mat-progress-bar mode="indeterminate" *ngIf="!distinctLocationObj"></mat-progress-bar>
+            <mat-option value="all">All</mat-option>
+            <mat-option *ngFor="let indiLocation of distinctLocationObj" [value]="indiLocation.regulation">
+              {{ indiLocation.regulation }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-md-5 float-right ml-3 mr-0">
+        <mat-paginator [hidden]="length < 10" #userPaginator [pageSizeOptions]="[10, 25, 50, 100]" [pageSize]="currentPageSize"
+         (page)="getData($event)" [showFirstLastButtons]="true"
+        >
+      </mat-paginator>
+      </div>
+      <!-- <label class="" style="font-size:larger; padding-top:14px; text-align:center;">Select Equipment type</label>
+      <div class="col-md-2">
+        <mat-form-field>
+          <mat-select [(ngModel)]="selectedLocation" (ngModelChange)="onChangeLocation()">
+            <mat-progress-bar mode="indeterminate" *ngIf="!distinctLocationObj"></mat-progress-bar>
+            <mat-option value="all">All</mat-option>
+            <mat-option *ngFor="let indiLocation of distinctLocationObj" [value]="indiLocation.classType">
+              {{ indiLocation.classType }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div> -->
+    </div>
+    <div class="scroller">
+      <div class="example-container mat-elevation-z8">
+        <mat-table #table [dataSource]="stdObjs" #userSort="matSort" matSort>
+
+          <ng-container matColumnDef="classType">
+            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'nameWidthClass'">Equipment Type</mat-header-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="'nameWidthClass'"> {{ element["classType"] }}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="regulation">
+            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'descrWidthClass'"> Regulation </mat-header-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="'descrWidthClass'">{{element.regulation}}</mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="facetName">
+            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'nameWidthClass'"> Facet Name </mat-header-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="'nameWidthClass'">{{element.facetName}}</mat-cell>
+          </ng-container>
+
+
+          <ng-container matColumnDef="facetUnit">
+            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'descrWidthClass'"> Facet value </mat-header-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="'descrWidthClass'">{{ element["facetUnit"] }}</mat-cell>
+          </ng-container>
+
+
+          <!-- <ng-container matColumnDef="ruleCode">
+            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'customWidthClass'"> Rule Code </mat-header-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="'customWidthClass'">{{element.ruleCode}}</mat-cell>
+          </ng-container> -->
+
+          <ng-container matColumnDef="criteria">
+            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'critWidthClass'"> Criteria </mat-header-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="'critWidthClass'" class="mr-3">
+              <div *ngIf='element["criteria"] == ""'>N/R</div>
+              <div *ngIf='element["criteria"] == "IsGreaterThan" || element["criteria"] == "IsGreaterThanEqualTo"'>{{element.criteria}}  {{element["acceptableHigh"]}}</div>
+              <div *ngIf='element["criteria"] == "IsBetween" || element["criteria"] == "IsNotInBetween"'>{{element.criteria}} [ {{ element["acceptableLow"]}} - {{element["acceptableHigh"]}}]</div>
+              <div *ngIf='element["criteria"] == "IsLessThanEqualTo" || element["criteria"] == "IsLessThan" || element["criteria"] == "IsEqualTo" || element["criteria"] == "IsNotEqualTo"'>{{element.criteria}}  {{ element["acceptableLow"]}}</div>
+              <!-- {{ element.criteria == "" ? "N/R" : element.criteria  }} -->
+            </mat-cell>
+          </ng-container>
+
+
+          <!-- <ng-container matColumnDef="acceptableLow">
+            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'customWidthClass'"> Acceptable Low</mat-header-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="'customWidthClass'">
+              {{ element.acceptableLow == 0 ? "N/R" : element.acceptableLow}}</mat-cell>
+          </ng-container> -->
+
+          <!-- <ng-container matColumnDef="acceptableHigh">
+            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'customWidthClass'"> Acceptable High </mat-header-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="'customWidthClass'">
+              {{ element.acceptableHigh == 0 ? "N/R" :  element.acceptableHigh }}</mat-cell>
+          </ng-container> -->
+
+          <ng-container matColumnDef="actions">
+            <mat-header-cell *matHeaderCellDef [ngClass]="'actnWidthClass'"> Actions </mat-header-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="'actnWidthClass'">
+              <img src="assets/icons/noun_edit_1644623.svg"
+                class="toggle-tenants mx-0 mr-1 click-event image" aria-hidden="false" matTooltip="Edit"  (click)="editStandard(element)"/>
+                <img src="assets/icons/Group 216.svg"  class="toggle-tenants mx-2 click-event image"
+                aria-hidden="false" matTooltip="Delete" (click)="getStandardCount(element)"/>
+
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+
+      </div>
+    </div>
+
+
+  </div>
+
+</div>

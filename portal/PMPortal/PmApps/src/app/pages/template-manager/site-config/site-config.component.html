@@ -1,0 +1,63 @@
+<div class="app-content">
+    <mat-card>
+        <div class="col-md-12">
+            <fieldset class="common-note">
+                <div>
+                    <b>Note: </b><span>By default PointMatter logo is reflected in the Topbar. Customize with
+                        recommended image dimensions 175px X 25px </span>
+                </div>
+            </fieldset>
+        </div>
+        <div>
+            <form class="">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label for="pmlogoName" style="display: block;">Website Logo</label>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="file" accept=".png, .jpg, .jpeg" class="form-control bg-icons-remove is-invalid"
+                            #pmlogoName name="" placeholder="Upload file..."
+                            [ngClass]="{ 'is-invalid': siteImageSize }"
+                            (change)="handleFileInput($event.target.files)" />
+                            <small class="form-text text-muted" id="fileHelp" *ngIf="width">{{width}} x {{height}}</small>
+                            <div class="invalid-feedback" *ngIf="siteImageSize">
+                                Image size should not exceed 300kb
+                              </div>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-outline-primary" *ngIf="!saveConfig"
+                            (click)="saveWebsiteLogo()">Save</button><br/>
+                        <button class="btn btn-outline-primary ml-3 margin-right" *ngIf="saveConfig" disabled>
+                            <span class="spinner-border spinner-border-sm"></span>
+                            Loading...
+                        </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="imageUrl" class="col-md-8">
+                    <div class="">
+                        <label class="" style="display: block;">Preview</label>
+                    </div>
+                    <div class="col-md-6" style="background-color: #1a3a7f;">
+                        <img [src]="imageUrl" class="image logoDisplay">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </mat-card>
+</div>
+
+<style>
+    @media screen and (min-width: 300px) and (max-width:900px) {
+        button{
+            margin-top: 7px;
+            margin-left: 10px;
+        }
+        input{
+            margin-top: 5px;
+        }
+
+    }
+</style>

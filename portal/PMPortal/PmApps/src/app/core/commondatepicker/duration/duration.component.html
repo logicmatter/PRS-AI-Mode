@@ -1,0 +1,41 @@
+<div class="gdp">
+  <div class="row mt-4 px-3">
+    <div class="col-md-6">
+      <form class="form-inline" style="width: 60%;">
+        <!--<div class="form-group">-->
+        <label class="ml-3 control-label gdp-label" for="duration">Duration</label>
+        <!--<div class="col-sm-6 col-md-2">-->
+        <mat-select style="padding-left: 10px;" id="duration" class="ml-2 col-sm-7 input-select gdp-select" [(ngModel)]="datePickerHelper._duration" name="duration"
+          (ngModelChange)="changeDuration($event)">
+          <mat-option *ngFor="let duration of durations" [value]="duration.value">
+            {{duration.label}}
+          </mat-option>
+        </mat-select>
+        <!--</div>-->
+        <!--</div>-->
+      </form>
+    </div>
+    <div class="col-md-6 ">
+      <app-start-date-time [duration]="datePickerHelper._duration"></app-start-date-time>
+    </div>
+  </div>
+  <div class="row mt-4 px-3">
+    <div class="col-md-6">
+      <form class="form-inline" style="width: 60%;">
+      <app-resolution [duration]="datePickerHelper._duration"></app-resolution>
+      </form>
+    </div>
+    <div class="col-md-6" >
+      <app-end-date-time [duration]="datePickerHelper._duration"></app-end-date-time>
+    </div>
+  </div>
+  <div class="row mt-3 px-3">
+    <div class="col-md-6">
+      <!-- <a class="ml-2 nav-link px-4 primary-color" href="#">Reset All</a> -->
+    </div>
+    <div class="col-md-6 text-md-right px-4">
+      <button type="button" class="btn btn-outline-primary mr-2 py-1" style="margin-right: 10px;" (click)="closeDatePicker()">Cancel</button>
+      <button class="btn btn-outline-primary mr-2 py-1" type="button" [disabled]="!coreService.isDateRangeValid" (click)="applyGlobalDate()">Apply</button>
+    </div>
+  </div>
+</div>

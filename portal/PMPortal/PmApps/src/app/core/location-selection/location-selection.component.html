@@ -1,0 +1,14 @@
+<button *ngIf="_utility.viewobjname === 'lid'" 
+        class="btn btn-secondary btn-block w-100 mt-2" 
+        (click)="openObjectList()" 
+        [disabled]='_utility.showSpinner'>
+  View / Select Environments
+  <span class="badge bg-light small" id="light">{{_Adhocutility.roomsList.length}}</span>
+</button>
+<button *ngIf="_utility.viewobjname === 'eid'" 
+        class="btn btn-secondary btn-block w-100 mt-2" 
+        (click)="openObjectList()" 
+        [disabled]='_utility.showSpinner'>
+  View / Select Equipments
+  <span class="badge bg-light small" id="light">{{_Adhocutility.roomsList.length}}</span>
+</button>

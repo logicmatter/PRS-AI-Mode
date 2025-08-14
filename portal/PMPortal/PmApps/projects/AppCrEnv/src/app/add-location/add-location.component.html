@@ -1,0 +1,880 @@
+
+<div class="row" align="right" rstyle="margin-top:10px">
+  <div class="col-md-12">
+    <button type="button" class="btn btn-outline-primary" style="margin-right: 5px" (click)="goBack()" tabindex="10">
+      Back
+    </button>
+    <button *ngIf="_util.showLocationBack" type="button" class="btn btn-outline-primary" style="margin-right: 5px"
+      [disabled]="saveDisable || _util.saveDisable" (click)="updateLocation()" tabindex="9">
+      Update
+    </button>
+    <button *ngIf="!_util.showLocationBack" type="submit" class="btn btn-outline-primary" style="margin-right: 5px"
+      [disabled]="saveDisable || _util.saveDisable" (click)="onSave()" tabindex="8">
+      Save
+    </button>
+
+  </div>
+</div>
+<h5 *ngIf="_util.showLocationBack" class="text-center">UPDATE ENVIRONMENT PROFILE</h5>
+<h5 *ngIf="!_util.showLocationBack" class="text-center">DEFINE ENVIRONMENT PROFILE</h5>
+<div class="col-md-3" style="padding-bottom: 10px;">
+  <label for="site"><sup class="mandatory-indication">*</sup>Site</label>
+  <input type="text" class="form-control" id="site" [(ngModel)]="site" placeholder="Site" required
+    (ngModelChange)="disableButton()" tabindex="1"  disabled style="background-color: white;"/>
+</div>
+<div class="card ">
+  <div class="card-body">
+    <div class="row">
+
+    </div>
+    <div class="row">
+      <div class="col-md-3">
+        <label for="location"><sup class="mandatory-indication">*</sup>Environment Type</label>
+        <angular2-multiselect [data]="dropdownLocationList" [(ngModel)]="selectedLocationsItems"
+          [settings]="dropdownLocationsSettings" (onSelect)="onLocationsItemSelect($event)"
+          (onDeSelect)="OnLocationsItemDeSelect($event)" (onDeSelectAll)="OnLocationsItemDeSelect($event)" tabindex="4">
+        </angular2-multiselect>
+      </div>
+      <div class="col-md-3">
+        <label for="regulation"><sup class="mandatory-indication">*</sup>Select Profile</label>
+
+        <mat-select class="form-control option" [(ngModel)]="selectedLocation" (ngModelChange)="onChangeLocation()" placeholder="Select a profile">
+          <mat-progress-bar mode="indeterminate" *ngIf="!distinctLocationObj"></mat-progress-bar>
+
+          <mat-option *ngFor="let indiLocation of distinctLocationObj" [value]="indiLocation">
+            {{ indiLocation.profile }}
+          </mat-option>
+        </mat-select>
+      </div>
+      <div class="col-md-3">
+        <label for="roomname"><sup class="mandatory-indication">*</sup>Environment Name</label>
+        <input type="text" class="form-control" id="roomname" [(ngModel)]="roomname" placeholder="Enter Environment Name (e.g. OR ROOM 1)" required
+          (ngModelChange)="disableButton()" tabindex="3" />
+      </div>
+
+    </div>
+    <div>
+
+      <div *ngIf="selectedLocation && !Roomtypechanged" >
+        <!-- <app-trendlog [selectionObjInput]="model" [ngClass]="'logWidthClass'" ></app-trendlog> -->
+        <app-spinner *ngIf="showSpinner"></app-spinner>
+        <div *ngIf="!showSpinner">
+          <div>
+            <mat-accordion>
+              <mat-expansion-panel class="mt-3  " [(expanded)]="trendlogPanel" *ngIf="_util.licenseInfo?.productFeatures?.trend">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    Trendlog
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div>
+                  <div>
+                    <div class="mt-2 body">
+                      <div>
+                        <div>
+                          <div class="fixedPosition ">
+                            <div
+                              class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+
+                              <div *ngIf="utility.patternShow">
+                                <div *ngIf="trndlength>0">
+                                  <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}}
+                                    of {{trendDataLength}} results for Pattern<b>"{{model.keyWord}}"</b>
+                                    in
+                                    <b>"Trendlog"</b>
+                                  </h5>
+                                </div>
+                                <div *ngIf="trndlength==0">
+                                  <h5 class="search-message py-2">Showing {{startingIndex}} - {{endingIndex}}
+                                    of {{trendDataLength}} results for Pattern<b>"{{model.keyWord}}"</b>
+                                    in
+                                    <b>"Trendlog"</b>
+                                  </h5>
+                                </div>
+                              </div>
+                              <div *ngIf="(model.DevNum != null && model.DevNum != '') && !utility.patternShow">
+                                <div>
+                                  <div *ngIf="trndlength>0">
+                                    <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}} of
+                                      {{trndlength}} results for <b>"Trendlog"</b> in <b>"Device
+                                        {{model.DevNum}}"</b></h5>
+                                  </div>
+                                  <div *ngIf="trndlength==0">
+                                    <h5 class="search-message py-2">Showing {{startingIndex }} - {{endingIndex}} of
+                                      {{trndlength}} results for <b>"Trendlog"</b> in <b>"Device
+                                        {{model.DevNum}}"</b></h5>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div
+                                *ngIf="(model.keyWord != null && model.keyWord != '') && (model.filterType == 'Trendlog')">
+                                <div *ngIf="trndlength>0">
+                                  <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}}
+                                    of {{trendDataLength}} results for <b>"{{model.keyWord}}"</b> in
+                                    <b>"Trendlog"</b>
+                                  </h5>
+                                </div>
+                                <div *ngIf="trndlength==0">
+                                  <h5 class="search-message py-2">Showing {{startingIndex }} - {{endingIndex}}
+                                    of {{trendDataLength}} results for <b>"{{model.keyWord}}"</b> in
+                                    <b>"Trendlog"</b>
+                                  </h5>
+                                </div>
+                              </div>
+
+                              <div
+                                *ngIf="(model.keyWord != null && model.keyWord != '') && (model.filterType == 'Alarm')">
+                                <div *ngIf="trndlength>0">
+                                  <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}} of
+                                    {{trendDataLength}} results for <b>"TotalTrendlogs"</b>
+                                  </h5>
+                                </div>
+                                <div *ngIf="trndlength==0">
+                                  <h5 class="search-message py-2">Showing {{startingIndex }} - {{endingIndex}} of
+                                    {{trendDataLength}} results for <b>"Trendlog"</b>
+                                  </h5>
+                                </div>
+                              </div>
+
+                              <div
+                              *ngIf="(model.keyWord != null && model.keyWord != '') && (model.filterType == 'Energy')">
+                              <div *ngIf="trndlength>0">
+                                <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}} of
+                                  {{trendDataLength}} results for <b>"TotalTrendlogs"</b>
+                                </h5>
+                              </div>
+                              <div *ngIf="trndlength==0">
+                                <h5 class="search-message py-2">Showing {{startingIndex }} - {{endingIndex}} of
+                                  {{trendDataLength}} results for <b>"Trendlog"</b>
+                                </h5>
+                              </div>
+                            </div>
+
+
+                              <div *ngIf="model.keyWord == null || model.keyWord == ''">
+                                <div *ngIf="trndlength>0">
+                                  <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}}
+                                    <b>"Trendlogs"</b> in {{trendDataLength}} <b>"TotalTrendlogs"</b>
+                                  </h5>
+                                </div>
+                                <div *ngIf="trndlength==0">
+                                  <h5 class="search-message py-2">Showing {{startingIndex }} - {{endingIndex}} of
+                                    {{trendDataLength}} results for <b>"Trendlog"</b>
+                                  </h5>
+                                </div>
+                              </div>
+                              <div class="d-flex ">
+                                <mat-paginator #trendlogPaginator [hidden]="trndlength < 10" class="pageTop1"
+                                  [length]="trendDataLength" [pageSize]="pageSize" [pageIndex]="currentPageIndex"
+                                  [pageSizeOptions]="pageSizeOptions" (page)="getData($event, 'Trendlog')"
+                                  [showFirstLastButtons]="true" [disabled]="isDisable">
+                                </mat-paginator>
+                              </div>
+                            </div>
+                            <div *ngIf="isDetails !='true'; else elseBlock1">
+                              <div class="input-container" style="float:left">
+                                <i class="fa fa-filter icon" matTooltip="Filter"></i>
+                                <input class="form-control filter" type="text" name="search" placeholder="Filter"
+                                  [(ngModel)]="filter" (keyup.enter)="applyFilter($event.target.value,$event)"
+                                  (keyup)="filterByKey($event.target.value,$event)"
+                                  style="border-radius:0px;margin-left: 0px;">
+                              </div>
+                            </div>
+                            <ng-template #elseBlock1>
+                              <div class="input-container" style="float:left">
+                                <i class="fa fa-filter icon" matTooltip="Filter"></i>
+                                <input class="form-control filter" type="text" name="search" placeholder="Filter"
+                                  [(ngModel)]="filter" (keyup)="applyFilter1($event.target.value)"
+                                  style="border-radius:0px;margin-left: 0px;">
+                              </div>
+                            </ng-template>
+
+                            <div class="checkList">
+                              <a style="font-size:12px" (click)="clearSelection()"
+                                [class.disabled]="!(adhocUtility.trndcheckedList.length > 0)">Uncheck All</a>
+                            </div>
+                            <div class="checkList">
+                              <a style="font-size:12px" (click)="checked()"
+                                [class.disabled]="!(adhocUtility.trndcheckedList.length > 0)">
+                                PinSelectedtoTop
+                              </a>
+                            </div>
+                            <div class="float-end text-sm-right ml-4">
+                              <a style="font-size:12px" *ngIf="model.app == 'lookUpApp'"
+                                [class.disabled]="!(adhocUtility.trndcheckedList.length > 0)"><strong>Trendlog Objects :
+                                  {{adhocUtility.trndcheckedList.length}}</strong> </a>
+                            </div>
+                            <div>
+                              <div class="info1" *ngIf="model.app == 'lookUpApp'">
+                                <p>Select up to 12 Trendlogs for Analysis</p>
+                              </div>
+                              <div class="info" *ngIf="model.app != 'lookUpApp'">
+                                <p>Select up to 10 Trendlogs for Analysis</p>
+                              </div>
+                            </div>
+                            <br /><br />
+                          </div>
+                          <div class="scroller mt-4">
+                            <div *ngIf="trndlength > 0 && trendlogList.filteredData.length == 0">
+                              <h5 style="text-align:center">No results found for the specified filter, press <b>Enter</b>
+                                for more results
+                                from database</h5>
+                            </div>
+                            <div *ngIf="trndlength == 0">
+                              <h5 style="text-align:center" *ngIf="adhocUtility.trndsaveFilter == ''">No results found
+                              </h5>
+                              <h5 style="text-align:center" *ngIf="adhocUtility.trndsaveFilter != ''">No results found for
+                                <b>{{adhocUtility.trndsaveFilter}}</b>
+                              </h5>
+                            </div>
+                            <div class="example-container mat-elevation-z8 mt-3">
+
+                              <div class="spinner-container" *ngIf="trendlogList">
+                                <!-- <app-spinner *ngIf="showSpinner"></app-spinner> -->
+                              </div>
+                              <mat-table #table [dataSource]="trendlogList" #trendlogSort="matSort" *ngIf="trndlength>0"
+                                matSort [matSortActive]="sortProperty" [matSortDirection]="sortDirection">
+                                <ng-container matColumnDef="checked">
+                                  <mat-header-cell *matHeaderCellDef [ngClass]="'checkedWidthClass'"></mat-header-cell>
+                                  <mat-cell *matCellDef="let element" [ngClass]="'checkedWidthClass'">
+                                    <mat-checkbox value="{{ element }}" (change)="checkedState(element,$event)"
+                                      [(ngModel)]="element.checked"></mat-checkbox>
+                                  </mat-cell>
+                                </ng-container>
+                                <!-- First Column ID-->
+                                <ng-container matColumnDef="trendlogName">
+                                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'logWidthClass'"> Trendlog
+                                    Name </mat-header-cell>
+                                  <mat-cell *matCellDef="let element" [ngClass]="'logWidthClass'">
+                                    <ng-template #disabledLink>
+                                      <span *ngIf="model.app == 'lookUpApp'">{{element.trendlogName}}</span>
+                                    </ng-template>
+                                    <a *ngIf="model.app != 'lookUpApp'; else disabledLink"
+                                      [routerLink]="['./trendDetail']"
+                                      [queryParams]="{objectType: 'Trendlog',sid: element.sid,isDetails:true,app:model.app}">{{element.trendlogName}}</a>
+                                  </mat-cell>
+                                </ng-container>
+
+                                <!-- Second Column -->
+                                <ng-container matColumnDef="logDescription">
+                                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'logWidthClass'"> Trendlog
+                                    Description
+                                  </mat-header-cell>
+                                  <mat-cell *matCellDef="let element" [ngClass]="'logWidthClass'">
+                                    <ng-template #disabledLink1>
+                                      <span *ngIf="model.app == 'lookUpApp'">{{element.logDescription}}</span>
+                                    </ng-template>
+                                    <a *ngIf="model.app != 'lookUpApp'; else disabledLink1"
+                                      [routerLink]="['./trendDetail']"
+                                      [queryParams]="{objectType: 'Trendlog',sid: element.sid,isDetails:true,app:model.app}">{{element.logDescription}}</a>
+                                  </mat-cell>
+                                </ng-container>
+
+                                <!-- Third Column -->
+                                <ng-container matColumnDef="logDevNum">
+                                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'logWidthClass'"> Log Dev
+                                    Number </mat-header-cell>
+                                  <mat-cell *matCellDef="let element" [ngClass]="'logWidthClass'">
+                                    <ng-template #disabledLink3>
+                                      <span *ngIf="model.app == 'lookUpApp'">{{element.logDevNum}}</span>
+                                    </ng-template>
+                                    <a *ngIf="model.app != 'lookUpApp'; else disabledLink3"
+                                      [routerLink]="['./deviceDetail']"
+                                      [queryParams]="{objectType: 'Device',DevNum: element.logDevNum,isDetails:true,app:model.app}">{{element.logDevNum}}</a>
+                                    <div class="form-group">
+                                      <!-- <a target="_blank"
+                                         (click)="onNavigate(element.productCode)" href="#">{{element.productCode}}</a> -->
+                                    </div>
+                                  </mat-cell>
+                                </ng-container>
+                                <!-- Fourth Column -->
+                                <ng-container matColumnDef="logInst">
+                                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'logWidthClass'"> Log
+                                    Instance Number </mat-header-cell>
+                                  <mat-cell *matCellDef="let element" [ngClass]="'logWidthClass'"> {{element.logInst }}
+                                  </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="engineeringUnit">
+                                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'logWidthClass'">
+                                    Engineering Units </mat-header-cell>
+                                  <mat-cell *matCellDef="let element" [ngClass]="'logWidthClass'">
+                                    {{element.engineeringUnit }} </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="standardId">
+                                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'logWidthClass'"> Standard
+                                  </mat-header-cell>
+                                  <mat-cell *matCellDef="let element" [ngClass]="'logWidthClass'">
+                                    <!-- <mat-form-field style="width: 100%"> -->
+                                      <mat-select
+                                        [value]="element.standardID ? element.standardID : 'none'"
+                                        (selectionChange)="onChange($event, element)">
+                                        <mat-option value="none"> -- Select Standard -- </mat-option>
+                                        <mat-option *ngFor="let col of standards" [value]="col.standardID">{{ col.standard
+                                          }}</mat-option>
+                                      </mat-select>
+                                    <!-- </mat-form-field> -->
+                                  </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row *matHeaderRowDef="displayedColumns1; sticky: true"></mat-header-row>
+                                <mat-row *matRowDef="let row; columns: displayedColumns1;"></mat-row>
+                              </mat-table>
+
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+              <mat-expansion-panel class="mt-3 " [(expanded)]="alarmPanel" *ngIf="_util.licenseInfo?.productFeatures?.alarm">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    Alarm
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div>
+                  <div>
+                    <div class="mt-2 body">
+                      <div>
+                        <div>
+                          <div class="fixedPosition">
+                            <div
+                              class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+
+
+                              <div *ngIf="utility.patternShow">
+                                <div *ngIf="alrmlength>0">
+                                  <h5 class="search-message py-2">Showing {{startingIndex1 + 1}} - {{endingIndex1}}
+                                    of {{alarmDataLength}} results for Pattern<b>"{{model.keyWord}}"</b>
+                                    in
+                                    <b>"Alarm"</b>
+                                  </h5>
+                                </div>
+                                <div *ngIf="alrmlength==0">
+                                  <h5 class="search-message py-2">Showing {{startingIndex1}} - {{endingIndex1}}
+                                    of {{alarmDataLength}} results for Pattern<b>"{{model.keyWord}}"</b>
+                                    in
+                                    <b>"Alarm"</b>
+                                  </h5>
+                                </div>
+                              </div>
+                              <div *ngIf="(model.DevNum != null && model.DevNum != '') && !utility.patternShow">
+                                <div>
+                                  <div *ngIf="alrmlength>0">
+                                    <h5 class="search-message py-2">Showing {{startingIndex1 + 1}} - {{endingIndex1}} of
+                                      {{alrmlength}} results for <b>"Alarm"</b> in <b>"Device
+                                        {{model.DevNum}}"</b></h5>
+                                  </div>
+                                  <div *ngIf="alrmlength==0">
+                                    <h5 class="search-message py-2">Showing {{startingIndex1 }} - {{endingIndex1}} of
+                                      {{alrmlength}} results for <b>"Alarm"</b> in <b>"Device
+                                        {{model.DevNum}}"</b></h5>
+                                  </div>
+                                </div>
+                              </div>
+                              <div
+                                *ngIf="(model.keyWord != null && model.keyWord != '') && (model.filterType == 'Alarm')">
+                                <div *ngIf="alrmlength>0">
+                                  <h5 class="search-message py-2">Showing {{startingIndex1 + 1}} - {{endingIndex1}}
+                                    of {{alarmDataLength}} results for <b>"{{model.keyWord}}"</b> in
+                                    <b>"Alarm"</b>
+                                  </h5>
+                                </div>
+                                <div *ngIf="alrmlength==0">
+                                  <h5 class="search-message py-2">Showing 0 - 0
+                                    of {{alarmDataLength}} results for <b>"{{model.keyWord}}"</b> in
+                                    <b>"Alarm"</b>
+                                  </h5>
+                                </div>
+
+                              </div>
+                              <div
+                                *ngIf="(model.keyWord != null && model.keyWord != '') && (model.filterType == 'Trendlog')">
+                                <div *ngIf="alrmlength>0">
+                                  <h5 class="search-message py-2">Showing {{startingIndex1 + 1}} - {{endingIndex1}} of
+                                    {{alarmDataLength}} results for <b>"TotalAlarms"</b></h5>
+                                </div>
+                                <div *ngIf="alrmlength==0">
+                                  <h5 class="search-message py-2">Showing {{startingIndex1 }} - {{endingIndex1}} of
+                                    {{alarmDataLength}} results for <b>"Alarm"</b></h5>
+                                </div>
+                              </div>
+                              <div
+                                *ngIf="(model.keyWord != null && model.keyWord != '') && (model.filterType == 'Energy')">
+                                <div *ngIf="alrmlength>0">
+                                  <h5 class="search-message py-2">Showing {{startingIndex1 + 1}} - {{endingIndex1}} of
+                                    {{alarmDataLength}} results for <b>"TotalAlarms"</b></h5>
+                                </div>
+                                <div *ngIf="alrmlength==0">
+                                  <h5 class="search-message py-2">Showing {{startingIndex1 }} - {{endingIndex1}} of
+                                    {{alarmDataLength}} results for <b>"Alarm"</b></h5>
+                                </div>
+                              </div>
+
+                              <div *ngIf="model.keyWord == null || model.keyWord == ''">
+                                <div *ngIf="alrmlength>0">
+                                  <h5 class="search-message py-2">Showing {{startingIndex1 + 1}} - {{endingIndex1}}
+                                    <b>"Alarms"</b> in {{alarmDataLength}} <b>"TotalAlarms"</b>
+                                  </h5>
+                                </div>
+                                <div *ngIf="alrmlength==0">
+                                  <h5 class="search-message py-2">Showing {{startingIndex1 }} - {{endingIndex1}} of
+                                    {{alarmDataLength}} results for <b>"Alarm"</b></h5>
+                                </div>
+                              </div>
+                              <div class="d-flex">
+                                <mat-paginator #paginator [hidden]="alrmlength < 10" class="pageTop1"
+                                  [length]="alarmDataLength" [pageSize]="pageSize1" [pageIndex]="currentPageIndex1"
+                                  [pageSizeOptions]="pageSizeOptions" (page)="getData1($event,'Alarm')"
+                                  showFirstLastButtons>
+                                </mat-paginator>
+                              </div>
+                            </div>
+                            <div *ngIf="isDetails !='true'; else elseBlock1">
+                              <div class="input-container" style="float:left">
+                                <i class="fa fa-filter icon" matTooltip="Filter"></i>
+                                <input class="form-control filter" type="text" name="search" placeholder="Filter"
+                                  [(ngModel)]="alrmfilter" (keyup.enter)="alrmapplyFilter($event.target.value,$event)"
+                                  (keyup)="alrmfilterByKey($event.target.value,$event)"
+                                  style="border-radius:0px;margin-left:0px;">
+                              </div>
+                            </div>
+                            <ng-template #elseBlock1>
+                              <div class="input-container" style="float:left">
+                                <i class="fa fa-filter icon" matTooltip="Filter"></i>
+                                <input class="form-control filter" type="text" name="search" placeholder="Filter"
+                                  [(ngModel)]="alrmfilter" (keyup)="alrmapplyFilter1($event.target.value)"
+                                  style="border-radius:0px;margin-left: 0px;">
+                              </div>
+                            </ng-template>
+
+                            <div class="checkList">
+                              <a style="font-size:12px" (click)="alrmclearSelection()"
+                                [class.disabled]="!(adhocUtility.alrmcheckedList.length > 0)">Uncheck All</a>
+                            </div>
+                            <div class="checkList">
+                              <a style="font-size:12px" (click)="alrmchecked()"
+                                [class.disabled]="!(adhocUtility.alrmcheckedList.length > 0)">
+                                PinSelectedtoTop
+                              </a>
+                            </div>
+                            <div class="float-end text-sm-right ml-4">
+                              <a style="font-size:12px" *ngIf="model.app == 'lookUpApp'"
+                                [class.disabled]="!(adhocUtility.alrmcheckedList.length > 0)"><strong>Alarm Objects :
+                                  {{adhocUtility.alrmcheckedList.length}}</strong> </a>
+                            </div>
+                            <div>
+                              <div class="info1" *ngIf="model.app == 'lookUpApp'">
+                                <p>Select up to 12 Alarm for Analysis</p>
+                              </div>
+                              <div class="info" *ngIf="model.app != 'lookUpApp'">
+                                <p>Select up to 12 Alarm for Analysis</p>
+                              </div>
+                            </div>
+                            <br /><br /><br />
+                          </div>
+                          <div class="scroller">
+                            <div *ngIf="alrmlength > 0 && alarmList.filteredData.length == 0">
+                              <h5 style="text-align:center">No results found for the specified filter, press <b>Enter</b>
+                                for more results
+                                from database</h5>
+                            </div>
+                            <div *ngIf="alrmlength == 0">
+                              <h5 style="text-align:center" *ngIf="adhocUtility.alrmsaveFilter == ''">No results found
+                              </h5>
+                              <h5 style="text-align:center" *ngIf="adhocUtility.alrmsaveFilter != ''">No results found for
+                                <b>{{adhocUtility.alrmsaveFilter}}</b>
+                              </h5>
+                            </div>
+                            <div class="example-container mat-elevation-z8 mt-3">
+
+                              <mat-table #table [dataSource]="alarmList" #sort="matSort" matSort matSortActive="ID"
+                                *ngIf="alrmlength>0" [matSortActive]="alarmSortProperty"
+                                [matSortDirection]="alarmSortDirection">
+                                <ng-container matColumnDef="checked">
+                                  <mat-header-cell *matHeaderCellDef [ngClass]="'checkedWidthClass'"></mat-header-cell>
+                                  <mat-cell *matCellDef="let element" [ngClass]="'checkedWidthClass'">
+                                    <mat-checkbox value="{{ element }}" (change)="alrmcheckedState(element,$event)"
+                                      [(ngModel)]="element.checked">
+                                    </mat-checkbox>
+                                  </mat-cell>
+                                </ng-container>
+                                <!-- First Column ID-->
+                                <ng-container matColumnDef="objName">
+                                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'logWidthClass'"> Alarm
+                                    Name </mat-header-cell>
+                                  <mat-cell *matCellDef="let element" [ngClass]="'logWidthClass'">
+                                    <ng-template #disabledLink>
+                                      <span *ngIf="model.app == 'lookUpApp'">{{element.objName}}</span>
+                                    </ng-template>
+                                    <a *ngIf="model.app != 'lookUpApp'; else disabledLink"
+                                      [routerLink]="['./alarmDetail']"
+                                      [queryParams]="{objectType: 'Alarm',sid: element.sid,isDetails:true,app:model.app}">{{element.objName}}</a>
+                                  </mat-cell>
+                                </ng-container>
+
+                                <!-- Second Column -->
+                                <ng-container matColumnDef="alarmType">
+                                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'logWidthClass'"> Alarm
+                                    Type </mat-header-cell>
+                                  <mat-cell *matCellDef="let element" [ngClass]="'logWidthClass'">
+                                    {{element.alarmType}}
+                                  </mat-cell>
+                                </ng-container>
+
+                                <!-- Third Column -->
+                                <ng-container matColumnDef="descr">
+                                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'descrWidthClass'"> Alarm
+                                    Description </mat-header-cell>
+                                  <mat-cell *matCellDef="let element" [ngClass]="'descrWidthClass'">
+                                    <ng-template #disabledLink1>
+                                      <span *ngIf="model.app == 'lookUpApp'">{{element.descr}}</span>
+                                    </ng-template>
+                                    <a *ngIf="model.app != 'lookUpApp'; else disabledLink1"
+                                      [routerLink]="['./alarmDetail']"
+                                      [queryParams]="{objectType: 'Alarm',sid: element.sid,isDetails:true,app:model.app}">{{element.descr}}</a>
+                                    <div class="form-group">
+                                      <!-- <a target="_blank"
+                                            (click)="onNavigate(element.productCode)" href="#">{{element.productCode}}</a> -->
+                                    </div>
+                                  </mat-cell>
+                                </ng-container>
+                                <!-- Fourth Column -->
+                                <ng-container matColumnDef="propDescr">
+                                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'descrWidthClass'">
+                                    Property Object Description </mat-header-cell>
+                                  <mat-cell *matCellDef="let element" [ngClass]="'descrWidthClass'"> {{element.propDescr
+                                    }} </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="devInst">
+                                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'logWidthClass'"> Device
+                                    Instance </mat-header-cell>
+                                  <mat-cell *matCellDef="let element" [ngClass]="'logWidthClass'">
+                                    <ng-template #disabledLink2>
+                                      <span *ngIf="model.app == 'lookUpApp'">{{element.devInst}}</span>
+                                    </ng-template>
+                                    <a *ngIf="model.app != 'lookUpApp'; else disabledLink2"
+                                      [routerLink]="['./deviceDetail']"
+                                      [queryParams]="{objectType: 'Device',DevNum: element.devInst,isDetails:true,app:model.app}">{{element.devInst}}</a>
+                                  </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="standardId">
+                                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'logWidthClass'"> Standard
+                                  </mat-header-cell>
+                                  <mat-cell *matCellDef="let element" [ngClass]="'logWidthClass'">
+                                    <!-- <mat-form-field style="width: 100%"> -->
+                                      <mat-select
+                                        [value]="element.standardID ? element.standardID : 'none'"
+                                        (selectionChange)="alarmOnChange($event, element)">
+                                        <mat-option value="none"> -- Select Standard -- </mat-option>
+                                        <mat-option *ngFor="let col of alarmStandards" [value]="col.standardID">{{
+                                          col.standard }}</mat-option>
+                                      </mat-select>
+                                    <!-- </mat-form-field> -->
+                                  </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+                                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                              </mat-table>
+
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </mat-expansion-panel>
+              <mat-expansion-panel class="mt-3 " [(expanded)]="energyPanel" *ngIf="_util.licenseInfo?.productFeatures?.energy">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    Energy
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div>
+                  <div>
+                    <div class="mt-2 body">
+                      <div class="fixedPosition">
+                        <div
+                          class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+
+
+                          <div *ngIf="utility.patternShow">
+                            <div *ngIf="energylength>0">
+                              <h5 class="search-message py-2">Showing {{startingIndex2 + 1}} - {{endingIndex2}}
+                                of {{energyDataLength}} results for Pattern<b>"{{model.keyWord}}"</b>
+                                in
+                                <b>"Energy"</b>
+                              </h5>
+                            </div>
+                            <div *ngIf="energylength==0">
+                              <h5 class="search-message py-2">Showing {{startingIndex2}} - {{endingIndex2}}
+                                of {{energyDataLength}} results for Pattern<b>"{{model.keyWord}}"</b>
+                                in
+                                <b>"Energy"</b>
+                              </h5>
+                            </div>
+                          </div>
+                          <div *ngIf="(model.DevNum != null && model.DevNum != '') && !utility.patternShow">
+                            <div>
+                              <div *ngIf="energylength>0">
+                                <h5 class="search-message py-2">Showing {{startingIndex2 + 1}} - {{endingIndex2}} of
+                                  {{energylength}} results for <b>"Energy"</b> in <b>"Device
+                                    {{model.DevNum}}"</b></h5>
+                              </div>
+                              <div *ngIf="energylength==0">
+                                <h5 class="search-message py-2">Showing {{startingIndex2 }} - {{endingIndex2}} of
+                                  {{energylength}} results for <b>"Energy"</b> in <b>"Device
+                                    {{model.DevNum}}"</b></h5>
+                              </div>
+                            </div>
+                          </div>
+                          <div
+                            *ngIf="(model.keyWord != null && model.keyWord != '') && (model.filterType == 'Energy')">
+                            <div *ngIf="energylength>0">
+                              <h5 class="search-message py-2">Showing {{startingIndex2 + 1}} - {{endingIndex2}}
+                                of {{energyDataLength}} results for <b>"{{model.keyWord}}"</b> in
+                                <b>"Energy"</b>
+                              </h5>
+                            </div>
+                            <div *ngIf="energylength==0">
+                              <h5 class="search-message py-2">Showing 0 - 0
+                                of {{energyDataLength}} results for <b>"{{model.keyWord}}"</b> in
+                                <b>"Energy"</b>
+                              </h5>
+                            </div>
+
+                          </div>
+                          <div
+                          *ngIf="(model.keyWord != null && model.keyWord != '') && (model.filterType == 'Alarm')">
+                          <div *ngIf="energylength>0">
+                            <h5 class="search-message py-2">Showing {{startingIndex2 + 1}} - {{endingIndex2}} of
+                              {{energyDataLength}} results for <b>"TotalEnergy"</b></h5>
+                          </div>
+                          <div *ngIf="energylength==0">
+                            <h5 class="search-message py-2">Showing {{startingIndex2 }} - {{endingIndex2}} of
+                              {{energyDataLength}} results for <b>"Energy"</b></h5>
+                          </div>
+                        </div>
+                          <div
+                            *ngIf="(model.keyWord != null && model.keyWord != '') && (model.filterType == 'Trendlog')">
+                            <div *ngIf="energylength>0">
+                              <h5 class="search-message py-2">Showing {{startingIndex2 + 1}} - {{endingIndex2}} of
+                                {{energyDataLength}} results for <b>"TotalEnergy"</b></h5>
+                            </div>
+                            <div *ngIf="energylength==0">
+                              <h5 class="search-message py-2">Showing {{startingIndex2 }} - {{endingIndex2}} of
+                                {{energyDataLength}} results for <b>"Energy"</b></h5>
+                            </div>
+                          </div>
+                          <div *ngIf="model.keyWord == null || model.keyWord == ''">
+                            <div *ngIf="energylength>0">
+                              <h5 class="search-message py-2">Showing {{startingIndex2 + 1}} - {{endingIndex2}}
+                                <b>"Energy"</b> in {{energyDataLength}} <b>"TotalEnergy"</b>
+                              </h5>
+                            </div>
+                            <div *ngIf="energylength==0">
+                              <h5 class="search-message py-2">Showing {{startingIndex2 }} - {{endingIndex2}} of
+                                {{energyDataLength}} results for <b>"Energy"</b></h5>
+                            </div>
+                          </div>
+                          <div class="d-flex">
+                            <mat-paginator #energyPaginator [hidden]="energylength < 10" class="pageTop1"
+                              [length]="energyDataLength" [pageSize]="pageSize3" [pageIndex]="currentPageIndex3"
+                              [pageSizeOptions]="pageSizeOptions" (page)="getData3($event,'Energy')"
+                              showFirstLastButtons>
+                            </mat-paginator>
+                          </div>
+                        </div>
+                        <div *ngIf="isDetails !='true'; else elseBlock1">
+                          <div class="input-container" style="float:left">
+                            <i class="fa fa-filter icon" matTooltip="Filter"></i>
+                            <input class="form-control filter" type="text" name="search" placeholder="Filter"
+                              [(ngModel)]="energyfilter" (keyup.enter)="energyapplyFilter($event.target.value,$event)"
+                              (keyup)="energyfilterByKey($event.target.value,$event)"
+                              style="border-radius:0px;margin-left:0px;">
+                          </div>
+                        </div>
+                        <ng-template #elseBlock1>
+                          <div class="input-container" style="float:left">
+                            <i class="fa fa-filter icon" matTooltip="Filter"></i>
+                            <input class="form-control filter" type="text" name="search" placeholder="Filter"
+                              [(ngModel)]="energyfilter" (keyup)="energyapplyFilter1($event.target.value)"
+                              style="border-radius:0px;margin-left: 0px;">
+                          </div>
+                        </ng-template>
+
+                        <div class="checkList">
+                          <a style="font-size:12px" (click)="energyclearSelection()"
+                            [class.disabled]="!(adhocUtility.energycheckedList.length > 0)">Uncheck All</a>
+                        </div>
+                        <div class="checkList">
+                          <a style="font-size:12px" (click)="energychecked()"
+                            [class.disabled]="!(adhocUtility.energycheckedList.length > 0)">
+                            PinSelectedtoTop
+                          </a>
+                        </div>
+                        <div class="float-end text-sm-right ml-4">
+                          <a style="font-size:12px" *ngIf="model.app == 'lookUpApp'"
+                            [class.disabled]="!(adhocUtility.energycheckedList.length > 0)"><strong>Energy Objects :
+                              {{adhocUtility.energycheckedList.length}}</strong> </a>
+                        </div>
+                        <div>
+                          <div class="info1" *ngIf="model.app == 'lookUpApp'">
+                            <p>Select up to 12 objects for Analysis</p>
+                          </div>
+                          <div class="info" *ngIf="model.app != 'lookUpApp'">
+                            <p>Select up to 12 objects for Analysis</p>
+                          </div>
+                        </div>
+                        <br /><br /><br /><br />
+                      </div>
+                      <div class="scroller">
+                        <div *ngIf="energylength > 0 && energyList.filteredData.length == 0">
+                          <h5 style="text-align:center">No results found for the specified filter, press <b>Enter</b>
+                            for more results
+                            from database</h5>
+                        </div>
+                        <div *ngIf="energylength == 0">
+                          <h5 style="text-align:center" *ngIf="adhocUtility.energysaveFilter == ''">No results found
+                          </h5>
+                          <h5 style="text-align:center" *ngIf="adhocUtility.energysaveFilter != ''">No results found for
+                            <b>{{adhocUtility.energysaveFilter}}</b>
+                          </h5>
+                        </div>
+                        <div class="example-container mat-elevation-z8 mt-3">
+                          <mat-table #table [dataSource]="energyList"  #energySort="matSort" *ngIf="energylength>0"
+                            matSort matSortActive="ID" [matSortActive]="sortProperty" [matSortDirection]="sortDirection">
+
+                            <!-- Checkbox Column -->
+                            <ng-container matColumnDef="checked">
+                              <mat-header-cell *matHeaderCellDef> Checked </mat-header-cell>
+                              <mat-cell *matCellDef="let element">
+                                <mat-checkbox [(ngModel)]="element.checked" (change)="energycheckedState(element, $event)"></mat-checkbox>
+                              </mat-cell>
+                            </ng-container>
+
+                            <!-- Energy Name Column -->
+                            <ng-container matColumnDef="objName">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'logWidthClass'"> Energy Name </mat-header-cell>
+                              <mat-cell *matCellDef="let element" [ngClass]="'logWidthClass'">
+                                <ng-container *ngIf="model.app != 'lookUpApp'; else disabledLink">
+                                  <a [routerLink]="['./energyDetail']" [queryParams]="{ objectType: 'Energy', sid: element.sid, isDetails: true, app: model.app }">{{ element.objName }}</a>
+                                </ng-container>
+                                <ng-template #disabledLink>
+                                  <span *ngIf="model.app == 'lookUpApp'"> {{ element.objName }} </span>
+                                </ng-template>
+                              </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="energyType">
+                              <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'logWidthClass'"> Energy
+                                Type </mat-header-cell>
+                              <mat-cell *matCellDef="let element" [ngClass]="'logWidthClass'">
+                                {{element.alarmType}}
+                              </mat-cell>
+                            </ng-container>
+                             <ng-container matColumnDef="logDescription">
+                                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'descrWidthClass'"> Energy
+                                    Description </mat-header-cell>
+                                  <mat-cell *matCellDef="let element" [ngClass]="'descrWidthClass'">
+                                    <ng-template #disabledLink1>
+                                      <span *ngIf="model.app == 'lookUpApp'">{{element.logDescription}}</span>
+                                    </ng-template>
+                                    <a *ngIf="model.app != 'lookUpApp'; else disabledLink1"
+                                      [routerLink]="['./energyDetail']"
+                                      [queryParams]="{objectType: 'Energy',sid: element.sid,isDetails:true,app:model.app}">{{element.logDescription}}</a>
+                                    <div class="form-group">
+
+                                    </div>
+                                  </mat-cell>
+                                </ng-container>
+                                   <ng-container matColumnDef="logDevNum">
+                                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'logWidthClass'"> Device
+                                    Instance </mat-header-cell>
+                                  <mat-cell *matCellDef="let element" [ngClass]="'logWidthClass'">
+                                    <ng-template #disabledLink2>
+                                      <span *ngIf="model.app == 'lookUpApp'">{{element.logDevNum}}</span>
+                                    </ng-template>
+                                    <a *ngIf="model.app != 'lookUpApp'; else disabledLink2"
+                                      [routerLink]="['./deviceDetail']"
+                                      [queryParams]="{objectType: 'Device',DevNum: element.rateDevNum,isDetails:true,app:model.app}">{{element.logDevNum}}</a>
+                                  </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="logInst">
+                                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'logWidthClass'"> Device
+                                    Object </mat-header-cell>
+                                  <mat-cell *matCellDef="let element" [ngClass]="'logWidthClass'">
+                                    <ng-template #disabledLink2>
+                                      <span *ngIf="model.app == 'lookUpApp'">{{element.logInst}}</span>
+                                    </ng-template>
+                                    <a *ngIf="model.app != 'lookUpApp'; else disabledLink2"
+                                      [routerLink]="['./deviceDetail']"
+                                      [queryParams]="{objectType: 'Device',DevNum: element.rateDevNum,isDetails:true,app:model.app}">{{element.logInst}}</a>
+                                  </mat-cell>
+                                </ng-container>
+                                 <ng-container matColumnDef="standardId">
+                                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'logWidthClass'"> Standard
+                                  </mat-header-cell>
+                                  <mat-cell *matCellDef="let element" [ngClass]="'logWidthClass'">
+
+                                      <mat-select
+                                        [value]="element.standardID ? element.standardID : 'none'"
+                                        (selectionChange)="energyOnChange($event, element)">
+                                        <mat-option value="none"> -- Select Standard -- </mat-option>
+                                        <mat-option *ngFor="let col of energyStandards" [value]="col.standardID">{{
+                                          col.standard }}</mat-option>
+                                      </mat-select>
+
+                                  </mat-cell>
+                                </ng-container>
+
+
+                            <!-- Define Header and Row -->
+                            <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedColumns2;"></mat-row>
+
+                          </mat-table>
+                        <mat-header-row *matHeaderRowDef="displayedColumns2; sticky: true"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns2;"></mat-row>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+
+            </mat-accordion>
+            <hr />
+<div class="row" align="right" style="margin-top:10px">
+  <div class="col-md-12">
+    <button type="button" class="btn btn-outline-primary" style="margin-right: 5px" (click)="goBack()"
+      tabindex="10">
+      Back
+    </button>
+    <button *ngIf="_util.showLocationBack" type="button" class="btn btn-outline-primary"
+      style="margin-right: 5px" [disabled]="saveDisable || _util.saveDisable" (click)="updateLocation()"
+      tabindex="9">
+      Update
+    </button>
+    <button *ngIf="!_util.showLocationBack" type="submit" class="btn btn-outline-primary"
+      style="margin-right: 5px" [disabled]="saveDisable || _util.saveDisable" (click)="onSave()" tabindex="8">
+      Save
+    </button>
+
+        </div>
+      </div>
+          </div>
+          <hr/>
+    </div>
+  </div>
+</div>
+
+

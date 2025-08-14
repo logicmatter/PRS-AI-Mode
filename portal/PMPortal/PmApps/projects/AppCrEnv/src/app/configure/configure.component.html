@@ -1,0 +1,78 @@
+<mat-card>
+  <div class="fixedPosition">
+    <div>
+      <div class="col" style="margin-top: 5px;margin-bottom: 5px;margin-left:2px;">
+        <button type="button" class="btn btn-primary app-navs" style="margin-right: 5px" (click)="facet()"
+          [disabled]="_util.isFacet">
+          Facet
+        </button>
+        <button type="button" class="btn btn-primary app-navs" style="margin-right: 5px" (click)="standard()"
+          [disabled]="_util.isStandard">
+          Standard
+        </button>
+        <button type="button" class="btn btn-primary app-navs" style="margin-right: 5px" (click)="compilanceprofile()"
+          [disabled]="_util.iscompilanceprofile">
+          Compliance Profile
+        </button>
+        <button type="button" class="btn btn-primary app-navs" style="margin-right: 5px" (click)="location()"
+        [disabled]="_util.isLocation">
+        Environment
+      </button>
+      </div>
+    </div>
+    <div *ngIf="_util.isFacet">
+      <div style="text-align: right">
+        <i *ngIf="!_util.showFacet" class="fa fa-plus fa-1x "
+          style="cursor: pointer;margin-right: 3px;color:var(--primary-color) !important;"
+          (click)="addFacet()">&nbsp;<span class="app-navs">Add Facet</span></i>
+      </div>
+      <div *ngIf="_util.showFacet">
+        <app-add-facet></app-add-facet>
+      </div>
+      <div *ngIf="!_util.showFacet">
+        <app-crenv-facet></app-crenv-facet>
+      </div>
+    </div>
+    <div *ngIf="_util.isStandard">
+      <div style="text-align: right">
+        <i *ngIf="!_util.showStandard" class="fa fa-plus fa-1x "
+          style="cursor: pointer;margin-right: 3px ;color:var(--primary-color) !important;"
+          (click)="addStandard()">&nbsp;<span class="app-navs">Add Standard</span></i>
+      </div>
+
+      <div *ngIf="_util.showStandard">
+        <app-add-standard></app-add-standard>
+      </div>
+      <div *ngIf="!_util.showStandard">
+        <app-crenv-standard></app-crenv-standard>
+      </div>
+    </div>
+    <div *ngIf="_util.iscompilanceprofile">
+      <div style="text-align: right">
+        <i *ngIf="!_util.showcompilanceprofile" class="fa fa-plus fa-1x "
+          style="cursor: pointer;margin-right: 3px ;color:var(--primary-color) !important;"
+          (click)=" addcompilanceprofile()">&nbsp;<span class="app-navs">Add Profile</span></i>
+      </div>
+      <div *ngIf="_util.showcompilanceprofile">
+        <app-add-complianceprofile></app-add-complianceprofile>
+      </div>
+      <div *ngIf="!_util.showcompilanceprofile">
+        <app-crenv-complianceprofile></app-crenv-complianceprofile>
+      </div>
+    </div>
+
+  <div *ngIf="_util.isLocation">
+    <div style="text-align: right">
+      <i *ngIf="!_util.showLocation" class="fa fa-plus fa-1x "
+        style="cursor: pointer;margin-right: 3px ;color:var(--primary-color) !important;"
+        (click)="addLocation()">&nbsp;<span class="app-navs">Add Environment</span></i>
+    </div>
+    <div *ngIf="_util.showLocation">
+      <app-add-location></app-add-location>
+    </div>
+    <div *ngIf="!_util.showLocation">
+      <app-crenv-location></app-crenv-location>
+    </div>
+  </div>
+</div>
+</mat-card>

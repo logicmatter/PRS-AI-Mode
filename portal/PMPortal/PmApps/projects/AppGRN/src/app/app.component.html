@@ -1,0 +1,9 @@
+<div>
+  <app-app-header></app-app-header>
+  <div *ngIf="_utility.isReportList">
+    <app-rpt-list></app-rpt-list>
+  </div>
+  <div *ngIf="_utility.isCreateReport">
+    <app-view-report></app-view-report>
+  </div>
+</div>

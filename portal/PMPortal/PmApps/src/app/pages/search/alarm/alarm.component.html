@@ -1,0 +1,425 @@
+<div *ngIf="route.children.length == 0">
+  <div *ngIf="model.app == 'app' || model.app === 'adhoc'">
+    <app-spinner *ngIf="showSpinner"></app-spinner>
+    <div *ngIf="!showSpinner">
+
+      <div class="fixedPosition">
+        <span data-toggle="tooltip" title="Back" (click)="backParent()" class="sla-back-icon refresh-icon"
+        *ngIf="!utility.routerValue" style="margin-left: 0%;margin-top: 1px;">
+        <mat-icon mat-list-icon class="btn-primary click-event">arrow_back</mat-icon>
+      </span>
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+        <div *ngIf="utility.patternShow">
+          <div *ngIf="length>0">
+            <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}}
+              of {{dataLength}} results for Pattern<b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5>
+          </div>
+          <div *ngIf="length==0">
+            <h5 class="search-message py-2">Showing {{startingIndex}} - {{endingIndex}}
+              of {{dataLength}} results for Pattern<b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5>
+          </div>
+        </div>
+        <div *ngIf="(model.DevNum != null && model.DevNum != '') && !utility.patternShow">
+          <div>
+            <div *ngIf="length>0">
+              <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}} of
+                {{length}} results for <b>"{{model.objectType}}"</b> in <b>"Device {{model.DevNum}}"</b></h5>
+            </div>
+            <div *ngIf="length==0">
+              <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}} of
+                {{length}} results for <b>"{{model.objectType}}"</b> in <b>"Device {{model.DevNum}}"</b></h5>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="(model.DevNum == null || model.DevNum == '') && !utility.patternShow">
+          <div *ngIf="model.keyWord == null || model.keyWord == ''">
+            <div *ngIf="length>0">
+              <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}} <b>"{{model.objectType}}s"</b> in
+                {{dataLength}} <b>"Total{{model.objectType}}s"</b></h5>
+            </div>
+            <div *ngIf="length==0">
+              <h5 class="search-message py-2">Showing {{startingIndex }} - {{endingIndex}} of
+                {{dataLength}} results for <b>"{{model.objectType}}"</b></h5>
+            </div>
+          </div>
+          <div *ngIf="(model.keyWord != null && model.keyWord != '') && !utility.patternShow">
+            <div *ngIf="length>0">
+              <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}}
+                of {{dataLength}} results for <b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5>
+            </div>
+            <div *ngIf="length==0">
+              <h5 class="search-message py-2">Showing {{startingIndex}} - {{endingIndex}}
+                of {{dataLength}} results for <b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex" id="itemstm">
+          <mat-paginator #paginator [hidden]="length < 10" [length]="dataLength" [pageSize]="currentPageSize"
+            [pageIndex]="currentPageIndex" [pageSizeOptions]="pageSizeOptions" (page)="getData($event)"
+            [showFirstLastButtons]="true" [disabled]="isDisable" class="pageTop"></mat-paginator>
+        </div>
+        </div><br *ngIf="model.app ==='app'"/>
+        <div *ngIf="isDetails !='true'; else elseBlock1">
+          <div class="input-container " style="float:left">
+            <i class="fa fa-filter icon" matTooltip="Filter"></i>
+            <input class="form-control wrap-text" type="text" name="search" placeholder="Filter" [(ngModel)]="filter"
+              (keyup.enter)="applyFilter($event.target.value,$event)" (keyup)="filterByKey($event.target.value,$event)"
+              style="border-radius:0px;margin-left: 0px;">
+          </div>
+        </div>
+        <ng-template #elseBlock1>
+          <div class="input-container" style="float:left">
+            <i class="fa fa-filter icon" matTooltip="Filter"></i>
+            <input class="form-control wrap-text" type="text" name="search" placeholder="Filter" [(ngModel)]="filter"
+              (keyup)="applyFilter1($event.target.value)" style="border-radius:0px;margin-left: 0px;">
+          </div>
+        </ng-template>
+
+
+
+              <div class="checkList">
+          <a style="font-size:12px" (click)="clearSelection()"
+            [class.disabled]="!(adhocUtility.checkedList.length > 0)">Uncheck All</a>
+        </div>
+        <div class="checkList">
+          <a style="font-size:12px" (click)="checked()" [class.disabled]="!(adhocUtility.checkedList.length > 0)">
+            PinSelectedtoTop
+          </a>
+        </div>
+
+
+        <!-- <mat-form-field>
+          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+        </mat-form-field> -->
+        <div class="float-end ml-5 mr-2">
+          <button mat-raised-button matTooltip="Plot" class="plotButton"
+            [disabled]="!(adhocUtility.checkedList.length > 0)" (click)="getSelected()" *ngIf="model.app != 'app'">
+            <i class="fa fa-line-chart" style="font-size: 16px;font-weight: 500;cursor:none"></i>
+            Plot
+          </button>
+        </div>
+        <div class="float-end ml-5 mt-1">
+          <a  style="font-size:12px;" *ngIf="model.app == 'app'"
+            [class.disabled]="!(adhocUtility.checkedList.length > 0)"><strong>Alarm Objects :
+              {{adhocUtility.checkedList.length}}</strong> </a>
+        </div>
+        <div>
+          <div class="info" *ngIf="model.app == 'app'">
+            <p>Select up to 25 Alarms for Analysis</p>
+          </div>
+          <div class="info1" *ngIf="model.app != 'app'">
+            <p>Select up to 10 Alarms for Analysis</p>
+          </div>
+        </div>
+
+      </div><br /><br *ngIf="model.app === 'app'"/>
+      <div class="scroller mt-4">
+        <div *ngIf="isDetails !='true'; else elseBlock">
+          <div *ngIf="length > 0 && dataSource.filteredData.length == 0 ">
+            <h5 style="text-align:center">No results found for the specified filter, press <b>Enter</b> for more results
+              from database</h5>
+          </div>
+          <div *ngIf="length == 0">
+            <h5 style="text-align:center" *ngIf="adhocUtility.saveFilter == ''">No results found</h5>
+            <h5 style="text-align:center" *ngIf="adhocUtility.saveFilter != ''">No results found for
+              <b>{{adhocUtility.saveFilter}}</b></h5>
+          </div>
+        </div>
+        <ng-template #elseBlock>
+          <div *ngIf="dataSource.filteredData.length == 0">
+            <h5 style="text-align:center">No records found for filter <b>{{filter}}</b> in the fetched results</h5>
+          </div>
+        </ng-template>
+        <div class="example-container mat-elevation-z8">
+          <mat-table cdkDropList #table #list="cdkDropList" [dataSource]="dataSource" [cdkDropListData]="dataSource.data"
+            (cdkDropListDropped)="onListDrop($event)" #sort="matSort" matSort *ngIf="length > 0"
+            [matSortActive]="sortProperty" [matSortDirection]="sortDirection">
+            <ng-container matColumnDef="checked">
+              <mat-header-cell *matHeaderCellDef [ngClass]="'checkedWidthClass'"></mat-header-cell>
+              <mat-cell *matCellDef="let element" [ngClass]="'checkedWidthClass'">
+                <mat-checkbox value="{{ element }}" (change)="checkedState(element,$event)" [(ngModel)]="element.checked">
+                </mat-checkbox>
+              </mat-cell>
+            </ng-container>
+            <!-- First Column ID-->
+            <ng-container matColumnDef="objName">
+              <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'nameWidthClass'"> Alarm Name
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element" [ngClass]="'nameWidthClass'">
+                <ng-template #disabledLink>
+                  <span *ngIf="model.app == 'app'">{{element.objName}}</span>
+                </ng-template>
+                <a *ngIf="model.app != 'app'; else disabledLink" [routerLink]="['./alarmDetail']"
+                  [queryParams]="{objectType: 'Alarm',sid: element.sid,isDetails:true,app:model.app}">{{element.objName}}</a>
+              </mat-cell>
+            </ng-container>
+
+            <!-- Second Column -->
+            <ng-container matColumnDef="alarmType">
+              <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'typeWidthClass'"> Alarm Type
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element" [ngClass]="'typeWidthClass'">
+                {{element.alarmType}}
+              </mat-cell>
+            </ng-container>
+
+            <!-- Third Column -->
+            <ng-container matColumnDef="descr">
+              <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'descrWidthClass'"> Alarm Description
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element" [ngClass]="'descrWidthClass'">
+                <ng-template #disabledLink1>
+                  <span *ngIf="model.app == 'app'">{{element.descr}}</span>
+                </ng-template>
+                <a *ngIf="model.app != 'app'; else disabledLink1" [routerLink]="['./alarmDetail']"
+                  [queryParams]="{objectType: 'Alarm',sid: element.sid,isDetails:true,app:model.app}">{{element.descr}}</a>
+                <div class="form-group">
+                  <!-- <a target="_blank"
+                                    (click)="onNavigate(element.productCode)" href="#">{{element.productCode}}</a> -->
+                </div>
+              </mat-cell>
+            </ng-container>
+            <!-- Fourth Column -->
+            <ng-container matColumnDef="propDescr">
+              <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'propDescrWidthClass'"> Property Object
+                Description
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element" [ngClass]="'propDescrWidthClass'"> {{element.propDescr }} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="devInst">
+              <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'devInstWidthClass'"> Device Instance
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element" [ngClass]="'devInstWidthClass'">
+                <ng-template #disabledLink2>
+                  <span *ngIf="model.app == 'app'">{{element.devInst}}</span>
+                </ng-template>
+                <a *ngIf="model.app != 'app'; else disabledLink2" [routerLink]="['./deviceDetail']"
+                  [queryParams]="{objectType: 'Device',DevNum: element.devInst,isDetails:true,app:model.app}">{{element.devInst}}</a>
+              </mat-cell>
+            </ng-container>
+
+
+            <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag></mat-row>
+          </mat-table>
+
+          <!-- <mat-paginator [hidden]="length < 10"  [length]="dataLength" #paginator [pageSizeOptions]="[10, 20, 50, 100]" (page)="getData($event)" showFirstLastButtons>
+          </mat-paginator> -->
+
+
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+  <div *ngIf="model.app ==='search'">
+    <div *ngIf="!showSpinner">
+      <div class="fixedPosition">
+        <span data-toggle="tooltip" title="Back" (click)="backParent()" class="sla-back-icon refresh-icon"
+        *ngIf="!utility.routerValue" style="margin-left: 0%;margin-top: 1px;">
+        <mat-icon mat-list-icon class="btn-primary click-event">arrow_back</mat-icon>
+      </span>
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+        <div *ngIf="utility.patternShow">
+          <div *ngIf="length>0">
+            <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}}
+              of {{dataLength}} results for Pattern<b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5>
+          </div>
+          <div *ngIf="length==0">
+            <h5 class="search-message py-2">Showing {{startingIndex}} - {{endingIndex}}
+              of {{dataLength}} results for Pattern<b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5>
+          </div>
+        </div>
+        <div *ngIf="(model.DevNum != null && model.DevNum != '') && !utility.patternShow">
+          <div>
+            <div *ngIf="length>0">
+              <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}} of
+                {{length}} results for <b>"{{model.objectType}}"</b> in <b>"Device {{model.DevNum}}"</b></h5>
+            </div>
+            <div *ngIf="length==0">
+              <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}} of
+                {{length}} results for <b>"{{model.objectType}}"</b> in <b>"Device {{model.DevNum}}"</b></h5>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="(model.DevNum == null || model.DevNum == '') && !utility.patternShow">
+          <div *ngIf="model.keyWord == null || model.keyWord == ''">
+            <div *ngIf="length>0">
+              <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}} <b>"{{model.objectType}}s"</b> in
+                {{dataLength}} <b>"Total{{model.objectType}}s"</b></h5>
+            </div>
+            <div *ngIf="length==0">
+              <h5 class="search-message py-2">Showing {{startingIndex }} - {{endingIndex}} of
+                {{dataLength}} results for <b>"{{model.objectType}}"</b></h5>
+            </div>
+          </div>
+          <div *ngIf="(model.keyWord != null && model.keyWord != '') && !utility.patternShow">
+            <div *ngIf="length>0">
+              <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}}
+                of {{dataLength}} results for <b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5>
+            </div>
+            <div *ngIf="length==0">
+              <h5 class="search-message py-2">Showing {{startingIndex}} - {{endingIndex}}
+                of {{dataLength}} results for <b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex" id="itemstm">
+          <mat-paginator #paginator [hidden]="length < 10" [length]="dataLength" [pageSize]="currentPageSize"
+            [pageIndex]="currentPageIndex" [pageSizeOptions]="pageSizeOptions" (page)="getData($event)"
+            [showFirstLastButtons]="true" [disabled]="isDisable" class="pageTop"></mat-paginator>
+        </div>
+        </div>
+        <div *ngIf="isDetails !='true'; else elseBlock1">
+          <div class="input-container " style="float:left">
+            <i class="fa fa-filter icon" matTooltip="Filter"></i>
+            <input class="form-control wrap-text" type="text" name="search" placeholder="Filter" [(ngModel)]="filter"
+              (keyup.enter)="applyFilter($event.target.value,$event)" (keyup)="filterByKey($event.target.value,$event)"
+              style="border-radius:0px;margin-left: 0px;">
+          </div>
+        </div>
+        <ng-template #elseBlock1>
+          <div class="input-container" style="float:left">
+            <i class="fa fa-filter icon" matTooltip="Filter"></i>
+            <input class="form-control wrap-text" type="text" name="search" placeholder="Filter" [(ngModel)]="filter"
+              (keyup)="applyFilter1($event.target.value)" style="border-radius:0px;margin-left: 0px;">
+          </div>
+        </ng-template>
+         <div class="checkList">
+          <a style="font-size:12px" (click)="clearSelection()"
+            [class.disabled]="!(adhocUtility.checkedList.length > 0)">Uncheck All</a>
+        </div>
+        <div class="checkList">
+          <a style="font-size:12px" (click)="checked()" [class.disabled]="!(adhocUtility.checkedList.length > 0)">
+            PinSelectedtoTop
+          </a>
+        </div>
+        <div class="float-end ml-5 mr-2">
+          <button mat-raised-button matTooltip="Plot" class="plotButton"
+            [disabled]="!(adhocUtility.checkedList.length > 0)" (click)="getSelected()" *ngIf="model.app == 'search'">
+            <i class="fa fa-line-chart" style="font-size: 16px;font-weight: 500;cursor:none"></i>
+            Plot
+          </button>
+        </div>
+        <div class="float-end ml-5 mt-1">
+          <a  style="font-size:12px;" *ngIf="model.app != 'search'"
+            [class.disabled]="!(adhocUtility.checkedList.length > 0)"><strong>Alarm Objects :
+              {{adhocUtility.checkedList.length}}</strong> </a>
+        </div>
+        <div>
+
+          <div class="info1" >
+            <p>Select up to 10 Alarms for Analysis</p>
+          </div>
+        </div>
+
+      </div><br /><br />
+      <div class="scroller mt-4">
+        <div *ngIf="isDetails !='true'; else elseBlock">
+          <div *ngIf="length > 0 && dataSource.filteredData.length == 0 ">
+            <h5 style="text-align:center">No results found for the specified filter, press <b>Enter</b> for more results
+              from database</h5>
+          </div>
+          <div *ngIf="length == 0">
+            <h5 style="text-align:center" *ngIf="adhocUtility.saveFilter == ''">No results found</h5>
+            <h5 style="text-align:center" *ngIf="adhocUtility.saveFilter != ''">No results found for
+              <b>{{adhocUtility.saveFilter}}</b></h5>
+          </div>
+        </div>
+        <ng-template #elseBlock>
+          <div *ngIf="dataSource.filteredData.length == 0">
+            <h5 style="text-align:center">No records found for filter <b>{{filter}}</b> in the fetched results</h5>
+          </div>
+        </ng-template>
+        <div class="example-container mat-elevation-z8">
+          <mat-table cdkDropList #table #list="cdkDropList" [dataSource]="dataSource" [cdkDropListData]="dataSource.data"
+            (cdkDropListDropped)="onListDrop($event)" #sort="matSort" matSort *ngIf="length > 0"
+            [matSortActive]="sortProperty" [matSortDirection]="sortDirection">
+            <ng-container matColumnDef="checked">
+              <mat-header-cell *matHeaderCellDef [ngClass]="'checkedWidthClass'"></mat-header-cell>
+              <mat-cell *matCellDef="let element" [ngClass]="'checkedWidthClass'">
+                <mat-checkbox value="{{ element }}" (change)="checkedState(element,$event)" [(ngModel)]="element.checked">
+                </mat-checkbox>
+              </mat-cell>
+            </ng-container>
+            <!-- First Column ID-->
+            <ng-container matColumnDef="objName">
+              <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'nameWidthClass'"> Alarm Name
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element" [ngClass]="'nameWidthClass'">
+                <ng-template #disabledLink>
+                  <span *ngIf="model.app != 'search'">{{element.objName}}</span>
+                </ng-template>
+                <a *ngIf="model.app == 'search'; else disabledLink" [routerLink]="['./alarmDetail']"
+                  [queryParams]="{objectType: 'Alarm',sid: element.sid,isDetails:true,app:model.app}">{{element.objName}}</a>
+              </mat-cell>
+            </ng-container>
+
+            <!-- Second Column -->
+            <ng-container matColumnDef="alarmType">
+              <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'typeWidthClass'"> Alarm Type
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element" [ngClass]="'typeWidthClass'">
+                {{element.alarmType}}
+              </mat-cell>
+            </ng-container>
+
+            <!-- Third Column -->
+            <ng-container matColumnDef="descr">
+              <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'descrWidthClass'"> Alarm Description
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element" [ngClass]="'descrWidthClass'">
+                <ng-template #disabledLink1>
+                  <span *ngIf="model.app != 'search'">{{element.descr}}</span>
+                </ng-template>
+                <a *ngIf="model.app == 'search'; else disabledLink1" [routerLink]="['./alarmDetail']"
+                  [queryParams]="{objectType: 'Alarm',sid: element.sid,isDetails:true,app:model.app}">{{element.descr}}</a>
+                <div class="form-group">
+                  <!-- <a target="_blank"
+                                    (click)="onNavigate(element.productCode)" href="#">{{element.productCode}}</a> -->
+                </div>
+              </mat-cell>
+            </ng-container>
+            <!-- Fourth Column -->
+            <ng-container matColumnDef="propDescr">
+              <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'propDescrWidthClass'"> Property Object
+                Description
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element" [ngClass]="'propDescrWidthClass'"> {{element.propDescr }} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="devInst">
+              <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'devInstWidthClass'"> Device Instance
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element" [ngClass]="'devInstWidthClass'">
+                <ng-template #disabledLink2>
+                  <span *ngIf="model.app != 'search'">{{element.devInst}}</span>
+                </ng-template>
+                <a *ngIf="model.app == 'search'; else disabledLink2" [routerLink]="['./deviceDetail']"
+                  [queryParams]="{objectType: 'Device',DevNum: element.devInst,isDetails:true,app:model.app}">{{element.devInst}}</a>
+              </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;" ></mat-row>
+
+
+          </mat-table>
+
+          <!-- <mat-paginator [hidden]="length < 10"  [length]="dataLength" #paginator [pageSizeOptions]="[10, 20, 50, 100]" (page)="getData($event)" showFirstLastButtons>
+          </mat-paginator> -->
+
+
+        </div>
+      </div>
+
+
+    </div>
+
+  </div>
+</div>
+<div>
+  <router-outlet></router-outlet>
+</div>
+

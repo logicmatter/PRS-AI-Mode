@@ -1,0 +1,49 @@
+<h5 style="color:#e85d1b;text-transform:uppercase">{{data.appName}}</h5>
+<h5>{{data.reportName}}</h5>
+<mat-dialog-content class="mat-typography" style="background-color:#f7f7f7">
+  <div class="input-group mb-3" style="margin-top:10px;">
+    <div class="input-group-prepend">
+      <span style="padding: 0.7rem 0.75rem" class="input-group-text"><i class="fa fa-filter"  aria-hidden="true"></i></span>
+    </div>
+    <input type="text" class="form-control" placeholder="Filter" [(ngModel)]="filter" />
+  </div>
+  <div *ngFor="let f of data.scheduledFiles | orderBy:['-createdOn'] | filter: filter | paginate: { id: 'reportFiles', itemsPerPage:  config.itemsPerPage, currentPage: p1 }">
+
+    <mat-card class="mb-3" style="margin-top:3px">
+      <mat-card-header>
+        <div mat-card-avatar class="">
+          <span matTooltip="Download PDF" *ngIf="f.fileFormat === 'pdf'" style="color:brown;margin:5px;">
+            <i class="fa fa-file-pdf-o" style="font-size: 27px;"></i>
+          </span>
+          <span matTooltip="Download Excel" *ngIf="f.fileFormat === 'xls' || f.fileFormat === 'xlsx'" style="color:green;">
+            <i class="fa fa-file-excel-o" style="font-size: 27px;"></i>
+          </span>
+        </div>
+        <mat-card-title>{{f.createdOn}}</mat-card-title>
+        <mat-card-subtitle>{{data.reportName}}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-actions align="right">
+        <span matTooltip="Download" style="color:#1a3a7f;margin:10px;cursor: pointer;">
+          <i class="fa fa-download"
+             style="font-size: 30px;" (click)="download(f)"></i>
+        </span>
+        <span matTooltip="Delete" style="color:#1a3a7f;margin:10px;cursor: pointer;">
+          <i class="fa fa-trash-o"
+             style="font-size: 30px;" (click)="deletes(f)"></i>
+        </span>
+                <!--<span matTooltip="Share via Mail" style="color:brown;margin:5px;cursor: pointer;">
+          <i class="fa fa-share-alt"
+             style="font-size: 15px;"></i>
+        </span>-->
+      </mat-card-actions>
+    </mat-card>
+
+  </div>
+  <pagination-controls id="reportFiles" *ngIf="data.scheduledFiles.length > 0" (pageChange)="p1 = $event"
+                       autoHide=true class="my-pagination"></pagination-controls>
+  <mat-card *ngIf="data.scheduledFiles.length == 0" class="mb-4" style="margin-top:4px"><mat-card-title>No scheduled files found</mat-card-title></mat-card>
+</mat-dialog-content>
+<!-- <mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>
+</mat-dialog-actions> -->

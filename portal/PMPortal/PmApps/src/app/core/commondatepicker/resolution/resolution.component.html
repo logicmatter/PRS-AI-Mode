@@ -1,0 +1,10 @@
+<div class="mt-2">
+  <form class="form-inline">
+    <!--<div class="form-group">-->
+      <label class="ml-4 control-label gdp-label" for="resolution" >Resolution</label>
+        <mat-select style="padding-left: 10px;" id="resolution" class="col-sm-7 input-select gdp-select" [(ngModel)]="datePickerHelper.resolution" name="resolution" (ngModelChange)="changeResolution($event)" [(value)]="datePickerHelper.resolution">
+          <mat-option *ngFor="let resolution of coreService.resolutions" [value]="resolution.value">{{resolution.key}}</mat-option>
+        </mat-select>
+      <!--</div>-->
+  </form>
+</div>

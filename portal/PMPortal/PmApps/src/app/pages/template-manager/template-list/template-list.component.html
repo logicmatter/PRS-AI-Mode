@@ -1,0 +1,91 @@
+<div class="app-content">
+  <div class="d-flex flex-column">
+  <mat-card class="card" [class.expanded]="isRdlTemplatesListExpanded">
+    <legend class="template"
+    (click)="toggleRdlTemplatesListExpansion()">
+  <span>PRS Templates List</span>
+  <span class="arrow" [ngClass]="{ 'arrow-down': isRdlTemplatesListExpanded, 'arrow-right': !isRdlTemplatesListExpanded }"></span>
+</legend>
+    <app-spinner *ngIf="isLoading"></app-spinner>
+    <div *ngIf="!isLoading && isRdlTemplatesListExpanded">
+        <div class="col-md-12 mb-2">
+          <fieldset class="common-note">
+            <div>
+              <b>Note: </b><span>Click on Template Name link to download the RDL file</span>
+            </div>
+          </fieldset>
+        </div>
+        <div class="col-md-3" style="margin-top:12px;">
+          <app-filter [placeHolderText]="'Filter'"></app-filter>
+        </div>
+        <div class="table-responsive" *ngIf="!isLoading">
+          <table class='table table-bordered tableStyles' *ngIf="templatesList.length>0">
+            <thead class="headerStyle">
+              <tr>
+                <th>Template Name</th>
+                <th>Description</th>
+                <th>Template Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let temp of templatesList | filter: coreService.filter">
+                <td><a style="color:#007bff;cursor:pointer;" title="Download RDL"
+                    (click)="downloadRdl(temp)">{{ temp.templateName }}</a></td>
+                <td>{{ temp.description }}</td>
+                <td><span style="text-transform:uppercase">{{ temp.templateType}}</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <a routerLink="../template-deploy" *ngIf="templatesList.length == 0">No Templates found. Deploy a Template for
+            the selected Tenant.</a>
+        </div>
+    </div>
+  </mat-card>
+  </div>
+<div *ngIf="_utility.licenseInfo.isGrafanaInstalled">
+  <div class="d-flex flex-column">
+    <mat-card  class="card" [class.expanded]="isGrafanaTemplatesListExpanded">
+      <legend class="template"
+      (click)="toggleGrafanaTemplatesListExpansion()">
+    <span>Grafana Templates List</span>
+    <span class="arrow" [ngClass]="{ 'arrow-down': isGrafanaTemplatesListExpanded, 'arrow-right': !isGrafanaTemplatesListExpanded }"></span>
+  </legend>
+      <app-spinner *ngIf="isLoading"></app-spinner>
+      <div *ngIf="!isLoading && isGrafanaTemplatesListExpanded">
+          <div class="col-md-12 mb-2">
+            <fieldset class="common-note">
+              <div>
+                <b>Note: </b><span>Click on Grafana Template Name link to download the JSON file</span>
+              </div>
+            </fieldset>
+          </div>
+          <div class="col-md-3" style="margin-top:12px;">
+            <app-filter [placeHolderText]="'Filter'"></app-filter>
+          </div>
+          <div class="table-responsive" *ngIf="!isLoading">
+            <table class='table table-bordered tableStyles' *ngIf="GrafanatemplatesList.length>0">
+              <thead class="headerStyle">
+                <tr>
+                  <th>Template Name</th>
+                  <th>Description</th>
+                  <th>Template Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let Grafanatemp of GrafanatemplatesList | filter: coreService.filter">
+                  <td><a style="color:#007bff;cursor:pointer;" title="Download json"
+                      (click)="downloadjson(Grafanatemp)">{{ Grafanatemp.templateName }}</a></td>
+                  <td>{{ Grafanatemp.description }}</td>
+                  <td><span style="text-transform:uppercase">{{ Grafanatemp.templateType}}</span></td>
+                </tr>
+              </tbody>
+            </table>
+            <a routerLink="../template-deploy" *ngIf="GrafanatemplatesList.length == 0">No Templates found. Deploy a Template for
+              the selected Tenant.</a>
+          </div>
+      </div>
+    </mat-card>
+    </div>
+</div>
+
+</div>

@@ -1,0 +1,12 @@
+<div style="margin-top: -15px;margin-bottom: -15px;">
+  <span style="font-size:x-small;" *ngIf="!(_utility.tenants.length>0)">{{tenantLoadMessage}}</span>
+  <mat-form-field *ngIf="_utility.tenants.length > 0 && !_utility.pmanalyticmode" appearance="none">
+    <mat-select [(ngModel)]="_utility.tenantId" class="tenant-select tenant" (ngModelChange)="getSelectedTenant($event)"
+      [disabled]="_utility.showSpinner" [compareWith]="compareFn">
+      <mat-option value="default" disabled>Select Tenant</mat-option>
+      <mat-option *ngFor="let tenant of _utility.tenants" [value]="tenant">
+        {{tenant.tenantName}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>

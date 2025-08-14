@@ -1,0 +1,26 @@
+table tr {
+  display: flex;
+}
+tr.mat-footer-row,
+tr.mat-row {
+  height: auto;
+  overflow: visible;
+}
+.nameWidthClass {
+  position: relative;
+  width: 120px;
+  white-space: normal;
+  word-wrap: break-word;
+  font-size: 14px; /* Adjust the font size as needed */
+  vertical-align: top;
+}
+
+// .nameWidthClass:hover {
+//   z-index: 2;
+//   white-space: pre-wrap;
+//   text-overflow: unset;
+//   width:500px;
+//   height: auto;
+//   overflow: auto;
+//   background-color: #f1f1f1;
+// }

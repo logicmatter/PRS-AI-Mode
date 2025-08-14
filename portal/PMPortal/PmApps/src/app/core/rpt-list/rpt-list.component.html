@@ -1,0 +1,267 @@
+<div *ngIf="searchFlag">
+  <app-spinner *ngIf="showSpinner"></app-spinner>
+  <div *ngIf="!showSpinner">
+    <div *ngIf="length !=0">
+      <div *ngIf="utility.patternShow">
+        <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex > length ? length : endingIndex}}
+          of {{length}} results for Pattern<b>"{{_searchModelInput.keyWord}}"</b> in
+          <b>"{{_searchModelInput.objectType}}"</b>
+        </h5>
+      </div>
+      <div *ngIf="(_searchModelInput.DevNum != null && _searchModelInput.DevNum != '') && !utility.patternShow">
+        <div>
+          <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex > length ? length :
+            endingIndex}} of
+            {{length}} results for <b>"{{_searchModelInput.objectType}}"</b> in <b>"Device
+              {{_searchModelInput.DevNum}}"</b></h5>
+        </div>
+      </div>
+      <div *ngIf="(_searchModelInput.DevNum == null || _searchModelInput.DevNum == '') && !utility.patternShow">
+        <div *ngIf="_searchModelInput.keyWord == null || _searchModelInput.keyWord == ''">
+          <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex > length ? length :
+            endingIndex}} <b>"{{_searchModelInput.objectType}}"</b> in
+            {{length}} <b>" Total{{_searchModelInput.objectType}}"</b></h5>
+
+        </div>
+        <div *ngIf="(_searchModelInput.keyWord != null && _searchModelInput.keyWord != '') && !utility.patternShow">
+          <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex > length ? length :
+            endingIndex}}
+            of {{length}} results for <b>"{{_searchModelInput.keyWord}}"</b> in
+            <b>"{{_searchModelInput.objectType}}"</b>
+          </h5>
+        </div>
+      </div>
+      <div class="input-container" style="float:left;margin-top: 15px;">
+        <i class="fa fa-filter icon" matTooltip="Filter"></i>
+        <input class="form-control" type="text" name="search" placeholder="Filter"
+          (keyup)="applyFilter($event.target.value)" style="border-radius:0px;width:auto;margin-left: 0px;">
+        <!-- <mat-button-toggle-group name="filterTypes" aria-label="Font Style" [value]="selectedFilter" class="ml-2"
+          style="font-size: 14px;height: 38px;">
+          <mat-button-toggle *ngFor="let filterType of filterTypes" [value]="filterType.value"
+            (click)="onChangeFilter(filterType.name)">{{filterType.name}}</mat-button-toggle>
+        </mat-button-toggle-group> -->
+      </div><br /><br /><br />
+
+      <div class="example-container mat-elevation-z8">
+        <mat-table #table [dataSource]="searchRptList" #searchRptSort="matSort" matSort>
+          <ng-container matColumnDef="appName">
+            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'iconsWidthClass'" class="appName"> App Name
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="'iconsWidthClass'">
+              <img src="{{'assets/icons/'+element.normalizedAppName+'.svg'}}" [ngClass]="'image1'"
+                class="toggle-tenants" aria-hidden="false" matTooltip="{{element.appName}}" />
+            </mat-cell>
+          </ng-container>
+
+          <!-- First Column ID-->
+          <ng-container matColumnDef="reportName">
+            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'nameWidthClass'"> Report Name
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="'nameWidthClass'">
+              <div class="repName" (click)="runReport(element)"> {{element.reportName}}</div>
+            </mat-cell>
+          </ng-container>
+
+          <!-- Second Column -->
+          <ng-container matColumnDef="createdBy">
+            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'dateWidthClass'"> Created By
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="'wrap-text-cell dateWidthClass'">
+              {{element.createdBy}}
+            </mat-cell>
+          </ng-container>
+
+          <!-- Third Column -->
+          <ng-container matColumnDef="lastModifiedOn">
+            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'dateWidthClass'"> Last Modified
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="'dateWidthClass'">{{element.lastModifiedOn | date:
+              "yyyy-MM-dd HH:mm:ss"}}
+            </mat-cell>
+          </ng-container>
+          <!-- Fourth Column -->
+          <ng-container matColumnDef="actions">
+            <mat-header-cell *matHeaderCellDef [ngClass]="'actnWidthClass'">Actions </mat-header-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="'actnWidthClass'">
+              <img src="assets/icons/duplicate.svg" [ngClass]="'image'"
+                class="toggle-tenants mx-2 click-event" aria-hidden="false" matTooltip="Duplicate"
+                (click)="saveReport(element)" />
+              <img src="assets/icons/noun_edit_1644623.svg" [ngClass]="'image'"
+                class="toggle-tenants mx-2 click-event" aria-hidden="false" matTooltip="Edit" matTooltipClass="tooltip"
+                (click)="editReport(element)" />
+              <img src="assets/icons/noun_play_1939987.svg" [ngClass]="'image'"
+                class="toggle-tenants mx-2 click-event" aria-hidden="false" matTooltip="Run" matTooltipClass="tooltip"
+                (click)="runReport(element)" />
+              <img [src]="element.scheduleId ? 'assets/icons/Group 230.svg' : 'assets/icons/Group 215.svg'" matTooltipClass="tooltip" [ngClass]="'image'" class="toggle-tenants mx-2 click-event" aria-hidden="false" matTooltip="Schedule"
+                (click)="schedule(element)" />
+              <img src="assets/icons/noun_Folder_3604475.svg" [ngClass]="'image'"
+                class="toggle-tenants mx-2 click-event" aria-hidden="false" matTooltip="View Files" matTooltipClass="tooltip"
+                (click)="getScheduledFiles(element)" />
+              <img src="assets/icons/Group 216.svg" [ngClass]="'image'" class="toggle-tenants mx-2 click-event" matTooltipClass="tooltip"
+                aria-hidden="false" matTooltip="Delete" (click)="openDialog(element)" />
+            </mat-cell>
+          </ng-container>
+
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+
+        <mat-paginator [hidden]="length < 10" #searchRptPaginator [pageSizeOptions]="[10, 25, 50, 100]"
+          (page)="getData($event)" showFirstLastButtons>
+        </mat-paginator>
+
+      </div>
+    </div>
+    <div *ngIf="length == 0">
+      <h5 style="text-align:center;padding: 25px;">No Reports Available</h5>
+    </div>
+  </div>
+</div>
+<div *ngIf="!searchFlag">
+  <app-spinner *ngIf="showSpinner"></app-spinner>
+
+  <div *ngIf="!showSpinner">
+    <div class="input-container" style="float:left;margin-top: 15px;">
+      <i class="fa fa-filter icon" matTooltip="Filter"></i>
+      <input class="form-control" type="text" name="search" placeholder="Filter"
+        (keyup)="applyFilter1($event.target.value)" style="border-radius:0px;width:auto;margin-left: 0px;">
+    </div>
+
+    <br /><br /><br />
+    <div *ngIf="length1 !=0">
+      <div class="example-container mat-elevation-z8">
+        <mat-table #table [dataSource]="appRptList" #appRptSort="matSort" matSort>
+          <!-- Case 1: When _utility.importerdatasource is true -->
+          <ng-container matColumnDef="appName">
+            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'iconsWidthClass'" class="appName"> 
+              App Name
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="'iconsWidthClass'">
+              <ng-container *ngIf="!_utility.importerdatasource">
+                <img src="{{'assets/icons/'+element.normalizedAppName+'.svg'}}" [ngClass]="'image1'"
+                     class="toggle-tenants" aria-hidden="false" matTooltip="{{element.appName}}" />
+              </ng-container>
+              <ng-container *ngIf="_utility.Transformerdatasource == 'Transformer'">
+                <img [src]="element.scheduleId ? 'assets/icons/Transformer_Active.svg' : 'assets/icons/Transformer.svg'" 
+         [ngClass]="'image1'" 
+         class="toggle-tenants" 
+         aria-hidden="false" 
+         matTooltip="Transformer"
+         />
+              </ng-container>
+              <ng-container *ngIf="_utility.Transformerdatasource == 'Exporter'">
+                <img [src]="element.scheduleId ? 'assets/icons/Exporter_Active.svg' : 'assets/icons/Exporter.svg'" 
+                [ngClass]="'image1'" 
+                class="toggle-tenants" 
+                aria-hidden="false" 
+                matTooltip="Exporter" />
+              </ng-container>
+              <ng-container *ngIf="_utility.Transformerdatasource == 'Maintainer'">
+                <img [src]="element.scheduleId ? 'assets/icons/Maintainer_Active.svg' : 'assets/icons/Maintainer.svg'" 
+                [ngClass]="'image1'" 
+                class="toggle-tenants" 
+                aria-hidden="false" 
+                matTooltip="Maintainer" />
+              </ng-container>
+            </mat-cell>
+          </ng-container>
+          
+
+
+          <!-- First Column ID-->
+          <ng-container matColumnDef="reportName">
+            
+            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'nameWidthClass'">
+              <!-- Default header "Report Name" when _utility.importerdatasource is falsy -->
+              <ng-container *ngIf="!_utility.importerdatasource; else conditionalHeader">
+                Report Name
+              </ng-container>
+              
+              <!-- Conditional header based on _utility.Transformerdatasource -->
+              <ng-template #conditionalHeader>
+                <ng-container *ngIf="_utility.Transformerdatasource === 'Transformer'; else exporterHeader">
+                  Transformer Name
+                </ng-container>
+              </ng-template>
+              
+              <ng-template #exporterHeader>
+                <ng-container *ngIf="_utility.Transformerdatasource === 'Exporter'; else maintainerHeader">
+                  Exporter Name
+                </ng-container>
+              </ng-template>
+              
+              <ng-template #maintainerHeader>
+                <ng-container *ngIf="_utility.Transformerdatasource === 'Maintainer'; else reportNameDefault">
+                  Maintainer Name
+                </ng-container>
+              </ng-template>
+          
+              <!-- Fallback to default Report Name -->
+              <ng-template #reportNameDefault>
+                Report Name
+              </ng-template>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="'nameWidthClass'">
+              <div class="repName" (click)="runReport(element)"> {{element.reportName}}</div>
+            </mat-cell>
+          </ng-container>
+
+          <!-- Second Column -->
+          <ng-container matColumnDef="createdBy">
+            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'dateWidthClass'"> Created By
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="'wrap-text-cell dateWidthClass'">
+              {{element.createdBy}}
+            </mat-cell>
+          </ng-container>
+
+          <!-- Third Column -->
+          <ng-container matColumnDef="lastModifiedOn">
+            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'dateWidthClass'"> Last Modified
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="'dateWidthClass'">{{element.lastModifiedOn | date:
+              "yyyy-MM-dd HH:mm:ss"}}
+            </mat-cell>
+          </ng-container>
+          <!-- Fourth Column -->
+          <ng-container matColumnDef="actions">
+            <mat-header-cell *matHeaderCellDef [ngClass]="'actnWidthClass'">Actions </mat-header-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="'actnWidthClass'">
+              <img src="assets/icons/duplicate.svg"  [ngClass]="'image'"
+              class="toggle-tenants mx-2 click-event" aria-hidden="false" matTooltip="Duplicate" matTooltipClass="tooltip"
+              (click)="saveReport(element)" />
+              <img src="assets/icons/noun_edit_1644623.svg" [ngClass]="'image'"
+                class="toggle-tenants mx-2 click-event" aria-hidden="false" matTooltip="Edit" matTooltipClass="tooltip"
+                (click)="editReport(element)" />
+              <img src="assets/icons/noun_play_1939987.svg" [ngClass]="'image'"
+                class="toggle-tenants mx-2 click-event" aria-hidden="false" matTooltip="Run" matTooltipClass="tooltip"
+                (click)="runReport(element)" />
+              <img [src]="element.scheduleId ? 'assets/icons/Group 230.svg' : 'assets/icons/Group 215.svg'" [ngClass]="'image'"  matTooltipClass="tooltip" class="toggle-tenants mx-2 click-event" aria-hidden="false" matTooltip="Schedule"
+                (click)="schedule(element)" />
+              <img src="assets/icons/noun_Folder_3604475.svg" [ngClass]="'image'"
+                class="toggle-tenants mx-2 click-event" aria-hidden="false" matTooltip="View Files" matTooltipClass="tooltip"
+                (click)="getScheduledFiles(element)" />
+              <img src="assets/icons/Group 216.svg" [ngClass]="'image'"  class="toggle-tenants mx-2 click-event" matTooltipClass="tooltip"
+                aria-hidden="false" matTooltip="Delete" (click)="openDialog(element)" />
+            </mat-cell>
+          </ng-container>
+
+
+
+          <mat-header-row *matHeaderRowDef="displayedColumns1"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns1;"></mat-row>
+        </mat-table>
+
+        <mat-paginator [hidden]="length1 < 10" #appRptPaginator [pageSizeOptions]="[10, 25, 50, 100]"
+          (page)="getData($event)" showFirstLastButtons>
+        </mat-paginator>
+
+      </div>
+    </div>
+    <div *ngIf="length1 == 0">
+      <h5 style="text-align:center;padding: 25px;">No Reports Available</h5>
+    </div>
+
+  </div>
+</div>

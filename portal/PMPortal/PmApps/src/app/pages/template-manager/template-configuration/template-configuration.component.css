@@ -1,0 +1,41 @@
+.content{
+  display: flex;
+  margin-bottom: 20px;
+}
+.input{
+  width: 40rem;
+}
+
+
+
+
+@media screen and (min-width: 700px) and (max-width:1200px) {
+  label{
+    white-space: nowrap;
+  }
+  .input{
+    width: 23rem;
+  }
+  img{
+    margin-left: 0px;
+    width: 70%;
+  }
+}
+
+@media screen and (min-width: 300px) and (max-width:900px) {
+  .form-group.form-inline.content {
+    display: flex;
+    flex-wrap: wrap; 
+
+  }
+  input{
+    margin-top: 6px;
+}
+img{
+  margin-left: 10px;
+  width: 80%;
+  height: 60px;
+}
+  
+  
+  }

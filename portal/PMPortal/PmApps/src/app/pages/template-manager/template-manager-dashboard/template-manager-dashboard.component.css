@@ -1,0 +1,44 @@
+a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+.mat-tab-label, .mat-tab-link {
+  color: #323C43;
+  font-family: Arial,sans-serif !important;
+  font: normal normal 600 14px/20px Arial;
+}
+@media screen and  (min-width: 360px) and (max-width:550px) {
+  .mat-tab-label, .mat-tab-link {
+
+    font: normal normal 600 11px/20px Arial;
+  }
+  .mat-tab-link {
+    height: 30px;
+  }
+  legend {
+    font-size: 1rem;
+  }
+  .form-control {
+    font-size: 0.7rem;
+  }
+  .col-md-2{
+    font-size: 12px;
+  }
+}
+

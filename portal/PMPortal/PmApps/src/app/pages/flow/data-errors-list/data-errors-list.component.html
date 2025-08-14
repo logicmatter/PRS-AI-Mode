@@ -1,0 +1,57 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+    <li class="breadcrumb-item"><a [routerLink]="'/tDashboard/' + tenants.tenantId ">{{this.tenants.tenantName}}</a>
+    </li>
+    <li class="breadcrumb-item"><a routerLink="/flow">Flow</a></li>
+    <li class="breadcrumb-item"><a routerLink="/data-source-list">DataSource List</a></li>
+    <li class="breadcrumb-item"><a
+        [routerLink]="'/data-load-history/' + dataSourceId+ '/'+ tenantId ">Data-Load-History</a></li>
+    <li class="breadcrumb-item"><a
+        [routerLink]="'/data-errors-list/'+ dataSourceId + '/'+ historyId+ '/'+ tenantId">Failed Count</a></li>
+  </ol>
+</nav>
+<div class="row">
+  <div class="col-md-8">
+    <h5>Data Errors Log <span *ngIf="dataSourceName">-</span> {{dataSourceName}}</h5>
+  </div>
+  <div class="col-md-4 text-right">
+    <input type="button" value="Refresh" class="btn btn-outline-primary mr-2" (click)="reloadHistory()" />
+    <input type="button" value="Back" class="btn btn-outline-primary float-right" (click)="goBack()" />
+  </div>
+</div>
+<div class="col-md-6">
+</div>
+<app-spinner *ngIf="showSpinner"></app-spinner>
+
+<div class="" [hidden]="showSpinner">
+  <div class="div">
+
+    <div [hidden]="!isTableHasData || this.dataSource.data.length == 0">
+      <div class="div">
+        <mat-form-field class="col-md-4">
+          <mat-label>Filter</mat-label>
+          <input class="col-md-6" matInput (keyup)="applyFilter($event)" placeholder="" #input>
+        </mat-form-field>
+        <p class="text-danger">Note: <a class="text-body"> We are displaying the failed count data that are able to
+            capture from the source</a></p>
+        <table mat-table [dataSource]="dataSource" class="ml-2 w-100">
+          <ng-container *ngFor="let columnName of displayedColumns" [matColumnDef]="columnName">
+            <th mat-header-cell *matHeaderCellDef class="ml-2 w-100" [ngClass]="'nameWidthClass'">{{
+              capitalize(columnName) }}</th>
+            <td class="ml-2 w-100" mat-cell *matCellDef="let row" [ngClass]="'nameWidthClass'"
+              [matTooltip]="row[columnName]">{{ row[columnName] }}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
+      </div>
+      <div class="my-4" *ngIf="this.dataSource.data.length == 0">
+        No data available
+      </div>
+    </div>
+    <div *ngIf="!isTableHasData" class="d-flex justify-content-center align-items-center">
+      No data available
+    </div>
+  </div>

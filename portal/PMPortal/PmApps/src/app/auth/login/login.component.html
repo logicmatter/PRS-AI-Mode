@@ -1,0 +1,144 @@
+<app-header></app-header>
+<div class="my-login-page" *ngIf="isValidLicense">
+  <div *ngIf="isDefaultUser">
+
+    <section class="h-100">
+      <div class="container h-100">
+        <div class="row justify-content-md-center h-100">
+          <div class="card-wrapper">
+            <div class="brand">
+              <!-- <img src="img/logo.jpg"> -->
+            </div>
+            <div class="card fat">
+              <div class="card-body">
+                <h5 class="card-title">Modify Default User</h5>
+                <form [formGroup]="userDefaultForm" (ngSubmit)="updateDefaultUser()">
+                  <div class="form-group">
+                    <label for="firstName"><sup class="mandatory-indication">*</sup>First Name</label>
+                    <input tabindex="1" id="firstName" type="text" class="form-control" title="First Name" formControlName="firstName">
+                    <mat-error *ngIf="f.firstName.errors && (f.firstName.touched || f.firstName.dirty)">Please enter first name</mat-error>
+                  </div>
+                  <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input tabindex="2" id="lastName" type="text" title="Last Name" class="form-control" formControlName="lastName">
+                    <mat-error *ngIf="f.lastName.errors && (f.lastName.touched || f.lastName.dirty)">Please enter last name</mat-error>
+                  </div>
+                  <div class="form-group">
+                    <label for="newEmail"><sup class="mandatory-indication">*</sup>Email Address</label>
+                    <input tabindex="3" id="newEmail" type="email" title="example@xyz.com" class="form-control" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$" formControlName="newEmail">
+                    <mat-error *ngIf="f.newEmail.errors && (f.newEmail.touched || f.newEmail.dirty)">Please enter a valid email</mat-error>
+                  </div>
+                  <div class="form-group">
+                    <label for="confirmEmail">Confirm Email Address</label>
+                    <input tabindex="4" id="confirmEmail" type="email" title="example@xyz.com" class="form-control" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$" formControlName="confirmEmail">
+                    <div *ngIf="f.confirmEmail.errors && (f.confirmEmail.touched || f.confirmEmail.dirty)">
+                      <mat-error *ngIf="f.confirmEmail.errors.requred">Please re-type email address</mat-error>
+                      <mat-error *ngIf="f.confirmEmail.hasError('NoMailMatch')">Mail address does not match</mat-error>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="newPassword"><sup class="mandatory-indication">*</sup>Password</label>
+                    <span (click)="showHide()">
+                      <i class="input-icons" data-toggle="tooltip" [title]="hide ? 'Hide Password' : 'Show Password'" [ngClass]="hide ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                    </span>
+                    <input tabindex="5" [type]="pass" class="form-control" formControlName="newPassword" required data-eye title="Example$9" />
+                    <div class="form-text text-muted">
+                      Make sure your password is strong and easy to remember
+                    </div>
+                    <div *ngIf="f.newPassword.errors && (f.newPassword.touched || f.newPassword.dirty)" class="">
+                      <mat-error *ngIf="f.newPassword.errors.required">Password is required</mat-error><br />
+                      <mat-error *ngIf="f.newPassword.errors.hasCapitalCase">Password must contain atleast 1 Capital case</mat-error><br />
+                      <mat-error *ngIf="f.newPassword.errors.hasSmallCase">Password must contain atleast 1 Smallcase</mat-error><br />
+                      <mat-error *ngIf="f.newPassword.errors.hasSpecialCharacters">Password must contain atleast 1 of #$^!*@%& Special characters</mat-error><br />
+                      <mat-error *ngIf="f.newPassword.errors.hasNumber">Password must contain atleast 1 Number </mat-error><br />
+                      <mat-error *ngIf="f.newPassword.errors.minlength">Password must be atleast 8 characters length</mat-error>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="confirmPassword"><sup class="mandatory-indication">*</sup>Confirm Password</label>
+                    <span (click)="showHide1()">
+                      <i class="input-icons" data-toggle="tooltip" [title]="confirm ? 'Hide Password' : 'Show Password'" [ngClass]="confirm ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                    </span>
+                    <input tabindex="6" [type]="cPass" class="form-control" formControlName="confirmPassword" title="Example$9" required data-eye />
+                    <div *ngIf="f.confirmPassword.errors && (f.confirmPassword.touched || f.confirmPassword.dirty)" class="">
+                      <mat-error *ngIf="f.confirmPassword.errors.required">Confirm password is required</mat-error>
+                      <mat-error *ngIf="f.confirmPassword.hasError('NoPassswordMatch')">Password does not match</mat-error>
+                    </div>
+                  </div>
+                  <div class="form-group no-margin">
+                    <button tabindex="7" [disabled]="loading || userDefaultForm.invalid" class="btn btn-primary btn-block" (click)="updateDefaultUser()">
+                      Update
+                      <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div *ngIf="!isDefaultUser">
+    <section class="h-100">
+      <div class="container h-100">
+        <div class="row justify-content-md-center h-100">
+          <div class="card-wrapper">
+            <div class="brand">
+              <!-- <img src="img/logo.jpg"> -->
+            </div>
+            <div class="card fat logmbl">
+              <div class="card-body">
+                <h5 class="card-title">Login</h5>
+                <form #loginForm="ngForm">
+                  <!-- <h6 class=" alert-danger">{{errorMsg}}</h6> -->
+                  <mat-error><h6 >{{errorMsg}}</h6> </mat-error>
+                  <div class="form-group">
+                    <label for="email">E-Mail Address</label>
+                    <input tabindex="1"  id="email" type="email" class="form-control" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$" [(ngModel)]="user.username" #username="ngModel" required name="username">
+                    <mat-error *ngIf="username.errors && (username.touched || username.dirty)">Please enter a valid email</mat-error>
+                  </div>
+                  <div class="form-group">
+                    <label for="password" id="password">Password</label>
+                    <span (click)="showHide()">
+                      <i class="input-icons pass" data-toggle="tooltip" [title]="hide ? 'Hide Password' : 'Show Password'" [ngClass]="hide ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                    </span>
+                    <input tabindex="2" id="password" [type]="pass" [(ngModel)]="user.password" #password="ngModel" name="password" class="form-control" required data-eye>
+                    <!-- <i style="position: absolute;right: 38px;top: 57%;" [ngClass]="{'fas fa-eye-slash': 'fas fa-eye'}" (click)="showHide()"></i> -->
+                    <!-- <mat-icon class="placeholder" (click)="showHide()">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon> -->
+                    <mat-error *ngIf="password.errors &&(password.touched || password.dirty)">Password should have minimum 8 characters</mat-error>
+                  </div>
+
+                  <div class="form-group">
+                    <label>
+                      <input tabindex="4" type="checkbox" [(ngModel)]="user.rememberme" #rememberme="ngModel" name="remember" id="rem"> Remember Me
+                    </label>
+                    <a tabindex="5" routerLink="/auth/forgot-password" class="float-right" id="forgot">
+                      Forgot Password?
+                    </a>
+                  </div>
+
+                  <div class="form-group no-margin">
+                    <button tabindex="3" [disabled]="loading || loginForm.invalid" class="btn btn-primary btn-block" (click)="login()">
+                      Login
+                      <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                    </button>
+                  </div>
+                  <!-- <div class="margin-top20 text-center">
+                  Don't have an account? <a href="register.html">Create One</a>
+                </div> -->
+                </form>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+</div>
+<div *ngIf="!isValidLicense">
+  <h5 align="center"> Your license is not valid. Please contact Administrator.</h5>
+</div>

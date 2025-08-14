@@ -1,0 +1,8 @@
+<button *ngIf="searchUtility.model.objectType !== 'Roomlist'"   class="btn btn-secondary btn-block w-100" (click)="openObjectList()" [disabled]='_utility.showSpinner'>View / Select Objects
+    <span class="badge bg-light small" id="light">{{_Adhocutility.checkedList.length}}</span></button><br>
+    <button *ngIf="searchUtility.model.objectType === 'Roomlist'"   class="btn btn-secondary btn-block w-100" (click)="openObjectList()" [disabled]='_utility.showSpinner'>View / Select Rooms
+      <span class="badge bg-light small" id="light">{{_Adhocutility.checkedList.length}}</span></button><br>
+
+      <!-- <button   class="btn btn-secondary btn-block w-100" (click)="openObjectList()" [disabled]='_utility.showSpinner'>View / Select Objects
+        <span class="badge bg-light small" id="light">{{_Adhocutility.checkedList.length}}</span></button><br> -->
+

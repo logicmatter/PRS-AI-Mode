@@ -1,0 +1,83 @@
+{
+    "BMS": [
+      {
+        "value": "All",
+        "viewValue": "All"
+      },
+      {
+        "value": "Alarm",
+        "viewValue": "Alarm",
+        "label": "Alarm",
+        "link": "./alarm",
+        "index": 0
+      },
+      {
+        "value": "Device",
+        "viewValue": "Device",
+        "label": "Device",
+        "link": "./device",
+        "index": 4
+      },
+      {
+        "value": "Energylog",
+        "viewValue": "Energylog",
+        "label": "Energylog",
+        "link": "./energylog",
+        "index": 2
+      },
+      {
+        "value": "Points",
+        "viewValue": "Points",
+        "label": "Points",
+        "link": "./points",
+        "index": 5
+      },
+      {
+        "value": "Reports",
+        "viewValue": "Reports",
+        "label": "Reports",
+        "link": "./reports",
+        "index": 3
+      },
+      {
+        "value": "Trendlog",
+        "viewValue": "Trendlog",
+        "label": "Trendlog",
+        "link": "./trendlog",
+        "index": 1
+      },
+      {
+        "value": "Transformers",
+        "viewValue": "Transformers",
+        "label": "Transformers",
+        "link": "./transformers",
+        "index": 6
+      }
+	],
+  "OEM": [
+
+    {
+      "value": "All",
+      "viewValue": "All"
+    },
+
+    {
+      "value": "All",
+      "viewValue": "All"
+    },
+    {
+      "value": "Reports",
+      "viewValue": "Reports",
+      "label": "Reports",
+      "link": "./reports",
+      "index": 0
+    },
+    {
+      "value": "Transformers",
+      "viewValue": "Transformers",
+      "label": "Transformers",
+      "link": "./transformers",
+      "index": 1
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+.login-container--header {
+  display: flex;
+  background: #fff;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+  box-shadow: 0 5px 15px 0 rgba(46, 61, 73, .12);
+}
+
+.login-container--logo {
+  //background: url(../../../assets/images/Pointmatter_logo_primary.png) transparent no-repeat;
+  width: 334px;
+  height: 43px;
+  margin: 0 auto;
+}
+img {
+  background: transparent no-repeat;
+  width: 334px;
+  height: 43px;
+  margin: 0 auto;
+}

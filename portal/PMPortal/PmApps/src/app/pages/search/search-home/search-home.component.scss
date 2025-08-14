@@ -1,0 +1,84 @@
+.note {
+  background-color: #f0f7fb;
+  border-left: solid 4px #3498db;
+  line-height: 18px;
+  mc-auto-number-format: '{b}Note: {/b}';
+  overflow: hidden;
+  padding: 12px;
+  width: 24%;
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.mat-tab-label, .mat-tab-link {
+  color: #323C43;
+  font-family: Arial,sans-serif !important;
+  font: normal normal 600 14px/20px Arial;
+}
+// App Name
+.appName {
+text-align: left;
+font: normal normal bold 24px/33px Arial;
+letter-spacing: 0px;
+color: #333333 !important;
+opacity: 1;
+}
+.margin{
+  margin-left: -4px;
+}
+
+@media screen and (min-width:360px) and (max-width:500px){
+  .appName {
+    text-align: right;
+    font: normal normal bold 20px/25px Arial;
+    margin-right: auto;
+}
+link{
+  font: normal normal 600 11px/20px Arial;
+}
+.mat-tab-links {
+  display: flex;
+  height: 30px;
+}
+.search-message {
+
+  margin-top: 27px;
+
+}
+h5, .h5 {
+  font-size: 1rem;
+}
+.icon{
+  padding: 10px;
+  color: #70787d;
+  min-width: 23px;
+}
+.mat-tab-label, .mat-tab-link {
+  color: #323C43;
+  font-family: Arial,sans-serif !important;
+  font: normal normal 600 14px/20px Arial;
+  height: 35px;
+}
+
+.margin{
+  margin-right: 83px;
+}
+
+}
+
+
+@media screen and (min-width: 300px) and (max-width:1000px) {
+
+  .appName{
+    margin-right: auto;
+  }
+  
+  
+
+  
+}
+
+
+
+
+

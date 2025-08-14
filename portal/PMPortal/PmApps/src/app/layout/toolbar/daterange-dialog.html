@@ -1,0 +1,45 @@
+<h5 mat-dialog-title [ngStyle]="{'margin':'0px'}">Date Range Filter</h5>
+<mat-dialog-content [ngStyle]="{'display':'grid'}">
+    <mat-form-field>
+        <mat-select [ngStyle]="{'font-size':'12px'}" [(ngModel)]="selectedState" [(value)]="selectedState" (ngModelChange)="onChange1($event)">
+            <mat-option *ngFor="let custom of customDay" [value]="custom.value">
+                {{custom.viewValue}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="!showMonth">
+        <input [ngStyle]="{'font-size':'12px'}" matInput [(ngModel)]="arsStartDate" placeholder="Start Date" [owlDateTime]="arsStartDate1" [max]="utility.maxDateCalendar" [owlDateTimeTrigger]="arsStartDate1" [owlDateTimeFilter]="myFilter" readonly>
+        <owl-date-time [pickerType]="'calendar'" #arsStartDate1></owl-date-time>
+    </mat-form-field>
+    <mat-form-field *ngIf="showMonth">
+        <input [ngStyle]="{'font-size':'12px'}" matInput placeholder="Start Date" [(ngModel)]="arsStartDate" [owlDateTime]="arsStartDate1" [max]="utility.maxDateCalendar" [owlDateTimeTrigger]="arsStartDate1" [owlDateTimeFilter]="myFilter" readonly>
+      <owl-date-time [pickerType]="'calendar'" [startView]="startAt" #arsStartDate1></owl-date-time>
+    </mat-form-field>
+
+    <mat-form-field>
+        <input [ngStyle]="{'font-size':'12px'}" matInput [(ngModel)]="arsStartDate" placeholder="Start Time" [owlDateTimeTrigger]="dt41" [owlDateTime]="dt41" [disabled]="disableTime" readonly>
+        <owl-date-time [pickerType]="'timer'" [hour12Timer]="'false'" #dt41></owl-date-time>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="!showMonth">
+        <input [ngStyle]="{'font-size':'12px'}" matInput [(ngModel)]="arsEndDate" placeholder="End Date" [owlDateTime]="arsEndDate1" [max]="utility.maxDateCalendar" [owlDateTimeTrigger]="arsEndDate1" [owlDateTimeFilter]="myFilter1" readonly>
+        <owl-date-time [pickerType]="'calendar'" #arsEndDate1></owl-date-time>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="showMonth">
+        <input [ngStyle]="{'font-size':'12px'}" matInput [(ngModel)]="arsEndDate" placeholder="End Date" [owlDateTime]="arsEndDate1" [max]="utility.maxDateCalendar" [owlDateTimeTrigger]="arsEndDate1" [owlDateTimeFilter]="myFilter1" readonly>
+        <owl-date-time [pickerType]="'calendar'" [startView]="startAt"  #arsEndDate1></owl-date-time>
+    </mat-form-field>
+
+    <mat-form-field>
+        <input [ngStyle]="{'font-size':'12px'}" matInput [(ngModel)]="arsEndDate" placeholder="End Time" [owlDateTime]="dt42" [owlDateTimeTrigger]="dt42" [disabled]="disableTime" readonly>
+
+        <owl-date-time [pickerType]="'timer'" [hour12Timer]="'false'" #dt42></owl-date-time>
+    </mat-form-field>
+
+</mat-dialog-content>
+<i [ngStyle]="{'color':'red','display':'block'}" *ngIf="!isDateRangeValid">{{getErrorMsg('Start Date should be less than End Date.')}}</i>
+<mat-dialog-actions  [ngStyle]="{'padding-top':'0px'}">
+    <button [ngStyle]="{'background-color':'#133780', 'color':'#fff'}" mat-raised-button [mat-dialog-close]="{'arsStartDate':arsStartDate, 'arsEndDate':arsEndDate, 'selectedState':selectedState}" cdkFocusInitial [disabled]="!isDateRangeValid">Apply</button>
+</mat-dialog-actions>

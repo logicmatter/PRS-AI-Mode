@@ -1,0 +1,106 @@
+.duration-btn {
+  background-color: #133780;
+  color: white;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  margin-right: 2px;
+}
+
+.active {
+  background-color: #e85d1b !important;
+}
+
+.rpt-detail {
+  display: block;
+}
+
+.buttons {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.rpt-filter-row {
+  margin-bottom: 4px;
+}
+
+.ndav {
+  text-align: center;
+  margin-top: 25px;
+}
+
+.labelname {
+  text-align: center;
+}
+.row {
+  margin: 0px 10px !important;
+}
+.col-border {
+  border: 1px solid;
+  padding: 5px 5px;
+}
+.row .col-md-12 {
+  border: 1px solid;
+  margin-top: 10px;
+  padding-top: 5px;
+}
+h4 {
+  margin-bottom: 5px;
+}
+h3 {
+  text-align: center;
+}
+.report-header {
+  margin: 5px 10px;
+  background-color: #E9ECEF;
+  padding: 2px;
+  color: #000;
+  text-align: center;
+}
+.timeHeader {
+  font-size: 14px;
+}
+.form-control{
+  width:97%;
+}
+.top-header {
+  margin-top: 50px;
+}
+#myChart {
+  display: block;
+  width: 1198px;
+  height: 599px !important;
+}
+// App Name
+.appName {
+  text-align: left;
+  font: normal normal bold 24px/33px Arial;
+  letter-spacing: 0px;
+  color: #333333 !important;
+  opacity: 1;
+}
+
+.widthHeight{
+  width:30px;
+  height:30px;
+}
+
+
+@media screen and (min-width:360px) and (max-width:599px){
+  .col-md-5{
+    position: relative;
+    width: 100%;
+    padding-right: 0px;
+    padding-left: 0px;
+    padding-bottom: 6px;
+  }
+  .col-md-7{
+    position: relative;
+    width: 100%;
+    padding-right: 0px;
+    padding-left: 0px;
+    padding-bottom: 6px;
+  }
+  .col-md-4, .col-md-3 {
+    padding-bottom: 6px;
+  }
+}

@@ -1,0 +1,56 @@
+<!-- <div class="app-content">
+  <mat-card>
+    <header>
+      <nav class='navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3' style="padding: 0% !important;">
+        <div class="plans-details-tabs">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-label="Toggle navigation"
+                  [attr.aria-expanded]="isExpanded" (click)="toggle()">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" [ngClass]='{"show": isExpanded}'>
+            <ul class="navbar-nav flex-grow">
+              <li class="nav-item">
+                <a id="template-config" routerLink="./template-config" routerLinkActive="active">Template Configuration</a>
+              </li>
+              <li class="nav-item">
+                <a id="template-list" routerLink="./template-list" routerLinkActive="active">Template List</a>
+              </li>
+              <li class="nav-item">
+                <a id="template-deploy" routerLink="./template-deploy" routerLinkActive="active">Template Deployment</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-card>
+</div> -->
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+    <li class="breadcrumb-item"><a
+        [routerLink]="'/tDashboard/' + tenantService.currentTenantValue.tenantId">{{this.tenantService.currentTenantValue.tenantName}}</a>
+    </li>
+    <li class="breadcrumb-item"><a routerLink="/template-manager/template-config">Template-Manager</a></li>
+    <li class="breadcrumb-item">
+      <a [routerLink]="getRouterLink(1)" *ngIf="activeLinkIndex === 0">Template-Configuration</a>
+      <a [routerLink]="getRouterLink(2)" *ngIf="activeLinkIndex === 1">Template-List</a>
+      <a [routerLink]="getRouterLink(3)" *ngIf="activeLinkIndex === 2">Template-Deployment</a>
+      <a [routerLink]="getRouterLink(4)" *ngIf="activeLinkIndex === 3">Website-Configuration</a>
+      <a [routerLink]="getRouterLink(5)" *ngIf="activeLinkIndex === 4">Tenant-Friendly-Name</a>
+    </li>
+  </ol>
+</nav>
+<div class="app-content">
+  <mat-card>
+    <nav mat-tab-nav-bar class="plans-details-tabs salesport-tabs">
+      <a mat-tab-link *ngFor="let link of navLinks; let i = index;" [routerLink]="link.link" routerLinkActive
+        #rla="routerLinkActive" (click)="activeLinkIndex = i" [active]="rla.isActive">
+        {{link.label}} </a>
+    </nav>
+    <router-outlet></router-outlet>
+  </mat-card>
+</div>

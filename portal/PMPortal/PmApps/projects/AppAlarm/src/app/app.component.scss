@@ -1,0 +1,28 @@
+.nav-active {
+  color: #e85d1b;
+  margin: 5px;
+}
+.nav-inactive {
+  color: #016698;
+  cursor: pointer;
+  margin: 5px;
+}
+// App Name
+.appName {
+  text-align: left;
+  font: normal normal bold 24px/33px Arial;
+  letter-spacing: 0px;
+  color: #333333 !important;
+  opacity: 1;
+}
+@media  screen and (min-width:360px) and (max-width:560px){
+  .navbar-nav{
+font-size: 13px;
+  }
+  .appName {
+    font: normal normal bold 20px/33px Arial;
+  }
+  .mx-2{
+    height:25px
+  }
+}

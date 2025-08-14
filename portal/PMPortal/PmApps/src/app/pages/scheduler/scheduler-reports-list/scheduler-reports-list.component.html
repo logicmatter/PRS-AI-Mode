@@ -1,0 +1,418 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+    <li class="breadcrumb-item"><a [routerLink]="'/tDashboard/' + tenants.tenantId ">{{this.tenants.tenantName}}</a>
+    </li>
+    <li class="breadcrumb-item"><a routerLink="/home/schedulesList">schedulerList</a></li>
+    <ng-container *ngIf="tabGroup.selectedIndex === 0">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/schedulesList']" [queryParams]="{ tabId: 0 }">Report Schedules</a>
+      </li>
+    </ng-container>
+
+    <ng-container *ngIf="tabGroup.selectedIndex === 1">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/schedulesList']" [queryParams]="{ tabId: 1 }">Flow Schedules</a>
+      </li>
+    </ng-container>
+
+    <ng-container *ngIf="tabGroup.selectedIndex === 2">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/schedulesList']" [queryParams]="{ tabId: 2 }">Gateway Schedules</a>
+      </li>
+    </ng-container>
+
+  </ol>
+</nav>
+<div>
+  <h5 style="text-transform:uppercase" align="center">Recurring Schedules List</h5>
+  <mat-tab-group #tabGroup (selectedTabChange)="tabChanged($event)" class="plans-details-tabs salesport-tabs admintabs">
+    <mat-tab label="Report Schedules">
+      <div style="margin-top: 1%;">
+        <!-- <h4 style="text-transform:uppercase" align="center">Users</h4> -->
+      </div>
+      <mat-card-content>
+        <app-spinner *ngIf="showSpinner"></app-spinner>
+
+        <div *ngIf="!showSpinner" class="table-responsive table1">
+          <div *ngIf="reportScheduleDataSource.data.length > 0; else elseBlock">
+            <div class="col-md-3">
+              <div class="input-container" style="margin-left: 1px; margin-bottom: 15px;">
+                <i class="fa fa-filter icon" matTooltip="Filter"></i>
+                <input class="form-control" type="text" name="search" placeholder="Filter"
+                  (keyup)="applyFilter($event.target.value)" style="border-radius:0px;width:auto;margin-left:0px;">
+              </div>
+            </div>
+            <div class="example-container mat-elevation-z8">
+              <mat-table #table [dataSource]="reportScheduleDataSource" #sort="matSort" matSort>
+
+
+                <!-- App Name Column -->
+                <ng-container matColumnDef="appName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'iconsWidthClass'"> App Name
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'iconsWidthClass'">
+                    <img src="{{'assets/icons/'+element.normalizedAppName+'.svg'}}" width="26px" height="26px"
+                      class="toggle-tenants" aria-hidden="false" matTooltip="{{element.appName}}" />
+                  </mat-cell>
+                </ng-container>
+                <!-- Report Name Column -->
+                <ng-container matColumnDef="reportName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'iconsWidthClass1'"> Report Name
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" (click)="modifySchedule(element)" [ngClass]="'iconsWidthClass1'"
+                    style="word-break:break-all;">
+                    {{element.reportName}}
+                  </mat-cell>
+                </ng-container>
+                <!-- reportDescription Column -->
+                <!-- <ng-container matColumnDef="reportDescription">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Description </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'iconsWidthClass2'" style="word-break:break-all;">
+                    {{element.reportDescription}}
+                  </mat-cell>
+                </ng-container> -->
+                <!-- scheduleCreatedBy Column -->
+                <ng-container matColumnDef="scheduleCreatedBy">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'scheWidthClass1'"> Schedule Created By
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'scheWidthClass1'">
+                    {{element.scheduleCreatedBy }}
+                  </mat-cell>
+                </ng-container>
+                <!-- scheduleModifiedBy Column -->
+                <ng-container matColumnDef="scheduleModifiedBy">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'scheWidthClass1'"> Schedule Modified By
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'scheWidthClass1'">
+                    {{element.scheduleModifiedBy }}
+                  </mat-cell>
+                </ng-container>
+                <!-- scheduleCreatedOn Column -->
+                <ng-container matColumnDef="scheduleCreatedOn">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'scheWidthClass1'"> Schedule Created on
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'scheWidthClass1'">
+                    {{element.scheduleCreatedOn | date: "yyyy-MM-dd HH:mm:ss"}}
+                  </mat-cell>
+                </ng-container>
+                <!-- scheduleStatus Column -->
+                <ng-container matColumnDef="scheduleStatus">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'scheWidthClass1'"> Schedule Status
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'scheWidthClass1'">
+                    {{element.scheduleStatus}}
+                  </mat-cell>
+                </ng-container>
+                <!-- lastRun Column -->
+                <ng-container matColumnDef="lastRun">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'scheWidthClass1'"> Last Run
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'scheWidthClass1'">
+                    {{element.lastRun | date: "yyyy-MM-dd HH:mm:ss"}}
+                  </mat-cell>
+                </ng-container>
+
+                <!-- nextRun Column -->
+                <ng-container matColumnDef="nextRun">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'scheWidthClass1'"> Next Run
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'scheWidthClass1'">
+                    {{element.nextRun | date: "yyyy-MM-dd HH:mm:ss"}}
+                  </mat-cell>
+                </ng-container>
+
+                <!-- actions Column -->
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef class="action" [ngClass]="'scheWidthClass1'">
+                    Action</mat-header-cell>
+                  <mat-cell *matCellDef="let element" class="action" [ngClass]="'scheWidthClass1'">
+                    <img *ngIf="element.scheduleId !=''"
+                      [src]="element.scheduleId ? 'assets/icons/Group 230.svg' : 'assets/icons/Group 215.svg'"
+                      width="20px" height="20px" class="toggle-tenants mx-2 click-event" aria-hidden="false"
+                      matTooltip="Schedule" matTooltip="Edit Schedule" matTooltipClass="tooltip" (click)="modifySchedule(element)" />
+                    <!-- <i *ngIf="rpt.scheduleId !=''" class="fa fa-clock-o fa-lg"
+                     matTooltip="Edit Schedule"
+                     (click)="modifySchedule(rpt)"
+                     style="color:green;cursor: pointer;margin-right: 1px;width: 0;">
+                    &nbsp;
+                  </i> -->
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              </mat-table>
+
+              <mat-paginator *ngIf="reportScheduleDataSource.data.length > 10" #paginator
+                [pageSizeOptions]="[10, 20, 50, 100]" (page)="getData($event)" showFirstLastButtons>
+              </mat-paginator>
+            </div>
+            <mat-error align="center" *ngIf="reportsScheduleList == undefined">No Report Schedules Found</mat-error>
+          </div>
+          <ng-template #elseBlock>
+            <h5 class="nodata">No data available</h5>
+          </ng-template>
+        </div>
+
+      </mat-card-content>
+      <mat-card-actions align="center"></mat-card-actions>
+    </mat-tab>
+    <mat-tab label="Flow Schedules">
+      <div style="margin-top: 1%;">
+        <!-- <h4 style="text-transform:uppercase" align="center">Users</h4> -->
+      </div>
+      <mat-card-content>
+        <app-spinner *ngIf="showSpinner"></app-spinner>
+
+        <div *ngIf="!showSpinner" class="table-responsive table">
+          <div *ngIf="flowScheduleDataSource.data.length > 0; else elseBlock1">
+            <div class="col-md-3">
+              <div class="input-container" style="margin-left: -11px;">
+                <i class="fa fa-filter icon" matTooltip="Filter"></i>
+                <input class="form-control" type="text" name="search" placeholder="Filter"
+                  (keyup)="applyFilter1($event.target.value)" style="border-radius:0px;width:auto;margin-left: 0px;">
+              </div>
+            </div>
+            <div class="example-container mat-elevation-z8">
+              <mat-table #table [dataSource]="flowScheduleDataSource" #sort1="matSort" matSort>
+
+
+                <!-- App Name Column -->
+                <ng-container matColumnDef="templateName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'scheWidthClass1'"> Connector Type
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'scheWidthClass1'">
+                    {{element.templateName}}
+                  </mat-cell>
+                </ng-container>
+                <!-- Report Name Column -->
+                <ng-container matColumnDef="dataSourceName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'scheWidthClass1'"> DataSource Name
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'scheWidthClass1'" class="repName"
+                    (click)="modifyFlowSchedule(element)">
+                    {{element.dataSourceName}}
+                  </mat-cell>
+                </ng-container>
+                <!-- dataSourceDescription Column -->
+                <ng-container matColumnDef="dataSourceDescription">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'scheWidthClass1'"> Description
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'scheWidthClass1 '">
+                    {{element.dataSourceDescription}}
+                  </mat-cell>
+                </ng-container>
+                <!-- scheduleCreatedBy Column -->
+                <ng-container matColumnDef="scheduleCreatedBy">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'scheWidthClass1'"> Schedule Created By
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'scheWidthClass1'">
+                    {{element.scheduleCreatedBy }}
+                  </mat-cell>
+                </ng-container>
+                <!-- scheduleModifiedBy Column -->
+                <ng-container matColumnDef="scheduleModifiedBy">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'scheWidthClass1'"> Schedule Modified By
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'scheWidthClass1'">
+                    {{element.scheduleModifiedBy }}
+                  </mat-cell>
+                </ng-container>
+                <!-- scheduleCreatedOn Column -->
+                <ng-container matColumnDef="scheduleCreatedOn">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'scheWidthClass1'"> Schedule Created on
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'scheWidthClass1'">
+                    {{element.scheduleCreatedOn | date: "yyyy-MM-dd HH:mm:ss"}}
+                  </mat-cell>
+                </ng-container>
+                <!-- scheduleStatus Column -->
+                <ng-container matColumnDef="scheduleStatus">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'scheWidthClass1'"> Schedule Status
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'scheWidthClass1'">
+                    {{element.scheduleStatus}}
+                  </mat-cell>
+                </ng-container>
+                <!-- lastRun Column -->
+                <ng-container matColumnDef="lastRun">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'scheWidthClass1'"> Last Run
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'scheWidthClass1'">
+                    {{element.lastRun | date: "yyyy-MM-dd HH:mm:ss"}}
+                  </mat-cell>
+                </ng-container>
+
+                <!-- nextRun Column -->
+                <ng-container matColumnDef="nextRun">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'scheWidthClass1'"> Next Run
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'scheWidthClass1'">
+                    {{element.nextRun | date: "yyyy-MM-dd HH:mm:ss"}}
+                  </mat-cell>
+                </ng-container>
+
+                <!-- actions Column -->
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef class="action" [ngClass]="'scheWidthClass1'"> Action
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" class="action" [ngClass]="'scheWidthClass1'">
+                    <img *ngIf="element.scheduleId !=''"
+                      [src]="element.scheduleId ? 'assets/icons/Group 230.svg' : 'assets/icons/Group 215.svg'"
+                      width="20px" height="20px" class="toggle-tenants mx-2 click-event" aria-hidden="false"
+                      matTooltip="Schedule" matTooltip="Edit Schedule" matTooltipClass="tooltip" (click)="modifyFlowSchedule(element)" />
+                    <!-- <i *ngIf="rpt.scheduleId !=''" class="fa fa-clock-o fa-lg"
+                     matTooltip="Edit Schedule"
+                     (click)="modifySchedule(rpt)"
+                     style="color:green;cursor: pointer;margin-right: 1px;width: 0;">
+                    &nbsp;
+                  </i> -->
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns1"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns1;"></mat-row>
+              </mat-table>
+
+              <mat-paginator *ngIf="flowScheduleDataSource.data.length > 10" #paginator1
+                [pageSizeOptions]="[10, 20, 50, 100]" (page)="getData1($event)" showFirstLastButtons>
+              </mat-paginator>
+            </div>
+            <mat-error align="center" *ngIf="flowScheduleList == undefined">No Schedules Found</mat-error>
+          </div>
+          <ng-template #elseBlock1>
+            <h5 class="nodata1">No data available</h5>
+          </ng-template>
+        </div>
+      </mat-card-content>
+      <mat-card-actions align="center"></mat-card-actions>
+    </mat-tab>
+    <mat-tab label="Gateway Schedules">
+      <div style="margin-top: 1%;">
+        <!-- <h4 style="text-transform:uppercase" align="center">Users</h4> -->
+      </div>
+      <mat-card-content>
+        <app-spinner *ngIf="showSpinner"></app-spinner>
+
+        <div *ngIf="!showSpinner" class="table-responsive table">
+          <div *ngIf="gatewayScheduleDataSource.data.length > 0; else elseBlock1">
+            <div class="col-md-3">
+              <div class="input-container" style="margin-left: -11px;">
+                <i class="fa fa-filter icon" matTooltip="Filter"></i>
+                <input class="form-control" type="text" name="search" placeholder="Filter"
+                  (keyup)="applyFilter2($event.target.value)" style="border-radius:0px;width:auto;margin-left: 0px;">
+              </div>
+            </div>
+            <div class="example-container mat-elevation-z8">
+              <mat-table #table [dataSource]="gatewayScheduleDataSource" #sort2="matSort" matSort>
+
+
+                <!-- App Name Column -->
+                <ng-container matColumnDef="templateName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'scheWidthClass21'"> Connector Type
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'scheWidthClass21'">
+                    {{element.templateName}}
+                  </mat-cell>
+                </ng-container>
+                <!-- Report Name Column -->
+                <ng-container matColumnDef="dataSourceName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'scheWidthClass21'"> DataSource Name
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" class="repName" [ngClass]="'scheWidthClass21'"
+                    (click)="modifygatewaySchedule(element)">
+                    {{element.dataSourceName}}
+                  </mat-cell>
+                </ng-container>
+                <!-- dataSourceDescription Column -->
+                <ng-container matColumnDef="dataSourceDescription">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'scheWidthClass21'"> Description
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'scheWidthClass21'">
+                    {{element.dataSourceDescription}}
+                  </mat-cell>
+                </ng-container>
+                <!-- scheduleCreatedBy Column -->
+                <ng-container matColumnDef="scheduleCreatedBy">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'scheWidthClass2'"> JobStatus
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'scheWidthClass2'">
+                    {{element.jobStatus }}
+                  </mat-cell>
+                </ng-container>
+                <!-- scheduleModifiedBy Column -->
+                <ng-container matColumnDef="scheduleModifiedBy">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'scheWidthClass2'"> Schedule Modified By
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'scheWidthClass2'">
+                    {{element.scheduleModifiedBy }}
+                  </mat-cell>
+                </ng-container>
+                <!-- scheduleCreatedOn Column -->
+                <ng-container matColumnDef="scheduleCreatedOn">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'scheWidthClass2'"> Schedule Created on
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'scheWidthClass2'">
+                    {{element.scheduleCreatedOn | date: "yyyy-MM-dd HH:mm:ss"}}
+                  </mat-cell>
+                </ng-container>
+                <!-- scheduleStatus Column -->
+                <ng-container matColumnDef="scheduleStatus">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'scheWidthClass2'"> Schedule Status
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'scheWidthClass2'">
+                    {{element.scheduleStatus}}
+                  </mat-cell>
+                </ng-container>
+                <!-- lastRun Column -->
+                <ng-container matColumnDef="lastRun">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'scheWidthClass2'"> Last Run
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'scheWidthClass2'">
+                    {{element.lastRun | date: "yyyy-MM-dd HH:mm:ss"}}
+                  </mat-cell>
+                </ng-container>
+
+                <!-- nextRun Column -->
+                <ng-container matColumnDef="nextRun">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'scheWidthClass2'"> Next Run
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'scheWidthClass2'">
+                    {{element.nextRun | date: "yyyy-MM-dd HH:mm:ss"}}
+                  </mat-cell>
+                </ng-container>
+
+                <!-- actions Column -->
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef [ngClass]="'scheWidthClass2'">Action </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'scheWidthClass2'">
+                    <img *ngIf="element.scheduleId !=''"
+                      [src]="element.scheduleId ? 'assets/icons/Group 230.svg' : 'assets/icons/Group 215.svg'"
+                      width="20px" height="20px" class="toggle-tenants mx-2 click-event" aria-hidden="false"
+                      matTooltip="Schedule" matTooltip="Edit Schedule" matTooltipClass="tooltip" (click)="modifygatewaySchedule(element)" />
+                    <!-- <i *ngIf="rpt.scheduleId !=''" class="fa fa-clock-o fa-lg"
+                     matTooltip="Edit Schedule"
+                     (click)="modifySchedule(rpt)"
+                     style="color:green;cursor: pointer;margin-right: 1px;width: 0;">
+                    &nbsp;
+                  </i> -->
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns1"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns1;"></mat-row>
+              </mat-table>
+
+              <mat-paginator *ngIf="gatewayScheduleDataSource.data.length > 10" #paginator1
+                [pageSizeOptions]="[10, 20, 50, 100]" (page)="getData2($event)" showFirstLastButtons>
+              </mat-paginator>
+            </div>
+            <mat-error align="center" *ngIf="GatewayScheduleList == undefined">No Schedules Found</mat-error>
+          </div>
+          <ng-template #elseBlock1>
+            <h5 class="nodata1">No data available</h5>
+          </ng-template>
+        </div>
+      </mat-card-content>
+      <mat-card-actions align="center"></mat-card-actions>
+    </mat-tab>
+  </mat-tab-group>
+</div>

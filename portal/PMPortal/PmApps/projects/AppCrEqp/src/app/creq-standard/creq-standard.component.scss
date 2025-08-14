@@ -1,0 +1,181 @@
+@import '../../../src/styles.scss';
+thead {
+  background-color: var(--primary-color);
+  color: #fff;
+  font-size:14px;
+}
+tbody {
+  font-size: 12px;
+}
+
+.fa-lg {
+  font-size: 1.35em !important;
+}
+.filterText{
+  color: rgba(112, 120, 125, 1);
+  min-width: 40px;
+  text-align: center;
+  font-size: 16px;
+  background: rgba(250, 250, 250, 1) 0% 0% no-repeat padding-box;
+  border: 1px solid rgba(204, 204, 204, 1);
+  border-radius: 4px 0px 0px 4px;
+  opacity: 1;
+}
+.columns {
+  padding-top: 0;
+}
+
+.left-div {
+  display: inline-block;
+  max-width: 501px;
+  text-align: left;
+  border-radius: 3px;
+  margin: 5px;
+  vertical-align: top;
+  margin-left: -45px;
+}
+
+.icon {
+  padding: 10px;
+    color: rgba(112, 120, 125, 1);
+    min-width: 50px;
+    text-align: center;
+    font-size: 16px;
+    background: rgba(250, 250, 250, 1) 0% 0% no-repeat padding-box;
+    border: 1px solid rgba(204, 204, 204, 1);
+    border-radius: 4px 0px 0px 4px;
+    opacity: 1;
+}
+.input-container {
+  // display: -ms-flexbox; __<<ngThemingMigrationEscapedComment0>>__
+  display: flex;
+  margin-bottom: 3px;
+}
+
+.right-div {
+  display: inline-block;
+  max-width: 501px;
+  text-align: left;
+  border-radius: 3px;
+  margin: 0px;
+  margin-top:8px;
+  margin-left: 45px;
+}
+.my-pagination ::ng-deep .ngx-pagination .current {
+  background: #193A7E;
+}
+.nameWidthClass{
+  flex: 0 0 15%;
+  display: flex;
+  justify-content: flex-start;
+  word-break: break-word;
+}
+.descrWidthClass {
+  flex: 0 0 22%;
+  display: flex;
+  justify-content: flex-start;
+}
+.critWidthClass {
+  flex: 0 0 18%;
+  display: flex;
+  justify-content: flex-start;
+}
+.actnWidthClass {
+  flex: 0 0 8%;
+  display: flex;
+  justify-content: flex-start;
+}
+.regulation{
+  font-size:larger;
+  padding-top:14px;
+  text-align:center;
+}
+.image{
+  width:20px;
+   height:20px
+}
+.fixedPosition1 {
+  width: 100%;
+}
+
+@media screen and (max-width: 786px) {
+
+  .actnWidthClass {
+    flex-wrap: wrap;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+
+}
+
+@media screen and (min-width: 360px)and (max-width: 550px) {
+
+  .actnWidthClass{
+    flex-wrap: wrap;
+    display: contents;
+    justify-content: flex-start;
+}
+  .mat-header-cell {
+    font: normal normal bold 13px/12px Arial;
+}
+.mat-cell {
+  font-size: 11px;
+  word-break: break-word;
+}
+.fixedPosition1[_ngcontent-lvc-c33] {
+  width: 106%;
+  font-size: 11px;
+}
+.regulation{
+  font-size:medium;
+
+}
+.descrWidthClass {
+  flex: 0 0 18%;
+  display: flex;
+  justify-content: flex-start;
+}
+.option{
+  font-size:10px
+}
+
+.nameWidthClass{
+   flex: 0 0 17%;
+  display: flex;
+  justify-content: flex-start;
+}
+.critWidthClass {
+  flex: 0 0 15%;
+  display: flex;
+  justify-content: flex-start;
+}
+.image{
+  width:16px;
+   height:16px
+}
+.scroller{
+  overflow: visible;
+  height: 80vh;
+
+  overflow-x: visible;
+  justify-content: flex-start;
+  display: contents;
+}
+.actnWidthClass{
+  padding-right: 2px;
+}
+
+mat-header-row, mat-row {
+  display: flex;
+  border-width: 0;
+  border-bottom-width: 1px;
+  border-style: solid;
+  width: 229%;
+  align-items: center;
+  box-sizing: border-box;
+}
+}
+
+
+

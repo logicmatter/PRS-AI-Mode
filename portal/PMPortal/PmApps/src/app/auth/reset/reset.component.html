@@ -1,0 +1,62 @@
+<app-header></app-header>
+<div class="my-login-page">
+    <section class="h-100">
+      <div class="container h-100">
+        <div class="row justify-content-md-center align-items-center h-100">
+          <div class="card-wrapper">
+            <div class="brand">
+              <!-- <img src="img/logo.jpg"> -->
+            </div>
+            <div class="card fat">
+              <div class="card-body">
+                <h5 class="card-title">Reset Password</h5>
+                <h5 *ngIf="userEmail" align="center">{{userEmail}}</h5>
+                <form [formGroup]="resetForm" (ngSubmit)="resetPassword()">
+
+                  <div class="form-group">
+                    <label for="newPassword"><sup class="mandatory-indication">*</sup>New Password</label>
+                    <span (click)="showHide()">
+                      <i class="input-icons" data-toggle="tooltip" [title]="new ? 'Hide Password' : 'Show Password'" [ngClass]="new ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                    </span>
+                    <input [type]="pass" class="form-control" formControlName="newPassword" required data-eye  style="margin-left: auto;margin-top: 4px;"/>
+                    <div class="form-text text-muted">
+                      Make sure your password is strong and easy to remember
+                    </div>
+                    <div *ngIf="f.newPassword.errors && (f.newPassword.touched || f.newPassword.dirty)" class="">
+                      <mat-error *ngIf="f.newPassword.errors.required">Password is required</mat-error><br />
+                      <mat-error *ngIf="f.newPassword.errors.hasNumber">Password must contain atleast 1 Number </mat-error><br />
+                      <mat-error *ngIf="f.newPassword.errors.hasCapitalCase">Password must contain atleast 1 Capital case</mat-error><br />
+                      <mat-error *ngIf="f.newPassword.errors.hasSmallCase">Password must contain atleast 1 Smallcase</mat-error><br />
+                      <mat-error *ngIf="f.newPassword.errors.hasSpecialCharacters">Password must contain atleast 1 of #$^!*@%& Special characters</mat-error><br />
+                      <mat-error *ngIf="f.newPassword.errors.minlength">Password must be atleast 8 characters length</mat-error>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="confirmPassword"><sup class="mandatory-indication">*</sup>Confirm Password</label>
+                    <span (click)="showHide1()">
+                      <i class="input-icons" data-toggle="tooltip" [title]="confirm ? 'Hide Password' : 'Show Password'" [ngClass]="confirm ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                    </span>
+                    <input [type]="pass1" class="form-control" formControlName="confirmPassword" required data-eye  style="margin-left: auto;margin-top: 4px;"/>
+                    <div *ngIf="f.confirmPassword.errors && (f.confirmPassword.touched || f.confirmPassword.dirty)" class="">
+                      <mat-error *ngIf="f.confirmPassword.errors.required">Confirm Password is required</mat-error>
+                      <mat-error *ngIf="f.confirmPassword.hasError('NoPassswordMatch')">Password does not match</mat-error>
+                    </div>
+                  </div>
+                  <div class="form-group no-margin">
+                    <button type="submit" class="btn btn-primary btn-block" style="margin-left: auto;margin-top: 10px;width:100%">
+                      Reset Password
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="footer">
+              <!-- Copyright &copy; Your Company 2017 -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>

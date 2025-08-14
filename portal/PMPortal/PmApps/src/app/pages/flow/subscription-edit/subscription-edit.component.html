@@ -1,0 +1,16 @@
+<div style="margin-top:10px;">
+  <span data-toggle="tooltip" title="Back"  class="sla-back-icon refresh-icon"><mat-icon mat-list-icon class="btn-primary click-event" (click)="navigate1()">arrow_back</mat-icon></span>
+  <span >
+    <!-- *ngIf="flowType !== 'spreadSheet'" -->
+    <input type="button" class="btn btn-outline-primary" style="margin-left:10px;margin-bottom:10px;" value="Save Subscription" *ngIf="!showLoadButton" (click)="downloadSubscription()" />
+  <button class="btn btn-outline-primary" style="margin-left:10px;margin-bottom:10px;" *ngIf="showLoadButton" disabled>
+    <span class="spinner-border spinner-border-sm"></span>
+    Saving...
+  </button>
+  </span>
+
+</div>
+
+<iframe style="width:100%; height:35vw;"  [src]="video | safe : 'resourceUrl'" allowfullscreen toggleFullscreen></iframe>
+
+<!-- [routerLink]="['./data-flow-detail',dataSourceId]" -->

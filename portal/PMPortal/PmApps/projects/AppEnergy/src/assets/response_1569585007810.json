@@ -1,0 +1,508 @@
+[
+  {
+    "name": "T_LID",
+    "parameterTypeName": "String",
+    "nullable": false,
+    "nullableSpecified": true,
+    "allowBlank": false,
+    "allowBlankSpecified": true,
+    "multiValue": true,
+    "multiValueSpecified": true,
+    "queryParameter": true,
+    "queryParameterSpecified": true,
+    "prompt": "Location",
+    "promptUser": true,
+    "promptUserSpecified": true,
+    "dependencies": null,
+    "validValuesQueryBased": true,
+    "validValuesQueryBasedSpecified": true,
+    "validValues": [
+      {
+        "label": "Service Room",
+        "value": "Service Room"
+      }
+    ],
+    "defaultValuesQueryBased": false,
+    "defaultValuesQueryBasedSpecified": true,
+    "defaultValues": null,
+    "parameterStateName": "MissingValidValue",
+    "errorMessage": null
+  },
+  {
+    "name": "R_ReportID",
+    "parameterTypeName": "Integer",
+    "nullable": true,
+    "nullableSpecified": true,
+    "allowBlank": false,
+    "allowBlankSpecified": true,
+    "multiValue": false,
+    "multiValueSpecified": true,
+    "queryParameter": true,
+    "queryParameterSpecified": true,
+    "prompt": "ReportID",
+    "promptUser": true,
+    "promptUserSpecified": true,
+    "dependencies": null,
+    "validValuesQueryBased": false,
+    "validValuesQueryBasedSpecified": true,
+    "validValues": null,
+    "defaultValuesQueryBased": false,
+    "defaultValuesQueryBasedSpecified": true,
+    "defaultValues": [
+      null
+    ],
+    "parameterStateName": "HasValidValue",
+    "errorMessage": null
+  },
+  {
+    "name": "R_SDate",
+    "parameterTypeName": "DateTime",
+    "nullable": true,
+    "nullableSpecified": true,
+    "allowBlank": false,
+    "allowBlankSpecified": true,
+    "multiValue": false,
+    "multiValueSpecified": true,
+    "queryParameter": true,
+    "queryParameterSpecified": true,
+    "prompt": "StartDate",
+    "promptUser": true,
+    "promptUserSpecified": true,
+    "dependencies": null,
+    "validValuesQueryBased": false,
+    "validValuesQueryBasedSpecified": true,
+    "validValues": null,
+    "defaultValuesQueryBased": false,
+    "defaultValuesQueryBasedSpecified": true,
+    "defaultValues": [
+      null
+    ],
+    "parameterStateName": "HasValidValue",
+    "errorMessage": null
+  },
+  {
+    "name": "R_EDate",
+    "parameterTypeName": "DateTime",
+    "nullable": true,
+    "nullableSpecified": true,
+    "allowBlank": false,
+    "allowBlankSpecified": true,
+    "multiValue": false,
+    "multiValueSpecified": true,
+    "queryParameter": true,
+    "queryParameterSpecified": true,
+    "prompt": "EndDate",
+    "promptUser": true,
+    "promptUserSpecified": true,
+    "dependencies": null,
+    "validValuesQueryBased": false,
+    "validValuesQueryBasedSpecified": true,
+    "validValues": null,
+    "defaultValuesQueryBased": false,
+    "defaultValuesQueryBasedSpecified": true,
+    "defaultValues": [
+      null
+    ],
+    "parameterStateName": "HasValidValue",
+    "errorMessage": null
+  },
+  {
+    "name": "T_SampleTime1",
+    "parameterTypeName": "String",
+    "nullable": false,
+    "nullableSpecified": true,
+    "allowBlank": false,
+    "allowBlankSpecified": true,
+    "multiValue": false,
+    "multiValueSpecified": true,
+    "queryParameter": true,
+    "queryParameterSpecified": true,
+    "prompt": "Snapshot Time 1",
+    "promptUser": true,
+    "promptUserSpecified": true,
+    "dependencies": null,
+    "validValuesQueryBased": false,
+    "validValuesQueryBasedSpecified": true,
+    "validValues": null,
+    "defaultValuesQueryBased": false,
+    "defaultValuesQueryBasedSpecified": true,
+    "defaultValues": [
+      "HH:MM"
+    ],
+    "parameterStateName": "HasValidValue",
+    "errorMessage": null
+  },
+  {
+    "name": "T_SampleTime2",
+    "parameterTypeName": "String",
+    "nullable": false,
+    "nullableSpecified": true,
+    "allowBlank": false,
+    "allowBlankSpecified": true,
+    "multiValue": false,
+    "multiValueSpecified": true,
+    "queryParameter": true,
+    "queryParameterSpecified": true,
+    "prompt": "Snapshot Time 2",
+    "promptUser": true,
+    "promptUserSpecified": true,
+    "dependencies": null,
+    "validValuesQueryBased": false,
+    "validValuesQueryBasedSpecified": true,
+    "validValues": null,
+    "defaultValuesQueryBased": false,
+    "defaultValuesQueryBasedSpecified": true,
+    "defaultValues": [
+      "HH:MM"
+    ],
+    "parameterStateName": "HasValidValue",
+    "errorMessage": null
+  },
+  {
+    "name": "T_Groupby",
+    "parameterTypeName": "String",
+    "nullable": false,
+    "nullableSpecified": true,
+    "allowBlank": false,
+    "allowBlankSpecified": true,
+    "multiValue": false,
+    "multiValueSpecified": true,
+    "queryParameter": true,
+    "queryParameterSpecified": true,
+    "prompt": "Display Results by",
+    "promptUser": true,
+    "promptUserSpecified": true,
+    "dependencies": null,
+    "validValuesQueryBased": false,
+    "validValuesQueryBasedSpecified": true,
+    "validValues": [
+      {
+        "label": "Room",
+        "value": "Room"
+      },
+      {
+        "label": "Facet",
+        "value": "Facet"
+      }
+    ],
+    "defaultValuesQueryBased": false,
+    "defaultValuesQueryBasedSpecified": true,
+    "defaultValues": [
+      "Room"
+    ],
+    "parameterStateName": "HasValidValue",
+    "errorMessage": null
+  },
+  {
+    "name": "R_DateRange",
+    "parameterTypeName": "String",
+    "nullable": true,
+    "nullableSpecified": true,
+    "allowBlank": false,
+    "allowBlankSpecified": true,
+    "multiValue": false,
+    "multiValueSpecified": true,
+    "queryParameter": true,
+    "queryParameterSpecified": true,
+    "prompt": "Scheduled Date Range",
+    "promptUser": true,
+    "promptUserSpecified": true,
+    "dependencies": null,
+    "validValuesQueryBased": true,
+    "validValuesQueryBasedSpecified": true,
+    "validValues": [
+      {
+        "label": "Last 24 Hours",
+        "value": "Last24Hours"
+      },
+      {
+        "label": "Last 7 Days",
+        "value": "Last7Days"
+      },
+      {
+        "label": "Last 30 Days",
+        "value": "Last30Days"
+      },
+      {
+        "label": "Last 60 Days",
+        "value": "Last60Days"
+      },
+      {
+        "label": "Last 90 Days",
+        "value": "Last90Days"
+      },
+      {
+        "label": "Yesterday",
+        "value": "Yesterday"
+      },
+      {
+        "label": "This Week",
+        "value": "ThisWeek"
+      },
+      {
+        "label": "Last Week",
+        "value": "LastWeek"
+      },
+      {
+        "label": "Fortnight",
+        "value": "Fortnight"
+      },
+      {
+        "label": "This Month",
+        "value": "ThisMonth"
+      },
+      {
+        "label": "Last Month",
+        "value": "LastMonth"
+      },
+      {
+        "label": "Custom",
+        "value": "Custom"
+      }
+    ],
+    "defaultValuesQueryBased": false,
+    "defaultValuesQueryBasedSpecified": true,
+    "defaultValues": [
+      "Custom"
+    ],
+    "parameterStateName": "HasValidValue",
+    "errorMessage": null
+  },
+  {
+    "name": "T_IsValid",
+    "parameterTypeName": "String",
+    "nullable": false,
+    "nullableSpecified": true,
+    "allowBlank": false,
+    "allowBlankSpecified": true,
+    "multiValue": false,
+    "multiValueSpecified": true,
+    "queryParameter": true,
+    "queryParameterSpecified": true,
+    "prompt": "",
+    "promptUser": false,
+    "promptUserSpecified": true,
+    "dependencies": [
+      "R_ReportID",
+      "T_Groupby",
+      "T_LID",
+      "R_EDate",
+      "T_SampleTime1",
+      "T_SampleTime2",
+      "R_DateRange",
+      "R_SDate"
+    ],
+    "validValuesQueryBased": true,
+    "validValuesQueryBasedSpecified": true,
+    "validValues": null,
+    "defaultValuesQueryBased": true,
+    "defaultValuesQueryBasedSpecified": true,
+    "defaultValues": null,
+    "parameterStateName": "HasOutstandingDependencies",
+    "errorMessage": null
+  },
+  {
+    "name": "R_ParameterDescription",
+    "parameterTypeName": "String",
+    "nullable": false,
+    "nullableSpecified": true,
+    "allowBlank": false,
+    "allowBlankSpecified": true,
+    "multiValue": true,
+    "multiValueSpecified": true,
+    "queryParameter": true,
+    "queryParameterSpecified": true,
+    "prompt": "",
+    "promptUser": false,
+    "promptUserSpecified": true,
+    "dependencies": null,
+    "validValuesQueryBased": false,
+    "validValuesQueryBasedSpecified": true,
+    "validValues": [
+      {
+        "label": "StartDate",
+        "value": "StartDate is used by the query to select the required data from the date selected."
+      },
+      {
+        "label": "EndDate",
+        "value": "EndDate is used by the query to limit the required data to the date selected."
+      },
+      {
+        "label": "PointDescription1",
+        "value": "Enter phrase to group the logdescriptions."
+      },
+      {
+        "label": "PointDescription2",
+        "value": "Enter phrase to group the logdescriptions."
+      },
+      {
+        "label": "PointDescription3",
+        "value": "Enter phrase to group the logdescriptions."
+      },
+      {
+        "label": "PointDescription4",
+        "value": "Enter phrase to group the logdescriptions."
+      },
+      {
+        "label": "SID",
+        "value": "Trendlog Objects."
+      },
+      {
+        "label": "DateRange",
+        "value": "Schedule the report based on the available list."
+      },
+      {
+        "label": "ReportID",
+        "value": "ReportID is used by the web app to show the report title in PDF's."
+      },
+      {
+        "label": "Templatetype",
+        "value": "This template onlyn supports for trendlog."
+      },
+      {
+        "label": "IsDashboard",
+        "value": "This template doesn't support dashboard."
+      },
+      {
+        "label": "Duration",
+        "value": "Set the default duration for the Datepicker."
+      },
+      {
+        "label": "MeasureSetpoint1",
+        "value": "Measure Point Set Points 1 are the threshold points for each trendlog which is used to indicate the acceptable range values Min and Max. Enter the values separated by commas."
+      },
+      {
+        "label": "MeasureSetpoint2",
+        "value": "Measure Point Set Points 2 are the threshold points for each trendlog which is used to indicate the acceptable range values Min and Max. Enter the values separated by commas."
+      },
+      {
+        "label": "MeasureSetpoint3",
+        "value": "Measure Point Set Points 3 are the threshold points for each trendlog which is used to indicate the acceptable range values Min and Max. Enter the values separated by commas."
+      },
+      {
+        "label": "MeasureSetpoint4",
+        "value": "Measure Point Set Points 4 are the threshold points for each trendlog which is used to indicate the acceptable range values Min and Max. Enter the values separated by commas."
+      },
+      {
+        "label": "Version",
+        "value": "The version number is used to track the.RDL files we ship to the customers."
+      },
+      {
+        "label": "SnapshotTime1",
+        "value": "A snapshot is the state of a trendlog at a particular point in time1. Time format shoud be(24Hours)- HH:MM"
+      },
+      {
+        "label": "SnapshotTime2",
+        "value": "A snapshot is the state of a trendlog at a particular point in time2. Time format shoud be(24Hours)- HH:MM"
+      },
+      {
+        "label": "Groupby",
+        "value": "Display Result Group by this field"
+      }
+    ],
+    "defaultValuesQueryBased": false,
+    "defaultValuesQueryBasedSpecified": true,
+    "defaultValues": [
+      "StartDate is used by the query to select the required data from the date selected.",
+      "EndDate is used by the query to limit the required data to the date selected.",
+      "Enter phrase to group the logdescriptions.",
+      "Enter phrase to group the logdescriptions.",
+      "Enter phrase to group the logdescriptions.",
+      "Enter phrase to group the logdescriptions.",
+      "Trendlog Objects.",
+      "Schedule the report based on the available list.",
+      "ReportID is used by the web app to show the report title in PDF's.",
+      "This template onlyn supports for trendlog.",
+      "This template doesn't support dashboard.",
+      "Set the default duration for the Datepicker.",
+      "Measure Point Set Points 1 are the threshold points for each trendlog which is used to indicate the acceptable range values Min and Max. Enter the values separated by commas.",
+      "Measure Point Set Points 2 are the threshold points for each trendlog which is used to indicate the acceptable range values Min and Max. Enter the values separated by commas.",
+      "Measure Point Set Points 3 are the threshold points for each trendlog which is used to indicate the acceptable range values Min and Max. Enter the values separated by commas.",
+      "Measure Point Set Points 4 are the threshold points for each trendlog which is used to indicate the acceptable range values Min and Max. Enter the values separated by commas.",
+      "The version number is used to track the.RDL files we ship to the customers.",
+      "A snapshot is the state of a trendlog at a particular point in time1. Time format shoud be(24Hours)- HH:MM",
+      "A snapshot is the state of a trendlog at a particular point in time2. Time format shoud be(24Hours)- HH:MM",
+      "Display Result Group by this field"
+    ],
+    "parameterStateName": "HasValidValue",
+    "errorMessage": null
+  },
+  {
+    "name": "R_Templatetype",
+    "parameterTypeName": "String",
+    "nullable": false,
+    "nullableSpecified": true,
+    "allowBlank": false,
+    "allowBlankSpecified": true,
+    "multiValue": false,
+    "multiValueSpecified": true,
+    "queryParameter": true,
+    "queryParameterSpecified": true,
+    "prompt": "",
+    "promptUser": false,
+    "promptUserSpecified": true,
+    "dependencies": null,
+    "validValuesQueryBased": false,
+    "validValuesQueryBasedSpecified": true,
+    "validValues": null,
+    "defaultValuesQueryBased": false,
+    "defaultValuesQueryBasedSpecified": true,
+    "defaultValues": [
+      "Trendlog"
+    ],
+    "parameterStateName": "HasValidValue",
+    "errorMessage": null
+  },
+  {
+    "name": "R_Version",
+    "parameterTypeName": "String",
+    "nullable": false,
+    "nullableSpecified": true,
+    "allowBlank": false,
+    "allowBlankSpecified": true,
+    "multiValue": false,
+    "multiValueSpecified": true,
+    "queryParameter": true,
+    "queryParameterSpecified": true,
+    "prompt": "",
+    "promptUser": false,
+    "promptUserSpecified": true,
+    "dependencies": null,
+    "validValuesQueryBased": false,
+    "validValuesQueryBasedSpecified": true,
+    "validValues": null,
+    "defaultValuesQueryBased": false,
+    "defaultValuesQueryBasedSpecified": true,
+    "defaultValues": [
+      "01.03.0001.19181"
+    ],
+    "parameterStateName": "HasValidValue",
+    "errorMessage": null
+  },
+  {
+    "name": "R_IsDashboard",
+    "parameterTypeName": "Boolean",
+    "nullable": false,
+    "nullableSpecified": true,
+    "allowBlank": false,
+    "allowBlankSpecified": true,
+    "multiValue": false,
+    "multiValueSpecified": true,
+    "queryParameter": true,
+    "queryParameterSpecified": true,
+    "prompt": "",
+    "promptUser": false,
+    "promptUserSpecified": true,
+    "dependencies": null,
+    "validValuesQueryBased": false,
+    "validValuesQueryBasedSpecified": true,
+    "validValues": null,
+    "defaultValuesQueryBased": false,
+    "defaultValuesQueryBasedSpecified": true,
+    "defaultValues": [
+      "False"
+    ],
+    "parameterStateName": "HasValidValue",
+    "errorMessage": null
+  }
+]

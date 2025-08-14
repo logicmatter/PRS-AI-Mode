@@ -1,0 +1,56 @@
+@import '../../../styles.scss';
+.example-container {
+  height: 100%;
+  border: 1px solid rgba(250, 250, 250, 1);
+}
+.example-sidenav-content {
+  height: 89vh;
+  margin: 15px;
+}
+.example-sidenav {
+  user-select: none;
+}
+.full-width {
+  width: 100%;
+  font-family: Arial, Sans-Serif !important;
+}
+.menu-button {
+  transition: 300ms ease-in-out;
+  transform: rotate(0deg);
+}
+.menu-button.rotated {
+  transform: rotate(180deg);
+}
+.submenu {
+  overflow-y: hidden;
+  transition: transform 300ms ease;
+  transform: scaleY(0);
+  transform-origin: top;
+  padding-left: 30px;
+}
+.submenu.expanded {
+  transform: scaleY(1);
+}
+.example-spacer {
+  flex: 1 1 auto;
+}
+.example-icon {
+  padding: 0 40px 0 0;
+}
+.toolbarIcons{
+  cursor: pointer;
+}
+::ng-deep .mat-tooltip.tooltip {
+
+  font-size: 12px;
+  margin-bottom: 0px;
+  margin: 5px!important;
+
+
+}
+@media only screen and (max-height: 658px) and (min-height: 600px)  {
+  .example-container {
+    height: auto;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+  }
+}

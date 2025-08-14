@@ -1,0 +1,179 @@
+<div *ngIf="route.children.length == 0">
+  <app-spinner *ngIf="showSpinner"></app-spinner>
+    <div>
+      <div *ngIf="!showSpinner">
+        <div class="fixedPosition">
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+        <!-- <span data-toggle="tooltip" title="Back" (click)="backParent()" class="sla-back-icon refresh-icon"
+      *ngIf="!utility.routerValue" style="margin-left: 0%;margin-top: 1px;">
+      <mat-icon mat-list-icon class="btn-primary click-event">arrow_back</mat-icon>
+      </span> -->
+      <div *ngIf="utility.patternShow">
+        <div *ngIf ="length>0"><h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}}
+          of {{dataLength}} results for Pattern<b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5></div>
+          <div *ngIf ="length==0">  <h5 class="search-message py-2">Showing {{startingIndex}} - {{endingIndex}}
+            of {{dataLength}} results for Pattern<b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5></div>
+      </div>
+      <div *ngIf="(model.DevNum != null && model.DevNum != '') && !utility.patternShow">
+        <div>
+          <div *ngIf ="length>0"><h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}} of
+            {{length}} results for <b>"{{model.objectType}}"</b> in <b>"Device {{model.DevNum}}"</b></h5></div>
+            <div *ngIf ="length==0">  <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}} of
+              {{length}} results for <b>"{{model.objectType}}"</b> in <b>"Device {{model.DevNum}}"</b></h5></div>
+        </div>
+      </div>
+      <div *ngIf="(model.DevNum == null || model.DevNum == '') && !utility.patternShow">
+        <div *ngIf="model.keyWord == null || model.keyWord == ''">
+          <div *ngIf ="length>0"> <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}} <b>"{{model.objectType}}s"</b>
+            in {{dataLength}}  <b>"Total{{model.objectType}}"</b></h5></div>
+            <div *ngIf ="length==0"> <h5 class="search-message py-2">Showing {{startingIndex }} - {{endingIndex}} of
+              {{dataLength}} results for <b>"{{model.objectType}}"</b></h5></div>
+        </div>
+        <div *ngIf="(model.keyWord != null && model.keyWord != '') && !utility.patternShow">
+          <div *ngIf ="length>0"> <h5 class="search-message py-2">Showing {{startingIndex + 1}} - {{endingIndex}}
+            of {{dataLength}} results for <b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5></div>
+          <div *ngIf ="length==0"> <h5 class="search-message py-2">Showing {{startingIndex}} - {{endingIndex}}
+              of {{dataLength}} results for <b>"{{model.keyWord}}"</b> in <b>"{{model.objectType}}"</b></h5></div>
+        </div>
+      </div>
+      <div class="paginator-container">
+        <mat-paginator
+        #deivcePaginator
+        [hidden]="length < 10"
+        [length]="dataLength"
+        [pageSize]="pageSize"
+        [pageIndex]="currentPageIndex"
+        [pageSizeOptions]="pageSizeOptions"
+        (page)="getData($event)" [showFirstLastButtons]="true" [disabled]="isDisable"
+        class="pageTop"
+        ></mat-paginator>
+      </div>
+</div>
+      <div class="input-container" style="float:left">
+        <i class="fa fa-filter icon" matTooltip="Filter"></i>
+        <input class="form-control filter-input" type="text" name="search" placeholder="Filter" [(ngModel)]="filter" (keyup.enter)="applyFilter($event.target.value,$event)" (keyup)="filterByKey($event.target.value,$event)">
+      </div>
+      <div class="text-sm-right">
+        <a style="font-size:12px" *ngIf="model.app == 'app'"
+            [class.disabled]="!(adhocUtility.checkedList.length > 0)"><strong>Alarm Objects :
+                {{adhocUtility.checkedList.length}}</strong> </a>
+      </div>
+
+      <!-- <mat-form-field>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+      </mat-form-field> -->
+      </div><br/><br/>
+      <div class="scroller">
+      <div *ngIf ="length > 0 && deviceList.filteredData.length == 0">
+        <h5 style="text-align:center">No results found for the specified filter, press <b>Enter</b> for more results from database</h5>
+      </div>
+      <div *ngIf ="length == 0">
+        <h5 style="text-align:center" *ngIf="adhocUtility.saveFilter == ''">No results found</h5>
+        <h5 style="text-align:center" *ngIf="adhocUtility.saveFilter != ''">No results found for <b>{{adhocUtility.saveFilter}}</b></h5>
+      </div>
+      <div class="example-container mat-elevation-z8" >
+
+      <div class="spinner-container" *ngIf="deviceList">
+              <!-- <mat-spinner></mat-spinner> -->
+          </div>
+
+              <mat-table #table [dataSource]="deviceList" *ngIf="length>0" matSort>
+
+                <!-- First Column ID-->
+                <ng-container matColumnDef="devInst">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'nameWidthClass'"> Device Instance </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'nameWidthClass'">
+                    <a [routerLink]="['./deviceDetail']"
+                    [queryParams]="{objectType: 'Device',DevNum: element.devInst,isDetails:true,app:model.app}">{{element.devInst}}</a></mat-cell>
+                </ng-container>
+
+                <!-- Second Column -->
+                <ng-container matColumnDef="objName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'nameWidthClass'"> Device Name </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'nameWidthClass'">
+                    <ng-template #disabledLink1>
+                      <span *ngIf="model.app == 'app'">{{element.objName}}</span>
+                    </ng-template>
+                    <a *ngIf="model.app != 'app'; else disabledLink1" [routerLink]="['./deviceDetail']"
+                    [queryParams]="{objectType: 'Device',sid: element.sid,isDetails:true,app:model.app}">{{element.objName}}</a>
+                  </mat-cell>
+                </ng-container>
+
+                <!-- Third Column -->
+                <ng-container matColumnDef="devDescription">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'descrWidthClass'"> Device Description </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'descrWidthClass'">{{element.devDescription}}
+                    <div class="form-group">
+                      <!-- <a target="_blank"
+                        (click)="onNavigate(element.productCode)" href="#">{{element.productCode}}</a> -->
+                    </div>
+                  </mat-cell>
+                </ng-container>
+                <!-- Fourth Column -->
+                <ng-container matColumnDef="devModel">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'nameWidthClass'"> Device Model </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'nameWidthClass'"> {{element.devModel }} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="trendlogs">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'countWidthClass'"> Trendlogs </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'countWidthClass'"><a [routerLink]="['/searchobj/trendlog']"
+                    [queryParams]="{objectType: 'Trendlog',DevNum: element.devInst,isDetails:true, app: 'search'}">{{element.trendlogs}}</a> </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="alarms">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'countWidthClass'"> Alarms </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'countWidthClass'"><a [routerLink]="['/searchobj/alarm']"
+                    [queryParams]="{objectType: 'Alarm',DevNum: element.devInst,isDetails:true, app: 'search'}">{{element.alarms}}</a> </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="energyLogs">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'countWidthClass'"> Energy Logs </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'countWidthClass'"><a [routerLink]="['/searchobj/energylog']"
+                    [queryParams]="{objectType: 'Energylog',DevNum: element.devInst,isDetails:true, app: 'search'}">{{element.energyLogs}}</a></mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="points">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'countWidthClass'"> Points </mat-header-cell>
+                  <mat-cell *matCellDef="let element" [ngClass]="'countWidthClass'"> <a [routerLink]="['/searchobj/points']"
+                                        [queryParams]="{objectType: 'Points',DevNum: element.devInst,isDetails:true, app: 'search'}">{{element.points}}</a>
+                               </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              </mat-table>
+
+             
+
+            </div>
+     </div>
+     </div>
+    </div>
+
+
+    <!-- <div *ngIf="!showSpinner">
+      <div *ngIf="length==0">
+        <div *ngIf="model.keyWord == null || model.keyWord == ''">
+            <div *ngIf="model.objectType == 'Energylog'">
+                <h5 style="text-align:center">No Results Found for <b>"Energy Log"</b></h5>
+            </div>
+            <div *ngIf="model.objectType != 'Energylog'">
+                <h5 style="text-align:center">
+                    No Results Found for <b>"{{model.objectType}}"</b>
+                </h5>
+            </div>
+        </div>
+        <div *ngIf="model.keyWord != null && model.keyWord != ''">
+            <div *ngIf="model.objectType == 'Energylog'">
+                <h5 style="text-align:center">No Results Found for <b>"{{model.keyWord}}"</b> in <b>"Energy
+                        Log"</b></h5>
+            </div>
+            <div *ngIf="model.objectType != 'Energylog'">
+                <h5 style="text-align:center">No Results Found for <b>"{{model.keyWord}}"</b> in
+                    <b>"{{model.objectType}}"</b></h5>
+            </div>
+        </div>
+      </div>
+    </div> -->
+
+</div>
+<div>
+  <router-outlet></router-outlet>
+</div>

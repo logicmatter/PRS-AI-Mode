@@ -1,0 +1,105 @@
+<mat-toolbar class="primary-background">
+  <button mat-icon-button (click)="toggleSidenavBar()" class="mx-2">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <!-- <h1 class="example-app-name">Nested Menus</h1> -->
+  <span class="example-app-name">
+    <img [src]="websiteService.siteTopLogo ? websiteService.siteTopLogo : 'assets/images/Pointmatter_logo_primary.png'"
+      class="logoDisplay ml-3 logo" />
+  </span>
+  <span class="example-spacer"></span>
+ <div *ngIf="_utility.shouldDisplayDivs">
+  <div *ngIf="!_utility.pmanalyticmode"
+    style="border: 1px solid rgb(227, 227, 227); display: inline-block; padding: 3px; border-radius: 5px;">
+    <mat-slide-toggle [(ngModel)]="analyticModebasic" (change)="onToggleClick()" color="primary" labelPosition="before"
+      [disabled]=" _utility.isGrafanaedit !== false || _utility.isCreateReport !== false"
+      style="font-size: 16px; transform: scale(0.9);">AnalyticMode</mat-slide-toggle>
+  </div>
+  <div *ngIf="_utility.pmanalyticmode"
+    style="border: 1px solid rgb(227, 227, 227); display: inline-block; padding: 3px; border-radius: 5px;">
+    <mat-slide-toggle [checked]="true" [(ngModel)]="analyticMode" color="primary" disabled labelPosition="before"
+      style="font-size: 16px; transform: scale(0.9);">AnalyticMode</mat-slide-toggle>
+  </div>
+</div>
+  <!-- Search Section Start -->
+  <form [formGroup]="formGroup" (ngSubmit)="onSubmit(formGroup.value)" class="searchForm">
+    <div class="input-group mt-0">
+      <div class="input-group-prepend input-group-sm select">
+        <select class="form-select form-control" id="objectType" title="Select an ReportType ..."
+          formControlName="objectType" [(ngModel)]="utility.entitySelected"
+          (ngModelChange)="onChangeSearchDropdown($event)" [(value)]="utility.entitySelected">
+          <option *ngFor="let types of objectTypes" [value]="types.value">{{types.viewValue}}</option>
+        </select>
+      </div>
+      <input type="text" class="form-control form-control-sm searchInput" [placeholder]="searchPlaceHolder"
+        formControlName="keyword" [(ngModel)]="model.keyWord" (change)="model.keyWord= model.keyWord.trim()">
+      <div class="input-group-append">
+        <button [disabled]="utility.entitySelected == 'Transformers'" class="btn btn-success btn-sm btn-style"
+          type="submit"><img src="assets/icons/Group 125.svg" width="17px" height="17px" matTooltip="Search" /></button>
+      </div>
+    </div>
+    <!-- <span class="InputTextFieldInfo">Search Tokens: {{searchPlaceHolder}}</span> -->
+  </form>
+  <!-- Search Seaction End -->
+  <div class="fa-icons ">
+    <!-- GDP Start-->
+    <!-- <mat-icon class="material-icons toggle-tenants" aria-hidden="false" matTooltip="Date Picker">
+      date_range
+      </mat-icon> -->
+    <div class="ml-3  click-event click-event" *ngIf="!_utility.pmanalyticmode">
+      <img src="assets/icons/Group 122.svg" width="26px" height="26px" margin="10px" class="toggle-tenants"
+        aria-hidden="false" matTooltip="Date Picker" />
+    </div>
+    <div class="show-tenatsdatepicker" style="display: none">
+      <app-duration [allowed]="accessGlobal"></app-duration>
+    </div>
+    <!-- GDP End -->
+    <!-- Schedule Start-->
+    <!-- <mat-icon class="material-icons" aria-hidden="false" matTooltip="Scheduler" [routerLink]="['/home/schedulesList']">
+        access_time
+        </mat-icon> -->
+    <div class="ml-3 click-event">
+      <img src="assets/icons/Group 123.svg" width="26px" height="26px" style="outline: none; " aria-hidden="false"
+        matTooltip="Scheduler" [routerLink]="['/home/schedulesList']" />
+    </div>
+    <!-- Schedule End -->
+    <!-- Help Start -->
+    <!-- <mat-icon class="material-icons" aria-hidden="false"
+      matTooltip="Help" [matMenuTriggerFor]="menu1">
+        help_outline
+        </mat-icon> -->
+    <div class="ml-3 click-event">
+      <img src="assets/icons/Group 124.svg" width="26px" height="26px" margin="10px" aria-hidden="false"
+        aria-hidden="false" matTooltip="Help" [matMenuTriggerFor]="menu1" />
+    </div>
+    <!-- Help Dropdown start -->
+    <mat-menu #menu1="matMenu" yPosition="below" [overlapTrigger]="false">
+      <button mat-menu-item [matMenuTriggerFor]="about">About</button>
+      <!-- <button mat-menu-item (click)="openDocLink()">Documentation</button> -->
+      <button mat-menu-item (click)="openSupLink()">Help</button>
+    </mat-menu>
+    <mat-menu #about="matMenu">
+      <div mat-menu-item style="cursor:default">
+        <span><b>License Type:
+          </b>{{_utility.licenseInfo.isLimitedEdition? 'STARTER' : _utility.licenseInfo.type}}</span>
+      </div>
+      <div mat-menu-item style="cursor:default">
+        <span><b>Version: </b>{{appVersion}}</span>
+      </div>
+      <div mat-menu-item style="cursor:default">
+        <span><b>Build: </b>{{build}}</span>
+      </div>
+    </mat-menu>
+    <!-- Help Dropdown End -->
+    <!-- Help End -->
+  </div>
+  <!-- Logout Section Start -->
+  <button aria-hidden="true" class="account ml-2 mr-4" mat-mini-fab matTooltip="{{isAuthorized.sub}}"
+    [matMenuTriggerFor]="menu">{{isAuthorized.sub | slice:0:1}}</button>
+  <mat-menu #menu="matMenu" yPosition="below" [overlapTrigger]="false">
+    <button mat-menu-item [routerLink]="['/profile', this.isAuthorized.userId]">Profile</button>
+    <button mat-menu-item (click)="logout()">Logout</button>
+    <!-- Logout Section End -->
+  </mat-menu>
+</mat-toolbar>
+<app-side-nav [isExpand]="isExpanded"></app-side-nav>

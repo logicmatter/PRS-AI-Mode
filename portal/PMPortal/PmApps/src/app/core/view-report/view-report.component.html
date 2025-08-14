@@ -1,0 +1,109 @@
+<div class="app-content mt-3">
+  <div class="row justify-content-start" style="margin-bottom: 20px;">
+    <div class="col-3" >
+      <button class="btn btn-outline-primary" (click)="discard()">
+        Back
+      </button>
+    </div>
+    <div class="col-3" >
+      <div *ngIf="_utility.createRpt  && _utility.toggle">
+        <button type="button" class="btn btn-outline-primary" (click)="comParam.saveReport()" [disabled]="
+        _utility.btnLoading  || (!_utility.validTemplateForm || _utility.isReportNameEmpty || _utility.reportNameExists || _utility.hasReportNameValid || (_utility.isObjectSelectionEnable ? _Adhocutility.checkedList.length == 0 : false))">
+          <span *ngIf="_utility.btnLoading" class="spinner-border spinner-border-sm mr-1"></span>
+          Save
+        </button>
+      </div>
+      <div *ngIf="!_utility.createRpt  && _utility.toggle">
+        <button type="button"
+          [disabled]="_utility.btnLoading  || (!_utility.validTemplateForm || _utility.isReportNameEmpty || _utility.reportNameExists || _utility.hasReportNameValid  || (_utility.isObjectSelectionEnable ? _Adhocutility.checkedList.length == 0 : false))"
+          class="btn btn-outline-primary" (click)="comParam.UpdateReportDialog()">
+          <span *ngIf="_utility.btnLoading" class="spinner-border spinner-border-sm mr-1"></span>
+          Update
+        </button>
+      </div>
+    </div>
+
+    <div class="col-3" >
+      <button class="btn btn-outline-primary" (click)="comParam.previewReport()"
+        [disabled]="!_utility.validTemplateForm  || _utility.hasReportNameValid || _utility.isReportNameEmpty || (_utility.isObjectSelectionEnable ? _Adhocutility.checkedList.length == 0 : false)"
+        *ngIf="_utility.toggle">
+        Preview
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <strong style="cursor:pointer;" (click)="openNav()">&#9776; Parameters</strong>
+    </div>
+    <div class="col-md-3"  style="word-wrap: break-word;">
+      <strong>{{ reportObj.ReportName }}</strong>
+    </div>
+    <div class="col-md-3" style="text-align: end;" *ngIf="_utility.isRunFeatures">
+      <app-rpt-pagination></app-rpt-pagination>
+    </div>
+    <div class="col-md-2" style="text-align: end;" *ngIf="_utility.isRunFeatures">
+      <!-- <button type="button" class="btn btn-light" matTooltip="PDF">
+        <i
+          class="fa fa-file-pdf-o"
+          style="color:red;cursor: pointer;margin: 5px"
+          (click)="downloadPdf()"
+        >
+        </i>
+      </button>
+
+      <button type="button" class="btn btn-light" matTooltip="EXCEL">
+        <i
+          class="fa fa-file-excel-o"
+          style="color:green;cursor: pointer;margin: 5px"
+          (click)="downloadExcel()"
+        >
+        </i>
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-light"
+        matTooltip="CSV"
+        *ngIf="!_utility.csvDownloadFlag"
+      >
+        <i
+          class="fa fa-file-text-o"
+          style="color:blue;cursor: pointer;margin: 5px"
+          (click)="downloadCSV()"
+        >
+        </i>
+      </button> -->
+      <span matTooltip="Download as PDF" style="color:brown;cursor: pointer;"><i class="fa fa-file-pdf-o"
+          style="font-size: 27px;" (click)="downloadPdf()"></i></span>
+      <span matTooltip="Download as EXCEL" style="color:green;margin:5px;cursor: pointer;"><i
+          class="fa fa-file-excel-o" style="font-size: 27px;" (click)="downloadExcel()"></i></span>
+      <span matTooltip="Download as CSV" style="color:blue;cursor: pointer;" *ngIf="!_utility.csvDownloadFlag"><i
+          class="fa fa-file-text-o" style="font-size: 27px;" (click)="downloadCSV()"></i></span>
+    </div>
+  </div>
+  <div class="row">
+    <div id="mySidenav" class="sidenav" [ngStyle]="{
+        width: _utility.isClickedToggle ? '34%' : '0', display: _utility.isClickedToggle ? 'block' : 'none'
+      }">
+
+      <div class="parameter" >
+        <app-parameters [id]="id" #comParam></app-parameters>
+      </div>
+    </div>
+    <div id="main" [ngStyle]="{
+        width: _utility.mainWidthToggle ? '66%' : '100%'
+      }">
+      <hr />
+      <!-- <app-spinner *ngIf="_utility.showSpinner"></app-spinner> -->
+      <!-- Resolution Buttons in side Report -->
+      <div class="row resolutions" *ngIf="_utility.isRunFeatures && _utility.isEnableResolution">
+        <app-rpt-resolutions *ngFor="let resolution of coreService.resolutions" [buttonLabel]="resolution.key" (resClick)="comParam.onClickResolutionBtn($event)">
+        </app-rpt-resolutions>
+      </div>
+      <show-report [rptData]="_utility.reportData"></show-report>
+      <div *ngIf="_utility.isObjectSelection">
+        <!-- <app-alarm-search [selectionObjInput1]="model"></app-alarm-search> -->
+      </div>
+    </div>
+  </div>
+</div>

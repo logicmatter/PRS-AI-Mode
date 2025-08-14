@@ -1,0 +1,167 @@
+.button-container {
+    display: flex;
+    justify-content: 20px;
+    align-items: center;
+    margin-top: 20px;
+  }
+  button {
+    margin-right: 10px;
+    font-size: 20px;
+    padding: 10px 20px;
+    background-color: gray;
+    border-radius: 12px;
+    border-color: gray;
+
+  }
+
+  button.selected {
+    background-color:#016698;
+    color: white; /* optional, changes text color to white */
+  }
+
+.row
+  {
+   display: flex;
+   justify-content: space-between;
+   padding: 0px 5px 5px 15px;
+
+  }
+
+  .cpybtn
+  {
+  margin-left: auto;
+  height: 45px;
+  background-color: #f2f2f2;
+  color: #016698;
+  border-color: #016698;
+  padding: 5px 10px;
+  cursor: pointer;
+  }
+
+  .cpybtn:hover {
+    background-color: #016698;
+    color: #ffffff;
+  }
+
+  .cpybtn2
+  {
+  margin-left: 15.5em;
+  height: 45px;
+  background-color: #f2f2f2;
+  color: #016698;
+  border-color: #016698;
+  padding: 5px 10px;
+  cursor: pointer;
+  }
+
+  .cpybtn2:hover {
+    background-color: #016698;
+    color: #ffffff;
+  }
+
+
+
+  ::ng-deep .mat-tab-label {
+    background-color: rgb(182, 182, 182);
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+  }
+
+  ::ng-deep .mat-tab-label-active {
+    background-color:#016698;;
+  }
+
+  .fa-lg {
+    font-size: 1.35em !important;
+  }
+
+  .filterText {
+    color: rgba(112, 120, 125, 1);
+    min-width: 40px;
+    text-align: center;
+    font-size: 16px;
+    background: rgba(250, 250, 250, 1) 0% 0% no-repeat padding-box;
+    border: 1px solid rgba(204, 204, 204, 1);
+    border-radius: 4px 0px 0px 4px;
+    opacity: 1;
+  }
+  .input-container {
+    display: -ms-flexbox;
+    /* IE10 */
+    display: flex;
+    margin-bottom: 3px;
+  }
+
+  .nav-active {
+    color: #e85d1b;
+    margin: 5px;
+  }
+
+  .nav-inactive {
+    color: #016698;
+    cursor: pointer;
+    margin: 5px;
+  }
+
+  .repName {
+    cursor: pointer;
+    color: var(--primary-color)
+  }
+
+  .repName:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+  }
+
+  @media screen and (min-width: 500px) and (max-width:1000px) {
+
+  .cpybtn
+  {
+
+  margin-left: 180px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+    }
+}
+
+  @media screen and (min-width: 300px) and (max-width:900px) {
+
+    .cpybtn
+    {
+  
+      margin-left: 180px;
+      margin-top: 5px;
+      margin-bottom: 5px;    
+    
+    }
+  
+}
+
+@media screen and (min-width: 700px) and (max-width:1100px) {
+
+  .cpybtn
+  {
+
+    margin-left: 550px;
+    margin-top: 5px;
+    margin-bottom: 5px;    
+  
+  }
+
+}
+
+@media screen and (min-width: 800px) and (max-width:1200px) {
+
+  .cpybtn
+  {
+
+    margin-left: 600px;
+    margin-top: 5px;
+    margin-bottom: 5px;    
+  
+  }
+
+}
+
+
