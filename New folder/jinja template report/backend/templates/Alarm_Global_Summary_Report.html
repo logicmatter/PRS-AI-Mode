@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <title>Alarm Report Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap & Chart.js -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <style>
+    
+    body {
+      transition: background-color 0.5s ease, color 0.5s ease;
+    }
+    .card:hover {
+      transform: scale(1.02);
+      transition: transform 0.2s ease-in-out;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+    .chart-container {
+      position: relative;
+      height: 300px;
+    }
+    .toggle-switch {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+    }
+    canvas {
+      cursor: crosshair;
+    }
+  </style>
+</head>
+<body class="bg-light text-dark">
+
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">🔔 Alarm Report Dashboard</h2>
+    <div class="form-check form-switch toggle-switch">
+      <input class="form-check-input" type="checkbox" id="darkModeToggle">
+      <label class="form-check-label" for="darkModeToggle">Dark Mode</label>
+    </div>
+  </div>
+
+  <!-- Report Info -->
+  <div class="row mb-4 g-3">
+    {% for label, value in {
+      "Start Date": report.sdt,
+      "End Date": report.edt,
+      "First Shift": report.first_shift_time,
+      "Shifts/Day": report.shifts_per_day
+    }.items() %}
+      <div class="col-md-3">
+        <div class="card p-3 shadow-sm">
+          <div class="fw-bold">{{ label }}</div>
+          <div>{{ value }}</div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+    <div class="row g-4 mb-4">
+    
+  <div class="row mb-4">
+    <div class="col">
+      <div class="card p-3">
+        <h6>⏰ Hourly Alarm Activity</h6>
+        <div class="chart-container"><canvas id="hourlyChart"></canvas></div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row mb-4 g-3 text-center" style="margin-top: -30px;">
+  {% if report.overview_alarms %}
+    {% set overview = report.overview_alarms[0] %}
+    {% for label, key in {
+      "Return To Normal": "Return To Normal",
+      "Alarm Count": "Alarm Count",
+      "Unique Alarm Count": "Unique Alarm Count",
+      "Never Acknowledged": "Never Acknowledged",
+      "Open Alarms": "Open Alarms"
+    }.items() %}
+      <div class="col-md">
+        <div class="card p-3 bg-gradient shadow-sm">
+          <div class="text-muted small">{{ label }}</div>
+          <div class="display-6 fw-semibold">{{ overview[key] or 0 }}</div>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="col">
+      <div class="alert alert-warning text-center w-100">No Data Available</div>
+    </div>
+  {% endif %}
+</div>
+
+  <div class="card p-3 mb-4" style="margin-top: -20px;">
+  <h5>📊 Alarm Count Breakdown</h5>
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-dark text-center">
+        <tr>
+          <th>Alarm State</th>
+          <th>Alarm Count</th>
+          <th>Unique Alarm Count</th>
+          <th>Never Acknowledged</th>
+          <th>Open Alarms</th>
+        </tr>
+      </thead>
+      <tbody class="text-center">
+        {% if report.state_alarms %}
+          {% for a in report.state_alarms %}
+            <tr>
+              <td>{{ a["AlarmState"] }}</td>
+              <td>{{ a["Alarm Count"] }}</td>
+              <td>{{ a["Unique Alarm Count"] }}</td>
+              <td>{{ a["Never Acknowledged"] }}</td>
+              <td>{{ a["Open Alarms"] }}</td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="5" class="text-muted text-center">No data available</td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Top 10 Alarms -->
+<div class="card p-2 mb-4" style="margin-top: -20px;">
+  <h5>📈 Top 10 Recurring Alarms</h5>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Rank</th>
+          <th>Count</th>
+          <th>Device</th>
+          <th>Object</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if report.top_alarms %}
+          {% for a in report.top_alarms %}
+            <tr>
+              <td>{{ a.Rank }}</td>
+              <td>{{ a.Count }}</td>
+              <td>{{ a.DevInst }}</td>
+              <td>{{ a.ObjInst }}</td>
+              <td>{{ a.Description }}</td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="5" class="text-center text-muted">No data available</td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+
+    const darkModeToggle = document.getElementById('darkModeToggle');
+  const htmlTag = document.documentElement;
+  darkModeToggle.addEventListener('change', () => {
+    htmlTag.setAttribute('data-bs-theme', darkModeToggle.checked ? 'dark' : 'light');
+  });
+
+  const shiftData = JSON.parse(`{{ report.hourly_shifts | tojson | safe }}`);
+
+const labels = shiftData.map(shift => shift.ShiftName);
+const alarmCounts = shiftData.map(shift => shift.Occurrence);
+const acknowledgedCounts = shiftData.map(shift => shift.AckOccurrence);
+
+const ctx = document.getElementById('hourlyChart').getContext('2d');
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: labels,
+    datasets: [
+      {
+        label: 'Alarm occurrence count in a shift',
+        data: alarmCounts,
+        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+        barPercentage: 1.0,
+
+      },
+      {
+        label: 'Acknowledged Alarms count in a shift',
+        data: acknowledgedCounts,
+        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+        barPercentage: 1.0,
+
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      x: {
+        stacked: false
+      },
+      y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Occurrences',
+            font: {
+              size: 14
+            }
+          }
+        }
+      },
+              plugins: {
+        legend: {
+          position: 'top',
+          align: 'end',
+          labels: {
+            boxWidth: 20
+          }
+        },
+        tooltip: {
+          callbacks: {
+            // Remove the default label (Shift1, Shift2)
+            title: function() {
+              return ''; // No title
+            },
+            label: function(context) {
+              const datasetLabel = context.dataset.label || '';
+              const value = context.formattedValue;
+              return `${datasetLabel}: ${value}`;
+            },
+            afterLabel: function(context) {
+              const index = context.dataIndex;
+              const shift = shiftData[index];
+              return `Shift Time: ${shift.ShiftTimePeriod}`;
+            }
+          }
+        }
+      }
+    }
+  });
+ 
+
+   </script>
+
+</body>
+</html>
