@@ -1,404 +1,374 @@
-"""Data loader for fetching raw IoT samples from source database"""
+"""Data loader for IoT metrics module (Parquet-based)"""
 
-from datetime import datetime
-from typing import List, Optional, Tuple, Dict, Any
+from typing import Optional, List
+from datetime import datetime, timedelta
+from pathlib import Path
 import pandas as pd
-from sqlalchemy import create_engine, and_, or_
-from sqlalchemy.orm import sessionmaker, Session
-from sqlalchemy.pool import QueuePool
 
 from ..config.config import Config
 from ..utils.logger import get_context_logger
-from ..utils.helpers import get_bucket_datetime_range, validate_dataframe_columns
-from .models import DimSensor, FactSample
+from ..storage.parquet_adapter import ParquetStorageAdapter
+from .models import DimSensor, FactSample, timestamp_to_bucket
 
 
 class DataLoader:
     """
-    DataLoader class for fetching raw sensor data from source database
+    Data loader for fetching raw IoT sensor data
+    Works with Parquet files for storage
     """
 
     def __init__(self, config: Config):
         """
-        Initialize DataLoader with configuration
+        Initialize data loader
 
         Args:
             config: Configuration object
         """
         self.config = config
         self.logger = get_context_logger('data.loader')
+        self.storage = ParquetStorageAdapter(config)
 
-        # Create database engine with connection pooling
-        self.engine = create_engine(
-            config.database.connection_string,
-            poolclass=QueuePool,
-            pool_size=config.database.pool_size,
-            max_overflow=config.database.max_overflow,
-            pool_pre_ping=True,  # Test connections before using
-            pool_recycle=3600,  # Recycle connections after 1 hour
-            echo=config.debug
-        )
+        self.logger.info("DataLoader initialized with Parquet storage")
 
-        # Create session factory
-        self.SessionLocal = sessionmaker(
-            autocommit=False,
-            autoflush=False,
-            bind=self.engine
-        )
-
-        self.logger.info("DataLoader initialized")
-
-    def get_session(self) -> Session:
+    def load_sensors(self, tid: Optional[str] = None) -> List[DimSensor]:
         """
-        Get a new database session
-
-        Returns:
-            SQLAlchemy session
-        """
-        return self.SessionLocal()
-
-    def fetch_sensors(
-        self,
-        tid: Optional[str] = None,
-        sid: Optional[int] = None,
-        sids: Optional[List[int]] = None
-    ) -> pd.DataFrame:
-        """
-        Fetch sensor metadata from DimSensor table
+        Load sensor metadata
 
         Args:
-            tid: Tenant ID filter (optional)
-            sid: Single sensor ID filter (optional)
-            sids: Multiple sensor IDs filter (optional)
+            tid: Optional tenant ID filter
 
         Returns:
-            DataFrame with sensor metadata
+            List of DimSensor objects
         """
-        session = self.get_session()
-        try:
-            query = session.query(DimSensor)
+        sensors = self.storage.read_sensors(tid=tid)
+        self.logger.debug(f"Loaded {len(sensors)} sensors" + (f" for tenant {tid}" if tid else ""))
+        return sensors
 
-            # Apply filters
-            if tid:
-                query = query.filter(DimSensor.tid == tid)
-            if sid:
-                query = query.filter(DimSensor.sid == sid)
-            if sids:
-                query = query.filter(DimSensor.sid.in_(sids))
-
-            # Execute query
-            sensors = query.all()
-
-            # Convert to DataFrame
-            if not sensors:
-                return pd.DataFrame()
-
-            data = [{
-                'sid': s.sid,
-                'tid': s.tid,
-                'ObjectInstance': s.ObjectInstance,
-                'ObjectType': s.ObjectType,
-                'ObjectName': s.ObjectName,
-                'ObjectDescription': s.ObjectDescription,
-                'ObjectStatus': s.ObjectStatus,
-                'expected_daily_count': s.expected_daily_count or self.config.tenant.default_expected_daily_count
-            } for s in sensors]
-
-            df = pd.DataFrame(data)
-            self.logger.info(f"Fetched {len(df)} sensors")
-            return df
-
-        except Exception as e:
-            self.logger.error(f"Error fetching sensors: {e}")
-            raise
-        finally:
-            session.close()
-
-    def fetch_samples_by_time_range(
-        self,
-        start_time: datetime,
-        end_time: datetime,
-        tid: Optional[str] = None,
-        sid: Optional[int] = None,
-        sids: Optional[List[int]] = None
-    ) -> pd.DataFrame:
+    def load_sensor_by_id(self, sid: int) -> Optional[DimSensor]:
         """
-        Fetch raw samples for a time range
-
-        Args:
-            start_time: Start of time window
-            end_time: End of time window
-            tid: Tenant ID filter (optional)
-            sid: Single sensor ID filter (optional)
-            sids: Multiple sensor IDs filter (optional)
-
-        Returns:
-            DataFrame with raw samples
-        """
-        session = self.get_session()
-        try:
-            query = session.query(FactSample)
-
-            # Time range filter
-            query = query.filter(
-                and_(
-                    FactSample.Timestamp >= start_time,
-                    FactSample.Timestamp < end_time
-                )
-            )
-
-            # Apply additional filters
-            if tid:
-                query = query.filter(FactSample.tid == tid)
-            if sid:
-                query = query.filter(FactSample.sid == sid)
-            if sids:
-                query = query.filter(FactSample.sid.in_(sids))
-
-            # Order by timestamp
-            query = query.order_by(FactSample.Timestamp)
-
-            # Execute query
-            samples = query.all()
-
-            # Convert to DataFrame
-            if not samples:
-                self.logger.warning(f"No samples found for time range {start_time} to {end_time}")
-                return pd.DataFrame()
-
-            data = [{
-                'sample_id': s.sample_id,
-                'sid': s.sid,
-                'tid': s.tid,
-                'Timestamp': s.Timestamp,
-                'PresentValue': s.PresentValue
-            } for s in samples]
-
-            df = pd.DataFrame(data)
-            self.logger.info(f"Fetched {len(df)} samples from {start_time} to {end_time}")
-            return df
-
-        except Exception as e:
-            self.logger.error(f"Error fetching samples: {e}")
-            raise
-        finally:
-            session.close()
-
-    def fetch_samples_by_bucket(
-        self,
-        year: int,
-        day_number: int,
-        time_bucket_no: int,
-        tid: Optional[str] = None,
-        sid: Optional[int] = None,
-        sids: Optional[List[int]] = None
-    ) -> pd.DataFrame:
-        """
-        Fetch raw samples for a specific time bucket
-
-        Args:
-            year: Year
-            day_number: Day of year (1-366)
-            time_bucket_no: Bucket number within day
-            tid: Tenant ID filter (optional)
-            sid: Single sensor ID filter (optional)
-            sids: Multiple sensor IDs filter (optional)
-
-        Returns:
-            DataFrame with raw samples
-        """
-        # Convert bucket coordinates to datetime range
-        start_time, end_time = get_bucket_datetime_range(
-            year, day_number, time_bucket_no,
-            self.config.metrics.bucket_interval_minutes
-        )
-
-        self.logger.debug(
-            f"Fetching samples for bucket: year={year}, day={day_number}, "
-            f"bucket={time_bucket_no} ({start_time} to {end_time})"
-        )
-
-        return self.fetch_samples_by_time_range(
-            start_time, end_time, tid, sid, sids
-        )
-
-    def fetch_samples_by_buckets(
-        self,
-        bucket_coords: List[Tuple[int, int, int]],
-        tid: Optional[str] = None,
-        sid: Optional[int] = None,
-        sids: Optional[List[int]] = None
-    ) -> pd.DataFrame:
-        """
-        Fetch raw samples for multiple time buckets
-
-        Args:
-            bucket_coords: List of (year, day_number, time_bucket_no) tuples
-            tid: Tenant ID filter (optional)
-            sid: Single sensor ID filter (optional)
-            sids: Multiple sensor IDs filter (optional)
-
-        Returns:
-            DataFrame with raw samples from all buckets
-        """
-        all_samples = []
-
-        for year, day_number, time_bucket_no in bucket_coords:
-            df = self.fetch_samples_by_bucket(
-                year, day_number, time_bucket_no,
-                tid, sid, sids
-            )
-            if not df.empty:
-                all_samples.append(df)
-
-        if not all_samples:
-            return pd.DataFrame()
-
-        # Concatenate all samples
-        combined_df = pd.concat(all_samples, ignore_index=True)
-        self.logger.info(f"Fetched {len(combined_df)} samples from {len(bucket_coords)} buckets")
-
-        return combined_df
-
-    def get_sensor_info(self, sid: int) -> Optional[Dict[str, Any]]:
-        """
-        Get metadata for a single sensor
+        Load a single sensor by ID
 
         Args:
             sid: Sensor ID
 
         Returns:
-            Dictionary with sensor metadata or None if not found
+            DimSensor object or None
         """
-        df = self.fetch_sensors(sid=sid)
-        if df.empty:
-            return None
-        return df.iloc[0].to_dict()
+        all_sensors = self.storage.read_sensors()
+        for sensor in all_sensors:
+            if sensor.sid == sid:
+                return sensor
+        return None
 
-    def get_active_sensors_for_tenant(self, tid: str) -> List[int]:
-        """
-        Get list of active sensor IDs for a tenant
-
-        Args:
-            tid: Tenant ID
-
-        Returns:
-            List of sensor IDs
-        """
-        df = self.fetch_sensors(tid=tid)
-        if df.empty:
-            return []
-        return df['sid'].tolist()
-
-    def get_sensor_expected_count(self, sid: int) -> int:
-        """
-        Get expected daily sample count for a sensor
-
-        Args:
-            sid: Sensor ID
-
-        Returns:
-            Expected daily count
-        """
-        sensor_info = self.get_sensor_info(sid)
-        if sensor_info is None:
-            return self.config.tenant.default_expected_daily_count
-        return sensor_info.get('expected_daily_count', self.config.tenant.default_expected_daily_count)
-
-    def fetch_and_group_by_sensor(
+    def load_samples_for_bucket(
         self,
         year: int,
         day_number: int,
         time_bucket_no: int,
         tid: Optional[str] = None,
         sids: Optional[List[int]] = None
-    ) -> Dict[int, pd.DataFrame]:
+    ) -> pd.DataFrame:
         """
-        Fetch samples and group by sensor ID
+        Load raw samples for a specific time bucket
 
         Args:
             year: Year
             day_number: Day of year
-            time_bucket_no: Bucket number
-            tid: Tenant ID filter (optional)
-            sids: Sensor IDs filter (optional)
+            time_bucket_no: Time bucket number
+            tid: Optional tenant ID filter
+            sids: Optional sensor ID list filter
 
         Returns:
-            Dictionary mapping sid to DataFrame of samples
+            DataFrame with raw samples
         """
-        # Fetch all samples for the bucket
-        df = self.fetch_samples_by_bucket(
-            year, day_number, time_bucket_no,
-            tid=tid, sids=sids
+        # Calculate time range for the bucket
+        bucket_minutes = self.config.metrics.bucket_interval_minutes
+
+        # Create base datetime from year and day_number
+        base_date = datetime(year, 1, 1) + timedelta(days=day_number - 1)
+
+        # Add bucket offset
+        bucket_offset = timedelta(minutes=time_bucket_no * bucket_minutes)
+        start_time = base_date + bucket_offset
+        end_time = start_time + timedelta(minutes=bucket_minutes)
+
+        self.logger.debug(
+            f"Loading samples for bucket {year}-{day_number}-{time_bucket_no} "
+            f"({start_time} to {end_time})"
         )
 
-        if df.empty:
-            return {}
+        # If tid is provided, load from storage
+        if tid:
+            samples_df = self.storage.read_samples(
+                tid=tid,
+                start_time=start_time,
+                end_time=end_time
+            )
+        else:
+            # Load all tenants (iterate through all tenant configs)
+            tenant_configs = self.storage.read_tenant_configs()
+            dfs = []
+            for config in tenant_configs:
+                if config.enabled:
+                    df = self.storage.read_samples(
+                        tid=config.tid,
+                        start_time=start_time,
+                        end_time=end_time
+                    )
+                    dfs.append(df)
 
-        # Group by sensor ID
-        grouped = {}
-        for sid, group_df in df.groupby('sid'):
-            grouped[sid] = group_df.reset_index(drop=True)
+            samples_df = pd.concat(dfs, ignore_index=True) if dfs else pd.DataFrame()
 
-        self.logger.info(f"Grouped {len(df)} samples into {len(grouped)} sensors")
-        return grouped
+        # Filter by sensor IDs if provided
+        if sids and not samples_df.empty:
+            samples_df = samples_df[samples_df['sid'].isin(sids)]
+
+        self.logger.info(f"Loaded {len(samples_df)} samples for bucket")
+        return samples_df
+
+    def load_samples_for_time_range(
+        self,
+        start_time: datetime,
+        end_time: datetime,
+        tid: Optional[str] = None,
+        sid: Optional[int] = None
+    ) -> pd.DataFrame:
+        """
+        Load raw samples for a time range
+
+        Args:
+            start_time: Start timestamp
+            end_time: End timestamp
+            tid: Optional tenant ID filter
+            sid: Optional sensor ID filter
+
+        Returns:
+            DataFrame with raw samples
+        """
+        if tid:
+            samples_df = self.storage.read_samples(
+                tid=tid,
+                start_time=start_time,
+                end_time=end_time,
+                sid=sid
+            )
+        else:
+            # Load all tenants
+            tenant_configs = self.storage.read_tenant_configs()
+            dfs = []
+            for config in tenant_configs:
+                if config.enabled:
+                    df = self.storage.read_samples(
+                        tid=config.tid,
+                        start_time=start_time,
+                        end_time=end_time,
+                        sid=sid
+                    )
+                    dfs.append(df)
+
+            samples_df = pd.concat(dfs, ignore_index=True) if dfs else pd.DataFrame()
+
+        self.logger.info(
+            f"Loaded {len(samples_df)} samples for time range "
+            f"{start_time} to {end_time}"
+        )
+        return samples_df
+
+    def get_expected_sample_count(self, sid: int) -> int:
+        """
+        Get expected sample count for a sensor within a bucket
+
+        Args:
+            sid: Sensor ID
+
+        Returns:
+            Expected sample count
+        """
+        sensor = self.load_sensor_by_id(sid)
+
+        if sensor and sensor.expected_daily_count:
+            # Calculate expected count for bucket size
+            bucket_minutes = self.config.metrics.bucket_interval_minutes
+            minutes_per_day = 1440
+            return int(
+                (sensor.expected_daily_count * bucket_minutes) / minutes_per_day
+            )
+
+        # Default fallback
+        return int(bucket_minutes)  # Assume 1 sample per minute
 
     def test_connection(self) -> bool:
         """
-        Test database connection
+        Test that storage is accessible
 
         Returns:
-            True if connection successful
+            True if storage is accessible
         """
         try:
-            session = self.get_session()
-            session.execute("SELECT 1")
-            session.close()
-            self.logger.info("Database connection test successful")
+            stats = self.storage.get_storage_stats()
+            self.logger.info(f"Storage test successful: {stats}")
             return True
         except Exception as e:
-            self.logger.error(f"Database connection test failed: {e}")
+            self.logger.error(f"Storage test failed: {e}")
             return False
 
-    def get_database_stats(self) -> Dict[str, Any]:
+    def close(self):
+        """Close any open connections (no-op for Parquet storage)"""
+        self.logger.info("DataLoader closed")
+
+
+class SyntheticDataGenerator:
+    """
+    Utility class for generating synthetic IoT sensor data for testing
+    """
+
+    def __init__(self, storage: ParquetStorageAdapter):
         """
-        Get statistics about the source database
+        Initialize synthetic data generator
+
+        Args:
+            storage: Storage adapter to write data to
+        """
+        self.storage = storage
+        self.logger = get_context_logger('data.synthetic')
+
+    def generate_sensors(
+        self,
+        tid: str,
+        num_sensors: int = 10,
+        sensor_type: str = "AnalogInput"
+    ) -> List[DimSensor]:
+        """
+        Generate synthetic sensor metadata
+
+        Args:
+            tid: Tenant ID
+            num_sensors: Number of sensors to generate
+            sensor_type: Type of sensors
 
         Returns:
-            Dictionary with database statistics
+            List of generated sensors
         """
-        session = self.get_session()
-        try:
-            # Count sensors
-            sensor_count = session.query(DimSensor).count()
+        import random
 
-            # Count samples (limit to avoid long query)
-            sample_count = session.query(FactSample).count()
+        sensors = []
+        for i in range(num_sensors):
+            sensor = DimSensor(
+                sid=1000 + i,
+                tid=tid,
+                ObjectInstance=f"{sensor_type}:{i+1}",
+                ObjectType=sensor_type,
+                ObjectName=f"Sensor {i+1}",
+                ObjectDescription=f"Test sensor {i+1} for tenant {tid}",
+                ObjectStatus="Active",
+                expected_daily_count=1440,  # 1 sample per minute
+                created_at=datetime.utcnow()
+            )
+            sensors.append(sensor)
 
-            # Get date range of samples
-            from sqlalchemy import func
-            date_range = session.query(
-                func.min(FactSample.Timestamp),
-                func.max(FactSample.Timestamp)
-            ).first()
+        # Write to storage
+        self.storage.write_sensors(sensors)
+        self.logger.info(f"Generated {num_sensors} synthetic sensors for {tid}")
 
-            stats = {
-                'sensor_count': sensor_count,
-                'sample_count': sample_count,
-                'earliest_sample': date_range[0],
-                'latest_sample': date_range[1]
-            }
+        return sensors
 
-            self.logger.info(f"Database stats: {stats}")
-            return stats
+    def generate_samples(
+        self,
+        sensors: List[DimSensor],
+        start_time: datetime,
+        end_time: datetime,
+        sample_interval_minutes: int = 1,
+        value_range: tuple = (65.0, 85.0),
+        add_noise: bool = True
+    ) -> pd.DataFrame:
+        """
+        Generate synthetic sample data
 
-        except Exception as e:
-            self.logger.error(f"Error getting database stats: {e}")
-            raise
-        finally:
-            session.close()
+        Args:
+            sensors: List of sensors to generate data for
+            start_time: Start timestamp
+            end_time: End timestamp
+            sample_interval_minutes: Minutes between samples
+            value_range: (min, max) range for values
+            add_noise: Whether to add random noise
 
-    def close(self):
-        """Close database connections"""
-        self.engine.dispose()
-        self.logger.info("DataLoader connections closed")
+        Returns:
+            DataFrame with generated samples
+        """
+        import random
+        import numpy as np
+
+        samples = []
+        sample_id = 1
+
+        for sensor in sensors:
+            current_time = start_time
+            base_value = random.uniform(value_range[0], value_range[1])
+
+            while current_time <= end_time:
+                # Add some variation
+                if add_noise:
+                    value = base_value + np.random.normal(0, 2.0)
+                    value = max(value_range[0], min(value_range[1], value))
+                else:
+                    value = base_value
+
+                sample = {
+                    'sample_id': sample_id,
+                    'sid': sensor.sid,
+                    'tid': sensor.tid,
+                    'Timestamp': current_time,
+                    'PresentValue': round(value, 2),
+                    'created_at': datetime.utcnow()
+                }
+                samples.append(sample)
+
+                sample_id += 1
+                current_time += timedelta(minutes=sample_interval_minutes)
+
+        samples_df = pd.DataFrame(samples)
+
+        # Write to storage
+        self.storage.write_samples(samples_df)
+
+        self.logger.info(
+            f"Generated {len(samples_df)} synthetic samples for "
+            f"{len(sensors)} sensors from {start_time} to {end_time}"
+        )
+
+        return samples_df
+
+    def generate_complete_dataset(
+        self,
+        tid: str,
+        num_sensors: int = 10,
+        days: int = 1,
+        sample_interval_minutes: int = 1
+    ) -> tuple[List[DimSensor], pd.DataFrame]:
+        """
+        Generate a complete synthetic dataset (sensors + samples)
+
+        Args:
+            tid: Tenant ID
+            num_sensors: Number of sensors
+            days: Number of days of data
+            sample_interval_minutes: Minutes between samples
+
+        Returns:
+            Tuple of (sensors list, samples dataframe)
+        """
+        # Generate sensors
+        sensors = self.generate_sensors(tid, num_sensors)
+
+        # Generate samples for the time range
+        end_time = datetime.utcnow()
+        start_time = end_time - timedelta(days=days)
+
+        samples_df = self.generate_samples(
+            sensors,
+            start_time,
+            end_time,
+            sample_interval_minutes
+        )
+
+        return sensors, samples_df

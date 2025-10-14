@@ -1,264 +1,289 @@
-"""SQLAlchemy ORM models for IoT Metrics Module"""
+"""Pydantic data models for IoT Metrics Module (Parquet-based storage)"""
 
 from datetime import datetime
-from typing import Optional
-from sqlalchemy import (
-    Column, Integer, String, Float, DateTime, BigInteger, Text,
-    ForeignKey, Index, UniqueConstraint, Boolean, create_engine
-)
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, Session
-
-Base = declarative_base()
+from typing import Optional, List, Dict, Any
+from pydantic import BaseModel, Field, ConfigDict
 
 
-class DimSensor(Base):
+class DimSensor(BaseModel):
     """
-    Dimension table for sensors/points
-    Maps to existing dim_sensor table in the source database
+    Sensor/Point dimension model
+    Represents metadata about IoT sensors
     """
-    __tablename__ = "dim_sensor"
+    sid: int = Field(..., description="Sensor ID")
+    tid: str = Field(..., description="Tenant ID", max_length=255)
+    ObjectInstance: Optional[str] = Field(None, description="BACnet ObjectInstance", max_length=255)
+    ObjectType: Optional[str] = Field(None, description="BACnet ObjectType", max_length=100)
+    ObjectName: Optional[str] = Field(None, description="Sensor Name", max_length=255)
+    ObjectDescription: Optional[str] = Field(None, description="Sensor Description")
+    ObjectStatus: Optional[str] = Field(None, description="Sensor Status", max_length=50)
+    expected_daily_count: Optional[int] = Field(None, description="Expected samples per day")
+    created_at: datetime = Field(default_factory=datetime.utcnow, description="Creation timestamp")
 
-    sid = Column(Integer, primary_key=True, comment="Sensor ID")
-    tid = Column(String(255), nullable=False, index=True, comment="Tenant ID")
-    ObjectInstance = Column(String(255), comment="BACnet ObjectInstance")
-    ObjectType = Column(String(100), comment="BACnet ObjectType")
-    ObjectName = Column(String(255), comment="Sensor Name")
-    ObjectDescription = Column(Text, comment="Sensor Description")
-    ObjectStatus = Column(String(50), comment="Sensor Status")
-    expected_daily_count = Column(Integer, comment="Expected samples per day")
-    created_at = Column(DateTime, default=datetime.utcnow)
-
-    # Relationships
-    fact_samples = relationship("FactSample", back_populates="sensor")
-
-    __table_args__ = (
-        Index("idx_dim_sensor_tid", "tid"),
-        Index("idx_dim_sensor_tid_sid", "tid", "sid"),
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "sid": 123,
+                "tid": "tenant-abc",
+                "ObjectInstance": "AI:1",
+                "ObjectType": "AnalogInput",
+                "ObjectName": "Temperature Sensor 1",
+                "ObjectDescription": "Room temperature sensor",
+                "ObjectStatus": "Active",
+                "expected_daily_count": 1440
+            }
+        }
     )
 
-    def __repr__(self):
-        return f"<DimSensor(sid={self.sid}, tid={self.tid}, name={self.ObjectName})>"
 
-
-class FactSample(Base):
+class FactSample(BaseModel):
     """
-    Fact table for raw IoT samples
-    Maps to existing fact_sample table in the source database
+    Raw IoT sample model
+    Represents a single sensor reading at a point in time
     """
-    __tablename__ = "fact_sample"
+    sample_id: Optional[int] = Field(None, description="Sample ID (auto-generated)")
+    sid: int = Field(..., description="Sensor ID")
+    tid: str = Field(..., description="Tenant ID", max_length=255)
+    Timestamp: datetime = Field(..., description="Sample timestamp")
+    PresentValue: Optional[float] = Field(None, description="Sensor reading value")
+    created_at: datetime = Field(default_factory=datetime.utcnow, description="Record creation timestamp")
 
-    sample_id = Column(BigInteger, primary_key=True, autoincrement=True)
-    sid = Column(Integer, ForeignKey("dim_sensor.sid"), nullable=False, index=True)
-    tid = Column(String(255), nullable=False, index=True)
-    Timestamp = Column(DateTime, nullable=False, index=True, comment="Sample timestamp")
-    PresentValue = Column(Float, comment="Sensor reading value")
-    created_at = Column(DateTime, default=datetime.utcnow)
-
-    # Relationships
-    sensor = relationship("DimSensor", back_populates="fact_samples")
-
-    __table_args__ = (
-        Index("idx_fact_sample_sid_timestamp", "sid", "Timestamp"),
-        Index("idx_fact_sample_tid_timestamp", "tid", "Timestamp"),
-        Index("idx_fact_sample_tid_sid_timestamp", "tid", "sid", "Timestamp"),
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "sid": 123,
+                "tid": "tenant-abc",
+                "Timestamp": "2025-01-15T14:30:00",
+                "PresentValue": 72.5
+            }
+        }
     )
 
-    def __repr__(self):
-        return f"<FactSample(sid={self.sid}, timestamp={self.Timestamp}, value={self.PresentValue})>"
 
-
-class MetricsDim(Base):
+class MetricDefinition(BaseModel):
     """
-    Dimension table for metrics definitions
-    Lookup table for all computed metrics
+    Metric definition model
+    Defines what a metric is and its properties
     """
-    __tablename__ = "metrics_dim"
+    metric_name: str = Field(..., description="Metric name (e.g., 'Actual_Mean')", max_length=100)
+    metric_category: str = Field(..., description="Category: Base, Behavior, Distribution, Trend, ML", max_length=50)
+    unit: Optional[str] = Field(None, description="Unit of measurement", max_length=50)
+    description: Optional[str] = Field(None, description="Metric description")
 
-    metric_id = Column(Integer, primary_key=True, autoincrement=True)
-    tid = Column(String(255), nullable=False, index=True)
-    sid = Column(Integer, nullable=False, index=True)
-    metric_name = Column(String(100), nullable=False, comment="Metric name (e.g., 'Actual_Mean')")
-    metric_category = Column(String(50), nullable=False, comment="Category: Base, Behavior, Distribution, Trend, ML")
-    unit = Column(String(50), comment="Unit of measurement")
-    description = Column(Text, comment="Metric description")
-    created_at = Column(DateTime, default=datetime.utcnow)
-
-    # Relationships
-    metric_facts = relationship("MetricsFact", back_populates="metric_def")
-
-    __table_args__ = (
-        UniqueConstraint("tid", "sid", "metric_name", name="uq_metrics_dim_tid_sid_name"),
-        Index("idx_metrics_dim_tid_sid", "tid", "sid"),
-        Index("idx_metrics_dim_category", "metric_category"),
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "metric_name": "Actual_Mean",
+                "metric_category": "Base",
+                "unit": "°C",
+                "description": "Mean value of samples in time bucket"
+            }
+        }
     )
 
-    def __repr__(self):
-        return f"<MetricsDim(id={self.metric_id}, name={self.metric_name}, category={self.metric_category})>"
 
-
-class MetricsFact(Base):
+class MetricValue(BaseModel):
     """
-    Fact table for computed metrics values
-    Stores time-bucketed KPI values
-    Note: Should be partitioned by (YearNumber, DayNumber) in production
+    Computed metric value model
+    Represents a single computed metric for a sensor at a specific time bucket
     """
-    __tablename__ = "metrics_fact"
+    tid: str = Field(..., description="Tenant ID", max_length=255)
+    sid: int = Field(..., description="Sensor ID")
+    metric_name: str = Field(..., description="Metric name", max_length=100)
+    metric_category: str = Field(..., description="Metric category", max_length=50)
 
-    metric_fact_id = Column(BigInteger, primary_key=True, autoincrement=True)
-    tid = Column(String(255), nullable=False, index=True)
-    sid = Column(Integer, nullable=False, index=True)
-    metric_id = Column(Integer, ForeignKey("metrics_dim.metric_id"), nullable=False)
+    # Time bucketing
+    year: int = Field(..., description="Year (e.g., 2025)", ge=2020, le=2100)
+    day_number: int = Field(..., description="Day of year (1-366)", ge=1, le=366)
+    time_bucket_no: int = Field(..., description="Bucket number in day (0-95 for 15-min)", ge=0, le=95)
 
-    # Time bucketing fields
-    YearNumber = Column(Integer, nullable=False, comment="Year (e.g., 2025)")
-    DayNumber = Column(Integer, nullable=False, comment="Day of year (1-366)")
-    TimeBucketNo = Column(Integer, nullable=False, comment="Bucket number in day (0-95 for 15-min)")
-
-    # Metric value
-    metric_value = Column(Float, comment="Computed metric value")
+    # Value
+    metric_value: Optional[float] = Field(None, description="Computed metric value")
 
     # Metadata
-    computed_at = Column(DateTime, default=datetime.utcnow)
+    computed_at: datetime = Field(default_factory=datetime.utcnow, description="Computation timestamp")
+    unit: Optional[str] = Field(None, description="Unit of measurement", max_length=50)
 
-    # Relationships
-    metric_def = relationship("MetricsDim", back_populates="metric_facts")
-
-    __table_args__ = (
-        Index("idx_metrics_fact_tid_sid", "tid", "sid"),
-        Index("idx_metrics_fact_time", "YearNumber", "DayNumber", "TimeBucketNo"),
-        Index("idx_metrics_fact_tid_sid_time", "tid", "sid", "YearNumber", "DayNumber", "TimeBucketNo"),
-        Index("idx_metrics_fact_metric_id", "metric_id"),
-        # For anomaly queries
-        Index("idx_metrics_fact_metric_value", "metric_id", "metric_value"),
-        # Composite unique constraint for upsert operations
-        UniqueConstraint("tid", "sid", "metric_id", "YearNumber", "DayNumber", "TimeBucketNo",
-                        name="uq_metrics_fact_unique_bucket"),
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "tid": "tenant-abc",
+                "sid": 123,
+                "metric_name": "Actual_Mean",
+                "metric_category": "Base",
+                "year": 2025,
+                "day_number": 15,
+                "time_bucket_no": 56,
+                "metric_value": 72.5,
+                "unit": "°C"
+            }
+        }
     )
 
-    def __repr__(self):
-        return f"<MetricsFact(tid={self.tid}, sid={self.sid}, year={self.YearNumber}, day={self.DayNumber}, bucket={self.TimeBucketNo})>"
 
-
-class ComputationLog(Base):
+class ComputationLog(BaseModel):
     """
-    Log table for tracking computation runs
-    Used for monitoring and debugging
+    Computation execution log model
+    Tracks the execution of metric computation jobs
     """
-    __tablename__ = "computation_log"
-
-    log_id = Column(BigInteger, primary_key=True, autoincrement=True)
-    execution_type = Column(String(50), nullable=False, comment="scheduled or on-demand")
+    log_id: Optional[int] = Field(None, description="Log ID (auto-generated)")
+    execution_type: str = Field(..., description="scheduled or on-demand", max_length=50)
 
     # Time window processed
-    YearNumber = Column(Integer, nullable=False)
-    DayNumber = Column(Integer, nullable=False)
-    TimeBucketNo = Column(Integer, nullable=False)
+    year: int = Field(..., description="Year", ge=2020, le=2100)
+    day_number: int = Field(..., description="Day of year", ge=1, le=366)
+    time_bucket_no: int = Field(..., description="Bucket number", ge=0, le=95)
 
     # Execution details
-    started_at = Column(DateTime, nullable=False, default=datetime.utcnow)
-    completed_at = Column(DateTime)
-    duration_seconds = Column(Float)
+    started_at: datetime = Field(..., description="Execution start time")
+    completed_at: Optional[datetime] = Field(None, description="Execution completion time")
+    duration_seconds: Optional[float] = Field(None, description="Execution duration", ge=0)
 
     # Statistics
-    sensors_processed = Column(Integer, comment="Number of sensors processed")
-    metrics_computed = Column(Integer, comment="Number of metrics computed")
-    errors_count = Column(Integer, default=0)
+    sensors_processed: int = Field(0, description="Number of sensors processed", ge=0)
+    metrics_computed: int = Field(0, description="Number of metrics computed", ge=0)
+    errors_count: int = Field(0, description="Number of errors", ge=0)
 
     # Status
-    status = Column(String(50), nullable=False, comment="success, failed, partial")
-    error_message = Column(Text)
+    status: str = Field(..., description="success, failed, partial", max_length=50)
+    error_message: Optional[str] = Field(None, description="Error details if failed")
 
     # Metadata
-    triggered_by = Column(String(100), comment="User or scheduler ID")
+    triggered_by: Optional[str] = Field(None, description="User or scheduler ID", max_length=100)
 
-    __table_args__ = (
-        Index("idx_computation_log_time", "YearNumber", "DayNumber", "TimeBucketNo"),
-        Index("idx_computation_log_status", "status"),
-        Index("idx_computation_log_started", "started_at"),
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "execution_type": "scheduled",
+                "year": 2025,
+                "day_number": 15,
+                "time_bucket_no": 56,
+                "started_at": "2025-01-15T14:15:00",
+                "completed_at": "2025-01-15T14:15:02",
+                "duration_seconds": 2.1,
+                "sensors_processed": 150,
+                "metrics_computed": 3750,
+                "status": "success",
+                "triggered_by": "scheduler"
+            }
+        }
     )
 
-    def __repr__(self):
-        return f"<ComputationLog(id={log_id}, status={self.status}, year={self.YearNumber}, day={self.DayNumber})>"
 
-
-class MLModelVersion(Base):
+class MLModelVersion(BaseModel):
     """
-    Track ML model versions for clustering and anomaly detection
+    ML model version tracking model
+    Tracks different versions of ML models (clustering, anomaly detection)
     """
-    __tablename__ = "ml_model_version"
-
-    model_version_id = Column(Integer, primary_key=True, autoincrement=True)
-    model_type = Column(String(50), nullable=False, comment="kmeans, anomaly_detector, etc.")
-    version = Column(String(50), nullable=False, comment="Version identifier")
+    model_version_id: Optional[int] = Field(None, description="Model version ID (auto-generated)")
+    model_type: str = Field(..., description="kmeans, anomaly_detector, etc.", max_length=50)
+    version: str = Field(..., description="Version identifier", max_length=50)
 
     # Training details
-    trained_at = Column(DateTime, nullable=False, default=datetime.utcnow)
-    training_start_date = Column(DateTime, comment="Start date of training data")
-    training_end_date = Column(DateTime, comment="End date of training data")
-    training_samples = Column(Integer, comment="Number of samples used for training")
+    trained_at: datetime = Field(default_factory=datetime.utcnow, description="Training timestamp")
+    training_start_date: Optional[datetime] = Field(None, description="Start date of training data")
+    training_end_date: Optional[datetime] = Field(None, description="End date of training data")
+    training_samples: Optional[int] = Field(None, description="Number of training samples", ge=0)
 
-    # Model parameters (stored as JSON-like text)
-    parameters = Column(Text, comment="JSON string of model parameters")
-    feature_list = Column(Text, comment="JSON array of features used")
+    # Model configuration
+    parameters: Optional[Dict[str, Any]] = Field(None, description="Model parameters")
+    feature_list: Optional[List[str]] = Field(None, description="Features used")
 
     # Performance metrics
-    performance_metrics = Column(Text, comment="JSON string of performance metrics")
+    performance_metrics: Optional[Dict[str, float]] = Field(None, description="Performance metrics")
 
     # Status
-    is_active = Column(Boolean, default=True, comment="Whether this is the active model")
-    replaced_at = Column(DateTime, comment="When this model was replaced")
-    replaced_by = Column(Integer, comment="Model version that replaced this one")
+    is_active: bool = Field(True, description="Whether this is the active model")
+    replaced_at: Optional[datetime] = Field(None, description="When model was replaced")
+    replaced_by: Optional[int] = Field(None, description="Model version that replaced this")
 
-    __table_args__ = (
-        Index("idx_ml_model_type_active", "model_type", "is_active"),
-        Index("idx_ml_model_trained_at", "trained_at"),
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "model_type": "kmeans",
+                "version": "v1.0.0",
+                "trained_at": "2025-01-15T12:00:00",
+                "training_samples": 10000,
+                "parameters": {"n_clusters": 3, "max_iter": 300},
+                "feature_list": ["Normalized_Count", "Flatline_Pct", "Stddev"],
+                "is_active": True
+            }
+        }
     )
 
-    def __repr__(self):
-        return f"<MLModelVersion(type={self.model_type}, version={self.version}, active={self.is_active})>"
 
-
-class TenantConfig(Base):
+class TenantConfig(BaseModel):
     """
-    Tenant-specific configuration overrides
+    Tenant-specific configuration model
+    Allows per-tenant customization of processing settings
     """
-    __tablename__ = "tenant_config"
-
-    config_id = Column(Integer, primary_key=True, autoincrement=True)
-    tid = Column(String(255), nullable=False, unique=True, index=True)
+    tid: str = Field(..., description="Tenant ID", max_length=255)
 
     # Tenant settings
-    enabled = Column(Boolean, default=True)
-    expected_daily_count_override = Column(Integer, comment="Override expected sample count")
+    enabled: bool = Field(True, description="Whether tenant is enabled")
+    expected_daily_count_override: Optional[int] = Field(None, description="Override expected sample count", ge=0)
 
     # Feature flags
-    enable_ml_processing = Column(Boolean, default=True)
-    enable_anomaly_detection = Column(Boolean, default=True)
+    enable_ml_processing: bool = Field(True, description="Enable ML processing")
+    enable_anomaly_detection: bool = Field(True, description="Enable anomaly detection")
 
     # Custom thresholds
-    flatline_threshold_override = Column(Float)
-    coverage_threshold_override = Column(Float)
+    flatline_threshold_override: Optional[float] = Field(None, description="Custom flatline threshold", ge=0, le=1)
+    coverage_threshold_override: Optional[float] = Field(None, description="Custom coverage threshold", ge=0, le=1)
 
     # Metadata
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    notes = Column(Text)
+    created_at: datetime = Field(default_factory=datetime.utcnow, description="Creation timestamp")
+    updated_at: datetime = Field(default_factory=datetime.utcnow, description="Last update timestamp")
+    notes: Optional[str] = Field(None, description="Configuration notes")
 
-    def __repr__(self):
-        return f"<TenantConfig(tid={self.tid}, enabled={self.enabled})>"
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "tid": "tenant-abc",
+                "enabled": True,
+                "expected_daily_count_override": 1440,
+                "enable_ml_processing": True,
+                "enable_anomaly_detection": True,
+                "flatline_threshold_override": 0.05,
+                "notes": "Custom configuration for high-frequency sensors"
+            }
+        }
+    )
 
 
-def create_tables(engine):
-    """Create all tables in the database"""
-    Base.metadata.create_all(engine)
+# Helper functions for data validation and conversion
+
+def validate_time_bucket(year: int, day_number: int, time_bucket_no: int) -> bool:
+    """Validate time bucket coordinates"""
+    if year < 2020 or year > 2100:
+        return False
+    if day_number < 1 or day_number > 366:
+        return False
+    if time_bucket_no < 0 or time_bucket_no > 95:
+        return False
+    return True
 
 
-def drop_tables(engine):
-    """Drop all tables from the database"""
-    Base.metadata.drop_all(engine)
+def get_bucket_timestamp(year: int, day_number: int, time_bucket_no: int, bucket_minutes: int = 15) -> datetime:
+    """Convert bucket coordinates to timestamp"""
+    from datetime import timedelta
+
+    # Create date from year and day_number
+    base_date = datetime(year, 1, 1) + timedelta(days=day_number - 1)
+
+    # Add bucket offset
+    bucket_offset = timedelta(minutes=time_bucket_no * bucket_minutes)
+
+    return base_date + bucket_offset
 
 
-def get_table_names():
-    """Get list of all table names"""
-    return Base.metadata.tables.keys()
+def timestamp_to_bucket(timestamp: datetime, bucket_minutes: int = 15) -> tuple[int, int, int]:
+    """Convert timestamp to bucket coordinates (year, day_number, time_bucket_no)"""
+    year = timestamp.year
+    day_number = timestamp.timetuple().tm_yday
+
+    # Calculate bucket number within the day
+    minutes_since_midnight = timestamp.hour * 60 + timestamp.minute
+    time_bucket_no = minutes_since_midnight // bucket_minutes
+
+    return year, day_number, time_bucket_no
