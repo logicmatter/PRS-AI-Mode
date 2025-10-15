@@ -1,64 +1,116 @@
-----
-# Node Setup
-- Rename Old Version of Node to node-old
-```
-move c:\pmtools\node c:\pmtools\node-old
-```
-- Download v20 version portable zip
+# PointMetrics - IoT Metrics Aggregation Module
 
-```
-curl -L https://nodejs.org/dist/v20.18.1/node-v20.18.1-win-x64.zip -o c:\pmtools\node-v20.zip
-```
+A production-grade batch processing engine for computing KPIs on time-series IoT sensor data.
 
-- Unzip new Node Version Zip File
-```
-powershell -Command "Expand-Archive -Path c:\pmtools\node-v20.zip -DestinationPath c:\pmtools -Force"
-```
-- Rename Folder to node
-``
-move c:\pmtools\node-v20.18.1-win-x64 c:\pmtools\node
-``
+## Overview
 
-----
-# BMAD Project Setup
-- If not run before then run the `bmad-init.py` file
+**PointMetrics** (IMAE - IoT Metrics Aggregation Engine) processes raw IoT sensor data into pre-computed KPIs at 15-minute intervals, supporting 100+ tenants and ~250K samples/day per system.
 
-if you have aldready copied files to folder note it will all be deleted
+### Key Features
 
-```
-python bmad-init.py
-```
+- Γ£à 15-minute batch processing (scheduled and on-demand)
+- Γ£à 25+ KPIs (Base, Behavior, Distribution, Trend metrics)
+- Γ£à ML Integration (K-means clustering, anomaly detection)
+- Γ£à Multi-tenant support (100+ concurrent tenants)
+- Γ£à Parquet-first storage (fast columnar with partitioning)
+- Γ£à Production-ready (monitoring, logging, alerting)
 
+## Quick Start
 
-----
-# Claude CLI Setup
+### Installation
 
-## Step 1: Clear the problematic environment variable
-```
-set NODE_OPTIONS=
+```bash
+# Create virtual environment
+python -m venv venv
+venv\\Scripts\\activate  # Windows
+
+# Install dependencies
+pip install -r requirements.txt
+pip install -e .
 ```
 
-## Step 2: Uninstall the old Claude Code
-```
-npm uninstall -g @anthropic-ai/claude-code
-```
-## Step 3: Install Claude Code fresh
-```
-npm install -g @anthropic-ai/claude-code
-```
+### Configuration
 
-## Step 4: Verify installation
-```
-claude --version
+```bash
+# Copy and edit environment file
+copy .env.example .env
+# Edit .env with your settings
 ```
 
-# Step 5: Run Claude Code
-claude
+### Running
 
-- Setup the mode for color
-- Authenticate and Authorize CLI
-- Use it using claude repl
-- 'quit' to return to command line
+```bash
+# Start the service
+python src/iot_metrics_module/main.py
+# or
+imae
+```
 
+## Project Structure
 
+```
+PointMetrics/
+Γö£ΓöÇΓöÇ src/iot_metrics_module/  # Source code
+Γöé   Γö£ΓöÇΓöÇ config/              # Configuration
+Γöé   Γö£ΓöÇΓöÇ data/                # Data models and loading
+Γöé   Γö£ΓöÇΓöÇ metrics/             # KPI computation
+Γöé   Γö£ΓöÇΓöÇ ml/                  # Machine learning
+Γöé   Γö£ΓöÇΓöÇ storage/             # Parquet storage
+Γöé   Γö£ΓöÇΓöÇ scheduler/           # Job scheduling
+Γöé   Γö£ΓöÇΓöÇ api/                 # REST API
+Γöé   ΓööΓöÇΓöÇ utils/               # Utilities
+Γö£ΓöÇΓöÇ tests/                   # Test suites
+Γö£ΓöÇΓöÇ scripts/                 # Utility scripts
+Γö£ΓöÇΓöÇ docs/                    # Documentation
+Γö£ΓöÇΓöÇ docker/                  # Containers
+ΓööΓöÇΓöÇ monitoring/              # Monitoring setup
+```
 
+## Development
+
+### Running Tests
+```bash
+pytest tests/ -v --cov=src/iot_metrics_module
+```
+
+### Code Quality
+```bash
+black src/ tests/      # Format
+flake8 src/ tests/     # Lint
+mypy src/              # Type check
+```
+
+## Documentation
+
+- [Architecture Design](docs/architecture/iot_metrics_module_design.md)
+- [Parquet Storage](docs/parquet-refactoring.md)
+- [Development Roadmap](docs/next-steps.md)
+- [AI Assistant Guide](CLAUDE.md)
+
+## Performance Targets
+
+- **Throughput:** ~2.6K samples per 15-min bucket
+- **Processing Time:** <2s per bucket (100 sensors)
+- **Memory:** ~200KB per batch
+- **Scale:** 100+ tenants, ~250K samples/day
+
+## Current Status
+
+**Phase 1 - Core Implementation**
+
+Completed:
+- Γ£à Project structure
+- Γ£à Parquet storage architecture
+- Γ£à Data models (Pydantic)
+- Γ£à Metrics computation framework
+- Γ£à Storage adapter
+- Γ£à Synthetic data generator
+
+In Progress:
+- ≡ƒöä ML pipeline
+- ≡ƒöä API endpoints
+- ≡ƒöä Test coverage
+
+## License
+
+MIT License - See [LICENSE](LICENSE)

@@ -439,3 +439,4 @@ The project also follows patterns from the BMAD (particle accelerator) framework
 - Maintain the partition structure when writing new data
 - Document new KPIs thoroughly with units and descriptions
 - The `bmad-init.py` script is a project scaffolding tool - it generates the complete directory structure and template files
+- Howto switch models between Sonet for development and Opus for Planning
