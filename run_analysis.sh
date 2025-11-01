@@ -17,10 +17,11 @@ if ! command -v python3 &> /dev/null; then
     exit 1
 fi
 
-# Check if the XML file exists
-XML_FILE="portal/PMPortal/PmApps/flattened-codebase.xml"
+# Check if the XML file exists (use env variable or default)
+XML_FILE="${CODEBASE_XML:-portal/PMPortal/PmApps/flattened-codebase.xml}"
 if [ ! -f "$XML_FILE" ]; then
     echo "Error: Flattened codebase XML not found at $XML_FILE"
+    echo "Set CODEBASE_XML environment variable to specify a different path."
     exit 1
 fi
 

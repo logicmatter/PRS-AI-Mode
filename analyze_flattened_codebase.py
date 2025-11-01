@@ -84,6 +84,30 @@ class CodebaseAnalyzer:
             self.stats['total_lines'] += file['lines']
             self.stats['total_size'] += file['size']
     
+    def extract_project_name(self, path: str) -> str:
+        """Extract Angular project name from path
+        
+        Args:
+            path: File path (may contain backslash or forward slash separators)
+            
+        Returns:
+            Project name or empty string if not in a project
+        """
+        # Normalize path separators
+        normalized_path = path.replace('\\', '/')
+        
+        # Check if path starts with projects/ or contains /projects/
+        if normalized_path.startswith('projects/'):
+            parts = normalized_path.split('/')
+            if len(parts) > 1:
+                return parts[1]
+        elif '/projects/' in normalized_path:
+            parts = normalized_path.split('/projects/')[1].split('/')
+            if parts:
+                return parts[0]
+        
+        return ''
+    
     def analyze_angular_structure(self):
         """Analyze Angular-specific structure"""
         print("Analyzing Angular structure...")
@@ -93,19 +117,9 @@ class CodebaseAnalyzer:
             content = file['content']
             basename = os.path.basename(path)
             
-            # Extract project name (handle both separators)
-            orig_path = file['path']
-            if orig_path.startswith('projects\\') or orig_path.startswith('projects/'):
-                # Extract project name from path like "projects\AppTrend\..."
-                parts = orig_path.replace('\\', '/').split('/')
-                if len(parts) > 1:
-                    project = parts[1]
-                    self.stats['projects'].add(project)
-            elif '\\projects\\' in orig_path:
-                project = orig_path.split('\\projects\\')[1].split('\\')[0]
-                self.stats['projects'].add(project)
-            elif '/projects/' in path:
-                project = path.split('/projects/')[1].split('/')[0]
+            # Extract project name
+            project = self.extract_project_name(file['path'])
+            if project:
                 self.stats['projects'].add(project)
             
             # Identify Angular artifacts by naming convention
@@ -348,7 +362,11 @@ class CodebaseAnalyzer:
 
 
 def main():
-    """Main entry point"""
+    """Main entry point
+    
+    Returns:
+        int: Exit code (0 for success, 1 for error)
+    """
     # Path to the flattened codebase XML
     xml_path = os.path.join(
         os.path.dirname(__file__),
@@ -370,12 +388,16 @@ def main():
         'CODEBASE_ANALYSIS_REPORT.json'
     )
     
-    # Create analyzer and run analysis
-    analyzer = CodebaseAnalyzer(xml_path)
-    analyzer.analyze(output_path, json_output_path)
-    
-    print("\n✅ Analysis complete!")
-    return 0
+    try:
+        # Create analyzer and run analysis
+        analyzer = CodebaseAnalyzer(xml_path)
+        analyzer.analyze(output_path, json_output_path)
+        
+        print("\n✅ Analysis complete!")
+        return 0
+    except Exception as e:
+        print(f"\n❌ Analysis failed: {e}")
+        return 1
 
 
 if __name__ == '__main__':
