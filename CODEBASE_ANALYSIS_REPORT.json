@@ -1,0 +1,231 @@
+{
+  "overview": {
+    "total_files": 1027,
+    "total_lines": 107018,
+    "total_size_bytes": 4158669,
+    "total_size_mb": 3.97,
+    "angular_projects_count": 24
+  },
+  "file_types": {
+    ".json": 95,
+    ".md": 2,
+    "[no extension]": 16,
+    "": 22,
+    ".ts": 537,
+    ".config": 1,
+    ".scss": 150,
+    ".js": 37,
+    ".html": 159,
+    ".xml": 1,
+    ".ijmap": 1,
+    ".css": 4,
+    ".txt": 1,
+    ".map": 1
+  },
+  "angular_structure": {
+    "components": 137,
+    "services": 24,
+    "modules": 56,
+    "pipes": 3,
+    "directives": 1,
+    "guards": 0,
+    "models": 14,
+    "test_files": 129
+  },
+  "projects": [
+    "AppAdhoc",
+    "AppAdhoc-e2e",
+    "AppAlarm",
+    "AppAlarm-e2e",
+    "AppBase",
+    "AppBilling",
+    "AppCrEnv",
+    "AppCrEnv-e2e",
+    "AppCrEqp",
+    "AppCrEqp-e2e",
+    "AppDevConf",
+    "AppDevConf-e2e",
+    "AppEnergy",
+    "AppEnergy-e2e",
+    "AppEvaluationDataReport",
+    "AppFieldTrailReport",
+    "AppGRN",
+    "AppIndoorAirQuality",
+    "AppInventory",
+    "AppOrderProcessing",
+    "AppReturns",
+    "AppSales",
+    "AppTrend",
+    "AppTrend-e2e"
+  ],
+  "code_patterns": {
+    "observables": 115,
+    "http_calls": 197,
+    "forms": 323,
+    "routing": 435,
+    "lifecycle_hooks": 258,
+    "decorators": 291
+  },
+  "dependencies": {
+    "@angular/animations": "^14.3.0",
+    "@angular/cdk": "^14.0.5",
+    "@angular/common": "^14.3.0",
+    "@angular/compiler": "^14.3.0",
+    "@angular/core": "^14.3.0",
+    "@angular/forms": "^14.3.0",
+    "@angular/material": "^14.0.5",
+    "@angular/platform-browser": "^14.3.0",
+    "@angular/platform-browser-dynamic": "^14.3.0",
+    "@angular/router": "^14.3.0",
+    "@auth0/angular-jwt": "^4.2.0",
+    "@fortawesome/fontawesome-free": "^6.2.1",
+    "@ngrx/router-store": "^14.3.0",
+    "@popperjs/core": "^2.11.6",
+    "@types/chart.js": "^2.9.41",
+    "angular-user-idle": "^3.0.1",
+    "angular2-multiselect-dropdown": "^4.6.10",
+    "bootstrap": "^5.1.3",
+    "chart.js": "^3.9.1",
+    "chartjs-adapter-moment": "^1.0.1",
+    "core-js": "^2.6.9",
+    "dayjs": "^1.11.10",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.6.0",
+    "lodash.clonedeep": "^4.5.0",
+    "moment": "^2.30.1",
+    "ng-pick-datetime-ex": "^14.0.0",
+    "ng2-search-filter": "^0.5.1",
+    "ngx-order-pipe": "^2.0.4",
+    "ngx-pagination": "^4.1.0",
+    "ngx-spinner": "^14.0.0",
+    "ngx-toastr": "^14.3.0",
+    "rxjs": "^7.5.0",
+    "rxjs-compat": "^6.5.2",
+    "tslib": "^1.9.0",
+    "typeface-open-sans": "^1.1.13",
+    "xng-breadcrumb": "^9.0.0",
+    "zone.js": "~0.11.4"
+  },
+  "top_files_by_size": [
+    {
+      "path": "projects\\AppCrEnv\\src\\app\\add-location\\add-location.component.ts",
+      "size_bytes": 165997,
+      "size_kb": 162.1,
+      "lines": 4303
+    },
+    {
+      "path": "projects\\AppCrEqp\\src\\app\\add-location\\add-location.component.ts",
+      "size_bytes": 150776,
+      "size_kb": 147.2,
+      "lines": 3606
+    },
+    {
+      "path": "src\\app\\pages\\search\\trendlog\\trendlog.component.ts",
+      "size_bytes": 90183,
+      "size_kb": 88.1,
+      "lines": 1852
+    },
+    {
+      "path": "angular.json",
+      "size_bytes": 80855,
+      "size_kb": 79.0,
+      "lines": 2246
+    },
+    {
+      "path": "projects\\AppTrend\\src\\app\\app-trend-common-params\\app-trend-common-params.component.ts",
+      "size_bytes": 71793,
+      "size_kb": 70.1,
+      "lines": 1763
+    },
+    {
+      "path": "projects\\AppCrEqp\\src\\app\\creq-common-params\\creq-common-params.component.ts",
+      "size_bytes": 67792,
+      "size_kb": 66.2,
+      "lines": 1693
+    },
+    {
+      "path": "src\\app\\core\\app-parameters\\app-parameters.component.ts",
+      "size_bytes": 66019,
+      "size_kb": 64.5,
+      "lines": 1596
+    },
+    {
+      "path": "projects\\AppCrEnv\\src\\app\\crenv-common-params\\crenv-common-params.component.ts",
+      "size_bytes": 65887,
+      "size_kb": 64.3,
+      "lines": 1583
+    },
+    {
+      "path": "projects\\AppCrEqp\\src\\app\\add-location\\add-location.component.html",
+      "size_bytes": 60529,
+      "size_kb": 59.1,
+      "lines": 911
+    },
+    {
+      "path": "projects\\AppEnergy\\src\\app\\app-energy-common-params\\app-energy-common-params.component.ts",
+      "size_bytes": 60527,
+      "size_kb": 59.1,
+      "lines": 1464
+    },
+    {
+      "path": "projects\\AppCrEnv\\src\\app\\add-location\\add-location.component.html",
+      "size_bytes": 59591,
+      "size_kb": 58.2,
+      "lines": 883
+    },
+    {
+      "path": "src\\app\\pages\\search\\trendlog\\trendlog.component.html",
+      "size_bytes": 59380,
+      "size_kb": 58.0,
+      "lines": 1006
+    },
+    {
+      "path": "projects\\AppAlarm\\src\\app\\app-alarm-common-params\\app-alarm-common-params.component.ts",
+      "size_bytes": 57024,
+      "size_kb": 55.7,
+      "lines": 1385
+    },
+    {
+      "path": "src\\app\\pages\\flow\\data-source-detail\\data-source-detail.component.ts",
+      "size_bytes": 53133,
+      "size_kb": 51.9,
+      "lines": 1322
+    },
+    {
+      "path": "src\\app\\pages\\search\\energylog\\energylog.component.ts",
+      "size_bytes": 51292,
+      "size_kb": 50.1,
+      "lines": 1027
+    },
+    {
+      "path": "src\\app\\pages\\search\\alarm\\alarm.component.ts",
+      "size_bytes": 51259,
+      "size_kb": 50.1,
+      "lines": 1103
+    },
+    {
+      "path": "src\\app\\pages\\scheduler\\flow\\flow-scheduler.component.ts",
+      "size_bytes": 38339,
+      "size_kb": 37.4,
+      "lines": 840
+    },
+    {
+      "path": "src\\app\\pages\\scheduler\\scheduler.component.ts",
+      "size_bytes": 35763,
+      "size_kb": 34.9,
+      "lines": 784
+    },
+    {
+      "path": "src\\app\\pages\\search\\points\\points.component.ts",
+      "size_bytes": 35119,
+      "size_kb": 34.3,
+      "lines": 667
+    },
+    {
+      "path": "src\\app\\core\\rpt-list\\rpt-list.component.ts",
+      "size_bytes": 33371,
+      "size_kb": 32.6,
+      "lines": 863
+    }
+  ]
+}
